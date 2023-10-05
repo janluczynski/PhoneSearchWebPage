@@ -4,7 +4,7 @@ Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz
 
 # Założone funkcjonalności
 
-- Użytkownicy (firebase)
+- Użytkownicy
 - Filtrowanie bazy produktów
 - System opinii
 - Koszyk z zapisem produktów, również po wyjściu ze strony
@@ -19,3 +19,4 @@ Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz
 - backend - Golang
 - frontend - Astro + React
 - database - MongoDB może Redis
+- login i hosting - Firebase
