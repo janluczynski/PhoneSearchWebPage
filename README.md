@@ -1,5 +1,5 @@
-# Projekt3rok
-Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz Śledzikowski
+# Sklep internetowy 
+Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz Śledzikowski(Lider)
 
 
 # Założone funkcjonalności
