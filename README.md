@@ -14,6 +14,7 @@ Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz
 - Aktualizowanie dostępności produktów na stronie
 - Wyszukiwanie produktów, sugestie innych
 - Utworzenie narzędzi do analizy dla admninistratora
+- Informacja o najbliższym sklepie i czasie w jaki do niego dojedziesz na podstawie googleApi
 
 # Wstępne technologie:
 - backend - Golang
