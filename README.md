@@ -21,3 +21,6 @@ Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz
 - frontend - Astro + React
 - database - MongoDB może Redis
 - login i hosting - Firebase
+
+#Diagram erd
+![Screenshot](diagram erd.png)
