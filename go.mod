@@ -5,6 +5,7 @@ go 1.19
 require go.mongodb.org/mongo-driver v1.12.1
 
 require (
+	github.com/google/uuid v1.4.0 // indirect
 	github.com/ysmood/fetchup v0.2.3 // indirect
 	github.com/ysmood/goob v0.4.0 // indirect
 	github.com/ysmood/got v0.34.1 // indirect

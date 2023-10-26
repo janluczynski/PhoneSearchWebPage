@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -18,22 +19,16 @@ type MongoDB struct {
 	ProductCollection *mongo.Collection
 }
 
-func CreateIfNotExists(d *mongo.Database, collection string) (*mongo.Collection, error) {
-	collectionObj := d.Collection(collection)
+func CreateIfNotExists(db *mongo.Database, collectionName string) (*mongo.Collection, error) {
+	collection := db.Collection(collectionName)
 
-	collectionExists, err := collectionObj.EstimatedDocumentCount(context.Background())
-	if err != nil {
-		return nil, err
-	}
-
-	if collectionExists == 0 {
-		err = d.CreateCollection(context.Background(), collection)
-		if err != nil {
+	if err := db.CreateCollection(context.Background(), collectionName); err != nil {
+		if _, ok := err.(mongo.CommandError); !ok {
 			return nil, err
 		}
 	}
 
-	return collectionObj, nil
+	return collection, nil
 }
 
 func InitDB() (*MongoDB, error) {
@@ -66,7 +61,6 @@ func InitDB() (*MongoDB, error) {
 	}
 
 	db := client.Database(database)
-
 	productCollection, err := CreateIfNotExists(db, "product")
 	if err != nil {
 		return nil, err
@@ -78,10 +72,24 @@ func InitDB() (*MongoDB, error) {
 	}, nil
 
 }
-func (m *MongoDB) AddProducts(products []interface{}) error {
-	_, err := m.ProductCollection.InsertMany(context.Background(), products)
+func (m *MongoDB) AddProducts(product []interface{}) error {
+	_, err := m.ProductCollection.InsertMany(context.Background(), product)
 	if err != nil {
 		return err
 	}
+	return nil
+}
+func (m *MongoDB) DeleteAllProducts() error {
+	// Specify an empty filter to match all documents
+	filter := bson.M{} // bson.M{} represents an empty BSON document
+
+	// Perform the deletion operation
+	result, err := m.ProductCollection.DeleteMany(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+
+	// Output the number of deleted documents
+	fmt.Printf("Deleted %v products.\n", result.DeletedCount)
 	return nil
 }
