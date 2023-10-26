@@ -1,6 +1,7 @@
 # Sklep internetowy 
 Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz Śledzikowski(Lider)
 
+Zainteresowani mentoringiem
 
 # Założone funkcjonalności
 
@@ -19,7 +20,7 @@ Projekt zespołowy - Błażej Gajewski, Jan Łuczyński, Amelia Ziemann, Mateusz
 # Wstępne technologie:
 - backend - Golang
 - frontend - Astro + React
-- database - MongoDB może Redis
+- database - MongoDB
 - login i hosting - Firebase
 
 #Diagram erd
