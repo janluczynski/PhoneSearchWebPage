@@ -12,6 +12,9 @@ import (
 )
 
 func main() {
+
+	//download https://download-chromium.appspot.com/ , unzip it and put it in the ~/photoscrapper/bin folder
+
 	u := launcher.New().Bin("./bin/chrome").MustLaunch()
 	browser := rod.New().ControlURL(u).MustConnect()
 
