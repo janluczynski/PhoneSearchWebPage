@@ -76,4 +76,12 @@ func InitDB() (*MongoDB, error) {
 		Client:            client,
 		ProductCollection: productCollection,
 	}, nil
+
+}
+func (m *MongoDB) AddProducts(products []interface{}) error {
+	_, err := m.ProductCollection.InsertMany(context.Background(), products)
+	if err != nil {
+		return err
+	}
+	return nil
 }
