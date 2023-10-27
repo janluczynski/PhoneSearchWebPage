@@ -11,7 +11,7 @@ import (
 	"github.com/joho/godotenv"
 	commons "main.go/commons"
 	mongodb "main.go/mongoDB"
-	scrap "main.go/photoscrapper"
+	scrapper "main.go/photoscrapper"
 )
 
 func main() {
@@ -61,7 +61,7 @@ func getDatabaseItems(filePath string) ([]interface{}, error) {
 	for i := range products {
 		products[i].ProductID = uuid.New().String()
 		//TODO: add scrapping images function to scram images from the web and add them to a []string and apped to the products
-		products[i].Imagetab = scrap.Scrap(browser, products[i].ProductURL)
+		products[i].Imagetab = scrapper.Scrap(browser, products[i].ProductURL)
 	}
 
 	// Convert products to []interface{}
