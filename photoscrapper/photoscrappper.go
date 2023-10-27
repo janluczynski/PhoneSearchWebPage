@@ -1,38 +1,33 @@
-package main
+package scrapper
 
 import (
-	"encoding/csv"
-	"fmt"
-	"log"
-	"os"
 	"strings"
 
 	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/launcher"
 )
 
-func main() {
+// func main() {
 
-	//download https://download-chromium.appspot.com/ , unzip it and put it in the ~/photoscrapper/bin folder
+// 	//download https://download-chromium.appspot.com/ , unzip it and put it in the ~/photoscrapper/bin folder
 
-	u := launcher.New().Bin("./bin/chrome").MustLaunch()
-	browser := rod.New().ControlURL(u).MustConnect()
+// 	u := launcher.New().Bin("./bin/chrome").MustLaunch()
+// 	browser := rod.New().ControlURL(u).MustConnect()
 
-	defer browser.MustClose()
+// 	defer browser.MustClose()
 
-	var linksToPhotos [][]string
+// 	var linksToPhotos [][]string
 
-	links := readCSV("./../DataSet/dataset.csv")
-	for _, link := range links[1:] {
-		if arr := scrap(browser, link); len(arr) > 0 {
-			linksToPhotos = append(linksToPhotos, arr)
-		}
-	}
+// 	links := readCSV("./../DataSet/dataset.csv")
+// 	for _, link := range links[1:] {
+// 		if arr := Scrap(browser, link); len(arr) > 0 {
+// 			linksToPhotos = append(linksToPhotos, arr)
+// 		}
+// 	}
 
-	fmt.Println(linksToPhotos)
-}
+// 	fmt.Println(linksToPhotos)
+// }
 
-func scrap(browser *rod.Browser, link string) []string {
+func Scrap(browser *rod.Browser, link string) []string {
 	page := browser.MustPage(link)
 	photosContainer := page.MustElementX("/html/body/div/div/div[3]/div[1]/div[1]/div/div[2]/div[1]")
 	photosDivs := photosContainer.MustElements("div")
@@ -51,32 +46,32 @@ func scrap(browser *rod.Browser, link string) []string {
 	return productPhotos
 }
 
-func readCSV(path string) []string {
-	//open file
-	f, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	//close file
-	defer f.Close()
+// func readCSV(path string) []string {
+// 	//open file
+// 	f, err := os.Open(path)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	//close file
+// 	defer f.Close()
 
-	//read file
-	r := csv.NewReader(f)
+// 	//read file
+// 	r := csv.NewReader(f)
 
-	//read all lines
-	lines, err := r.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	//read all lines
+// 	lines, err := r.ReadAll()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	//create array of strings
-	var result []string
+// 	//create array of strings
+// 	var result []string
 
-	//iterate over lines
-	for _, line := range lines {
-		//append first column to array
-		result = append(result, line[0])
-	}
+// 	//iterate over lines
+// 	for _, line := range lines {
+// 		//append first column to array
+// 		result = append(result, line[0])
+// 	}
 
-	return result
-}
+// 	return result
+// }

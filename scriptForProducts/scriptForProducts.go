@@ -5,10 +5,13 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	commons "main.go/commons"
 	mongodb "main.go/mongoDB"
+	scrap "main.go/photoscrapper"
 )
 
 func main() {
@@ -49,9 +52,16 @@ func getDatabaseItems(filePath string) ([]interface{}, error) {
 		return nil, err
 	}
 
+	u := launcher.New().Bin("./bin/chrome").MustLaunch()
+	browser := rod.New().ControlURL(u).MustConnect()
+
+	defer browser.MustClose()
+
 	// Add UUID to each product
 	for i := range products {
 		products[i].ProductID = uuid.New().String()
+		//TODO: add scrapping images function to scram images from the web and add them to a []string and apped to the products
+		products[i].Imagetab = scrap.Scrap(browser, products[i].ProductURL)
 	}
 
 	// Convert products to []interface{}
