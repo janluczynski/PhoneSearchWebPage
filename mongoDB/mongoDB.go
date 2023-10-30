@@ -93,3 +93,10 @@ func (m *MongoDB) DeleteAllProducts() error {
 	fmt.Printf("Deleted %v products.\n", result.DeletedCount)
 	return nil
 }
+func (m *MongoDB) AddProduct(product interface{}) error {
+	_, err := m.ProductCollection.InsertOne(context.Background(), product)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -57,7 +57,7 @@ func getDatabaseItems(m *mongodb.MongoDB, filePath string) error {
 
 	defer browser.MustClose()
 
-	// Add UUID to each product
+	// Add UUID and images to each product
 	for i := range products {
 		var product interface{}
 		products[i].ProductID = uuid.New().String()
