@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"main.go/commons"
 )
 
 //package od metod związanych z łącznością z bazą danych
@@ -98,4 +99,24 @@ func (m *MongoDB) AddProduct(product interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// function to check if there is product with given ID in database
+func (m *MongoDB) CheckIfProductInDB(productID string) bool {
+	var product commons.Product
+	err := m.ProductCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+// function to get product data from database
+func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
+	var product commons.Product
+	err := m.ProductCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+	if err != nil {
+		return commons.Product{}, err
+	}
+	return product, nil
 }
