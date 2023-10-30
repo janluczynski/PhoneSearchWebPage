@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -59,7 +60,6 @@ func InitDB() (*MongoDB, error) {
 	}
 
 	db := client.Database(database)
-
 	productCollection, err := CreateIfNotExists(db, "product")
 	if err != nil {
 		return nil, err
@@ -69,4 +69,33 @@ func InitDB() (*MongoDB, error) {
 		Client:            client,
 		ProductCollection: productCollection,
 	}, nil
+
+}
+func (m *MongoDB) AddProducts(product []interface{}) error {
+	_, err := m.ProductCollection.InsertMany(context.Background(), product)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (m *MongoDB) DeleteAllProducts() error {
+	// Specify an empty filter to match all documents
+	filter := bson.M{} // bson.M{} represents an empty BSON document
+
+	// Perform the deletion operation
+	result, err := m.ProductCollection.DeleteMany(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+
+	// Output the number of deleted documents
+	fmt.Printf("Deleted %v products.\n", result.DeletedCount)
+	return nil
+}
+func (m *MongoDB) AddProduct(product interface{}) error {
+	_, err := m.ProductCollection.InsertOne(context.Background(), product)
+	if err != nil {
+		return err
+	}
+	return nil
 }
