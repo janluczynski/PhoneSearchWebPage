@@ -19,6 +19,7 @@ type MongoDB struct {
 	ProductCollection *mongo.Collection
 }
 
+// func check if collection exists and create it if not
 func CreateIfNotExists(db *mongo.Database, collectionName string) (*mongo.Collection, error) {
 	collection := db.Collection(collectionName)
 
@@ -41,9 +42,7 @@ func InitDB() (*MongoDB, error) {
 	if database == "" {
 		return nil, fmt.Errorf("DBNAME env is empty")
 	}
-
-	clientOptions := options.Client().ApplyURI(uri)
-
+	clientOptions := options.Client().ApplyURI("mongodb+srv://projektzespolowy73:esFPWrGpjtdsYkCM@projekt.cch4qp1.mongodb.net/")
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		return nil, err
