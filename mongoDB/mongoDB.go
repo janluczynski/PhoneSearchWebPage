@@ -16,8 +16,8 @@ import (
 //package od metod związanych z łącznością z bazą danych
 
 type MongoDB struct {
-	Client            *mongo.Client
-	ProductCollection *mongo.Collection
+	Client             *mongo.Client
+	DatabaseCollection *mongo.Collection
 }
 
 // func check if collection exists and create it if not
@@ -61,19 +61,19 @@ func InitDB() (*MongoDB, error) {
 	}
 
 	db := client.Database(database)
-	productCollection, err := CreateIfNotExists(db, "product")
+	databaseCollection, err := CreateIfNotExists(db, "product")
 	if err != nil {
 		return nil, err
 	}
 
 	return &MongoDB{
-		Client:            client,
-		ProductCollection: productCollection,
+		Client:             client,
+		DatabaseCollection: databaseCollection,
 	}, nil
 
 }
 func (m *MongoDB) AddProducts(product []interface{}) error {
-	_, err := m.ProductCollection.InsertMany(context.Background(), product)
+	_, err := m.DatabaseCollection.InsertMany(context.Background(), product)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func (m *MongoDB) DeleteAllProducts() error {
 	filter := bson.M{} // bson.M{} represents an empty BSON document
 
 	// Perform the deletion operation
-	result, err := m.ProductCollection.DeleteMany(context.TODO(), filter)
+	result, err := m.DatabaseCollection.DeleteMany(context.TODO(), filter)
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func (m *MongoDB) DeleteAllProducts() error {
 	return nil
 }
 func (m *MongoDB) AddProduct(product interface{}) error {
-	_, err := m.ProductCollection.InsertOne(context.Background(), product)
+	_, err := m.DatabaseCollection.InsertOne(context.Background(), product)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func (m *MongoDB) AddProduct(product interface{}) error {
 // function to check if there is product with given ID in database
 func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 	var product commons.Product
-	err := m.ProductCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+	err := m.DatabaseCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
 	if err != nil {
 		return false
 	}
@@ -114,7 +114,7 @@ func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 // function to get product data from database
 func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 	var product commons.Product
-	err := m.ProductCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+	err := m.DatabaseCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
 	if err != nil {
 		return commons.Product{}, err
 	}

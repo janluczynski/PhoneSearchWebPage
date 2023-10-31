@@ -15,3 +15,7 @@ type Product struct {
 	Category    string   `json:"category" bson:"category"`
 	Material    string   `json:"material" bson:"material"`
 }
+type ProductStock struct {
+	ProductID string `json:"product_id" bson:"product_id"`
+	Count     int    `json:"stock" bson:"stock"`
+}
