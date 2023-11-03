@@ -2,12 +2,13 @@ package routes
 
 import (
 	"context"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	commons "main.go/commons"
 	mongodb "main.go/mongoDB"
 )
 
@@ -39,8 +40,8 @@ func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 }
 func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 	r.POST("/search", func(c *gin.Context) {
-		searchedPhrase := c.PostForm("searchedPhrase")
-		if searchedPhrase == "" {
+		searchedPhrase, err := c.Cookie("searchedPhrase")
+		if err != nil || searchedPhrase == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in cookies files"})
 
 			return
@@ -51,7 +52,7 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 			},
 		}
 
-		var products []string
+		var products []commons.Product
 		cursor, err := m.DatabaseCollection.Find(context.Background(), filter)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -59,19 +60,10 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 		}
 		defer cursor.Close(context.Background())
 
-		for cursor.Next(context.Background()) {
-			var result bson.M
-			err := cursor.Decode(&result)
-			if err != nil {
-				log.Printf("Error decoding document: %v\n", err)
-				continue
-			}
-
-			// Extract product_name field from the document and append it to the products slice
-			productName, ok := result["product_name"].(string)
-			if ok {
-				products = append(products, productName)
-			}
+		err = cursor.All(context.Background(), &products)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			return
 		}
 
 		// Sending data as JSON response
