@@ -1,15 +1,18 @@
 package scrappers
 
 import (
-	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/google/uuid"
+	"github.com/joho/godotenv"
+	common "main.go/commons"
+	mongodb "main.go/mongoDB"
 )
 
 func XkomScrap() {
@@ -51,11 +54,22 @@ func XkomScrap() {
 		linksOnly = append(linksOnly, correctLink)
 	}
 
-	// Save linksOnly to a new JSON file
-	err := saveToJSON(linksOnly, "xkomLinks.json")
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Printf("Some error occured. Err: %s \n", err)
+	}
+	m, err := mongodb.InitDB()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+	for _, link := range linksOnly {
+		product := common.Product{
+			ProductURL: link,
+			ProductID:  uuid.New().String(),
+		}
+		m.AddProduct(product)
+	}
+
 }
 
 func KomputronikScrap() {
@@ -96,10 +110,20 @@ func KomputronikScrap() {
 		linksOnly = append(linksOnly, link)
 	}
 
-	// Save linksOnly to a new JSON file
-	err := saveToJSON(linksOnly, "komputronikLinks.json")
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Printf("Some error occured. Err: %s \n", err)
+	}
+	m, err := mongodb.InitDB()
 	if err != nil {
 		fmt.Println("Error:", err)
+	}
+	for _, link := range linksOnly {
+		product := common.Product{
+			ProductURL: link,
+			ProductID:  uuid.New().String(),
+		}
+		m.AddProduct(product)
 	}
 
 }
@@ -125,7 +149,6 @@ func MediaMarktScrap() {
 			if productLinkRegex.MatchString(link) && !visitedLinks[link] && !strings.HasSuffix(link, "#reviews") && !strings.HasPrefix(link, "https://mediamarkt.pl") {
 				productLinks = append(productLinks, link)
 				visitedLinks[link] = true
-				fmt.Println(link)
 			}
 		})
 
@@ -149,25 +172,19 @@ func MediaMarktScrap() {
 		linksOnly = append(linksOnly, correctLink)
 	}
 
-	// Save linksOnly to a new JSON file
-	err := saveToJSON(linksOnly, "mediamarktLinks.json")
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Printf("Some error occured. Err: %s \n", err)
+	}
+	m, err := mongodb.InitDB()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
-}
-func saveToJSON(data interface{}, filename string) error {
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
+	for _, link := range linksOnly {
+		product := common.Product{
+			ProductURL: link,
+			ProductID:  uuid.New().String(),
+		}
+		m.AddProduct(product)
 	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	err = encoder.Encode(data)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println("Data saved to", filename)
-	return nil
 }
