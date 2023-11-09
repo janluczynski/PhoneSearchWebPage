@@ -1,13 +1,15 @@
 package commons
 
 //package od struktur
+// TODO: przerobić na struktury produkt telefonu
 
+// Wywalić reszte
 type Product struct {
 	ProductURL  string   `json:"product_url" bson:"product_url"`
 	ProductID   string   `json:"product_id" bson:"product_id"`
 	ProductName string   `json:"product_name" bson:"product_name"`
 	Brand       string   `json:"brand" bson:"brand"`
-	ImageURL    string   `json:"image_url" bson:"image_url"` //TODO: change to []string
+	ImageURL    string   `json:"image_url" bson:"image_url"`
 	Imagetab    []string `json:"image_tab" bson:"image_tab"`
 	SalePrice   float64  `json:"sale_price" bson:"sale_price"`
 	Colour      string   `json:"colour" bson:"colour"`
