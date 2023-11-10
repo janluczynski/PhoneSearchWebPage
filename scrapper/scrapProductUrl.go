@@ -3,10 +3,8 @@ package scrappers
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/google/uuid"
@@ -139,7 +137,7 @@ func MediaMarktScrap() {
 
 	productLinkRegex := regexp.MustCompile(`/telefony-i-smartfony/smartfon-`)
 
-	rand.Seed(time.Now().UnixNano()) // Seed for random number generation
+	// rand.Seed(time.Now().UnixNano()) // Seed for random number generation
 
 	for i := 1; i <= 43; i++ {
 		scrapeURL := baseURL + fmt.Sprintf("%d", i) //+ ".bhtml"
