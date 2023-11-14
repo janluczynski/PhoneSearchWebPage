@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -16,8 +17,8 @@ import (
 //package od metod związanych z łącznością z bazą danych
 
 type MongoDB struct {
-	Client             *mongo.Client
-	DatabaseCollection *mongo.Collection
+	Client            *mongo.Client
+	ProductCollection *mongo.Collection
 }
 
 // func check if collection exists and create it if not
@@ -61,19 +62,19 @@ func InitDB() (*MongoDB, error) {
 	}
 
 	db := client.Database(database)
-	databaseCollection, err := CreateIfNotExists(db, "product")
+	productCollection, err := CreateIfNotExists(db, "product")
 	if err != nil {
 		return nil, err
 	}
 
 	return &MongoDB{
-		Client:             client,
-		DatabaseCollection: databaseCollection,
+		Client:            client,
+		ProductCollection: productCollection,
 	}, nil
 
 }
 func (m *MongoDB) AddProducts(product []interface{}) error {
-	_, err := m.DatabaseCollection.InsertMany(context.Background(), product)
+	_, err := m.ProductCollection.InsertMany(context.Background(), product)
 	if err != nil {
 		return err
 	}
@@ -84,7 +85,7 @@ func (m *MongoDB) DeleteAllProducts() error {
 	filter := bson.M{} // bson.M{} represents an empty BSON document
 
 	// Perform the deletion operation
-	result, err := m.DatabaseCollection.DeleteMany(context.TODO(), filter)
+	result, err := m.ProductCollection.DeleteMany(context.TODO(), filter)
 	if err != nil {
 		return err
 	}
@@ -94,7 +95,7 @@ func (m *MongoDB) DeleteAllProducts() error {
 	return nil
 }
 func (m *MongoDB) AddProduct(product interface{}) error {
-	_, err := m.DatabaseCollection.InsertOne(context.Background(), product)
+	_, err := m.ProductCollection.InsertOne(context.Background(), product)
 	if err != nil {
 		return err
 	}
@@ -104,7 +105,10 @@ func (m *MongoDB) AddProduct(product interface{}) error {
 // function to check if there is product with given ID in database
 func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 	var product commons.Product
-	err := m.DatabaseCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+
+	filter := bson.M{"product_id": productID}
+
+	err := m.ProductCollection.FindOne(context.Background(), filter).Decode(&product)
 	if err != nil {
 		return false
 	}
@@ -114,9 +118,58 @@ func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 // function to get product data from database
 func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 	var product commons.Product
-	err := m.DatabaseCollection.FindOne(context.Background(), commons.Product{ProductID: productID}).Decode(&product)
+
+	filter := bson.M{"product_id": productID}
+
+	err := m.ProductCollection.FindOne(context.Background(), filter).Decode(&product)
 	if err != nil {
 		return commons.Product{}, err
 	}
 	return product, nil
+}
+
+func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Product, error) {
+	filter := bson.M{
+		"$or": []bson.M{
+			{"brand": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: ""}}},
+		},
+	}
+
+	filter2 := bson.M{
+		"$or": []bson.M{
+			{"model": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: ""}}},
+		},
+	}
+
+	var products []commons.Product
+	var products2 []commons.Product
+
+	cursor, err := m.ProductCollection.Find(context.Background(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &products)
+	if err != nil {
+
+		return nil, err
+	}
+
+	cursor, err = m.ProductCollection.Find(context.Background(), filter2)
+	if err != nil {
+
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &products2)
+	if err != nil {
+
+		return nil, err
+	}
+	//merge products and products2
+	products = append(products, products2...)
+
+	return products, nil
 }

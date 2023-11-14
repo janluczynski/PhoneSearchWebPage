@@ -29,7 +29,7 @@ func XkomScrapProductInfo() {
 
 	var products []commons.Product
 
-	cur, err := m.DatabaseCollection.Find(context.Background(), filter)
+	cur, err := m.ProductCollection.Find(context.Background(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +53,7 @@ func XkomScrapProductInfo() {
 				"display":    phoneInfo[7],
 			},
 		}
-		_, err := m.DatabaseCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
+		_, err := m.ProductCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -177,7 +177,7 @@ func KomputronikScrapProductInfo() {
 
 	var products []commons.Product
 
-	cur, err := m.DatabaseCollection.Find(context.Background(), filter)
+	cur, err := m.ProductCollection.Find(context.Background(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -201,7 +201,7 @@ func KomputronikScrapProductInfo() {
 				"display":    phoneInfo[7],
 			},
 		}
-		_, err := m.DatabaseCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
+		_, err := m.ProductCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -221,7 +221,7 @@ func MediaMarktScrapProductInfo() {
 
 	var products []commons.Product
 
-	cur, err := m.DatabaseCollection.Find(context.Background(), filter)
+	cur, err := m.ProductCollection.Find(context.Background(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -245,7 +245,7 @@ func MediaMarktScrapProductInfo() {
 				"display":    phoneInfo[7],
 			},
 		}
-		_, err := m.DatabaseCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
+		_, err := m.ProductCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
 		if err != nil {
 			log.Fatal(err)
 		}
