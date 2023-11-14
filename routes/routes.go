@@ -1,34 +1,41 @@
 package routes
 
 import (
-	"context"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	commons "main.go/commons"
 	mongodb "main.go/mongoDB"
 )
 
+type productID struct {
+	ProductID string `json:"product_id"`
+}
+
+type sphrase struct {
+	SearchedPhrase string `json:"searchedPhrase"`
+}
+
 func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 	r.POST("/parse/product", func(c *gin.Context) {
-		productID, err := c.Cookie("productID")
-		if err != nil || productID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in cookies files"})
+		var product productID
+		err := c.BindJSON(&product)
+
+		if err != nil || product.ProductID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in data"})
 
 			return
 		}
 		// Checking if product exists in DB
-		if !m.CheckIfProductInDB(productID) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Worker doesn't exist"})
+		if !m.CheckIfProductInDB(product.ProductID) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Product doesn't exist"})
 
 			return
 		}
 
 		// Getting product data from DB
-		productData, err := m.GetProductData(productID)
+		productData, err := m.GetProductData(product.ProductID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
@@ -40,32 +47,23 @@ func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 }
 func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 	r.POST("/search", func(c *gin.Context) {
-		searchedPhrase, err := c.Cookie("searchedPhrase")
-		if err != nil || searchedPhrase == "" {
+
+		var phrase sphrase
+		err := c.BindJSON(&phrase)
+
+		if err != nil || phrase.SearchedPhrase == "" {
+			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in cookies files"})
-
 			return
 		}
-		filter := bson.M{
-			"$or": []bson.M{
-				{"product_name": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: ""}}},
-			},
-		}
 
-		var products []commons.Product
-		cursor, err := m.DatabaseCollection.Find(context.Background(), filter)
+		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-			return
-		}
-		defer cursor.Close(context.Background())
-
-		err = cursor.All(context.Background(), &products)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
 		}
 
+		log.Println(products)
 		// Sending data as JSON response
 		c.JSON(http.StatusOK, products)
 	})
