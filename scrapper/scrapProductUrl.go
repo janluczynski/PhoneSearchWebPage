@@ -3,10 +3,8 @@ package scrappers
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/google/uuid"
@@ -25,8 +23,8 @@ func XkomScrap() {
 	// Regular expression to match product links
 	productLinkRegex := regexp.MustCompile(`/p/\d+-[a-z0-9-]+\.html`)
 
-	for i := 1; i <= 37; i++ {
-		scrapeURL := baseURL + fmt.Sprintf("%d", i)
+	for i := 1; i <= 26; i++ {
+		scrapeURL := baseURL + fmt.Sprintf("%d", i) + "&hide_unavailable=1"
 
 		c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -129,19 +127,14 @@ func KomputronikScrap() {
 }
 
 func MediaMarktScrap() {
-	c := colly.NewCollector(
-		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
-	)
-
+	c := colly.NewCollector()
 	baseURL := "https://mediamarkt.pl/telefony-i-smartfony/smartfony/wszystkie-smartfony?page=" //".bhtml"
 	var productLinks []string
 	visitedLinks := make(map[string]bool)
 
 	productLinkRegex := regexp.MustCompile(`/telefony-i-smartfony/smartfon-`)
 
-	rand.Seed(time.Now().UnixNano()) // Seed for random number generation
-
-	for i := 1; i <= 43; i++ {
+	for i := 1; i <= 33; i++ {
 		scrapeURL := baseURL + fmt.Sprintf("%d", i) //+ ".bhtml"
 
 		c.OnHTML("a[href]", func(e *colly.HTMLElement) {
