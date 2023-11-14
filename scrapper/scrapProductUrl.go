@@ -23,8 +23,8 @@ func XkomScrap() {
 	// Regular expression to match product links
 	productLinkRegex := regexp.MustCompile(`/p/\d+-[a-z0-9-]+\.html`)
 
-	for i := 1; i <= 37; i++ {
-		scrapeURL := baseURL + fmt.Sprintf("%d", i) //+ "&hide_unavailable=1"
+	for i := 1; i <= 26; i++ {
+		scrapeURL := baseURL + fmt.Sprintf("%d", i) + "&hide_unavailable=1"
 
 		c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
