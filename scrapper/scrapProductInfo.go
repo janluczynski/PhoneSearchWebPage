@@ -104,8 +104,9 @@ func xkomScrapHelper(baseURL string) []string {
 		phoneElements = append(phoneElements, e.Text)
 	})
 	c.OnScraped(func(r *colly.Response) {
+		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
 		Brand := phoneInfo[0]
-		Model := phoneInfo[1]
+		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
 		Price := phoneInfo[2]
 		Display := ""
 		Procesor := phoneElements[0]
@@ -146,7 +147,19 @@ func xkomScrapHelper(baseURL string) []string {
 				}
 			}
 		}
-		Display = fmt.Sprintf("%s, %s", Cale, Herce)
+		if Cale != "" && Herce != "" {
+			Display = fmt.Sprintf("%s, %s", Cale, Herce)
+		} else if Cale != "" && Herce == "" {
+			Display = Cale
+		} else {
+			Display = "N/A"
+		}
+		if RAM == "" {
+			RAM = "N/A"
+		}
+		if Battery == "" {
+			Battery = "N/A"
+		}
 
 		fullProductInfo = append(fullProductInfo, Brand)
 		fullProductInfo = append(fullProductInfo, Model)
@@ -297,8 +310,9 @@ func mediaMarktScrapHelper(baseURL string) []string {
 	})
 
 	c.OnScraped(func(r *colly.Response) {
+		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
 		Brand := phoneInfo[0]
-		Model := phoneInfo[1]
+		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
 		Price := phoneInfo[2] + " zł"
 		Display := ""
 		Procesor := ""
@@ -325,9 +339,21 @@ func mediaMarktScrapHelper(baseURL string) []string {
 				Battery = strings.TrimLeft(phoneElements[i+1], " ")
 			}
 		}
-		Display = fmt.Sprintf("%s,%s", Cale, Herce)
-		if Storage != "" {
-			Storage = Storage + " mAh"
+		if Cale != "" && Herce != "" {
+			Display = fmt.Sprintf("%s, %s", Cale, Herce)
+		} else if Cale != "" && Herce == "" {
+			Display = Cale
+		} else {
+			Display = "N/A"
+		}
+		if RAM == "" {
+			RAM = "N/A"
+		}
+		if Battery == "" {
+			Battery = "N/A"
+		}
+		if Battery != "" {
+			Battery = Battery + " mAh"
 		}
 
 		fullProductInfo = append(fullProductInfo, Brand)
