@@ -53,7 +53,7 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 
 		if err != nil || phrase.SearchedPhrase == "" {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in cookies files"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty search phrase"})
 			return
 		}
 
