@@ -16,12 +16,12 @@ const Navbar = () => {
         <Menu>
   <MenuButton
     as={IconButton}
-    aria-label='Options'
+    ariaLabel='Options'
     icon={<HamburgerIcon color="black" height="3vh" width="3vh"/>}
     variant='outline'
     height="4vh"
     width="4vh"
-    borderRadius='lg'
+    borderRadius= "5px"
   />
   <MenuList color="black">
     <MenuItem height="3.5vh">
