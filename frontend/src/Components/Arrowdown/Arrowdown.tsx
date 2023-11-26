@@ -1,8 +1,17 @@
-import React, {useState, useEffect} from "react";
+import  {useState, useEffect} from "react";
 import "./Arrowdown.css";
 import {ArrowDownIcon} from "@chakra-ui/icons";
 const Arrowdown = () => {
+
+  
     const [isVisible, setIsVisible] = useState(true);
+    let arrow;
+    if(isVisible){
+      arrow = <div className={`arrow-down ${isVisible ? 'visible' : 'hidden'}`}><ArrowDownIcon /></div>
+    }
+    else{
+      arrow = <></>
+    }
     useEffect(() => {
         const handleScroll = () => {
           const scrollY = window.scrollY || window.pageYOffset;
@@ -17,10 +26,10 @@ const Arrowdown = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+
   }, []);
     return(
-        
-        <div className={`arrow-down ${isVisible ? 'visible' : 'hidden'}`}><ArrowDownIcon /></div>
+       <>{arrow}</>
     )
 }
 export default Arrowdown;

@@ -1,5 +1,8 @@
-p{
+.waskie{
   display: flex;
   justify-content: center;
   width: 10%;
+}
+.products{
+  display: flex;
 }

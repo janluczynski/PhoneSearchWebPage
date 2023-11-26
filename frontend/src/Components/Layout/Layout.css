@@ -1,5 +1,4 @@
 html{
-    background-color: rgb(255, 255, 255);
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -11,9 +10,12 @@ body {
     margin: 0;
     padding: 0;
     min-height: 200vh;
-    background-color: rgb(255, 255, 255);
-    color:rgb(0, 0, 0);
+    color:rgb(255, 255, 255);
     align-items: center;
     text-align: center;
 }
-
+main{
+    color: white;
+    background: rgb(2,0,36);
+    background: linear-gradient(180deg, rgba(2,0,36,1) 40%, rgba(44,42,62,1) 100%);
+}
