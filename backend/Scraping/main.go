@@ -5,8 +5,9 @@ import scrappers "main.go/scrapper"
 func main() {
 	//scrappers.XkomScrap()
 	// scrappers.XkomScrapProductInfo()
-	scrappers.FakeMediaMarktRequest()
+	// scrappers.FakeMediaMarktRequest()
 	// scrappers.MediaMarktScrap()
-	scrappers.MediaMarktScrapProductInfo()
+	// scrappers.MediaMarktScrapProductInfo()
 	//scrappers.Test2()
+	scrappers.UpdateProductPrice()
 }

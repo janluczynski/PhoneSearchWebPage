@@ -201,7 +201,7 @@ func KomputronikScrapProductInfo() {
 	}
 	for _, product := range products {
 		link := product.ProductURL
-		phoneInfo := mediaMarktScrapHelper(link) // CHANGE TO KOMPUTRONIKSCRAP HELPER
+		phoneInfo := komputronikScrapHelper(link) // CHANGE TO KOMPUTRONIKSCRAP HELPER
 		update := bson.M{
 			"$set": bson.M{
 				"brand":      phoneInfo[0],
@@ -220,6 +220,119 @@ func KomputronikScrapProductInfo() {
 		}
 	}
 }
+func komputronikScrapHelper(baseURL string) []string {
+	c := colly.NewCollector()
+
+	phoneElements := make([]string, 0)
+	phoneInfo := make([]string, 0)
+	fullProductInfo := make([]string, 0)
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL)
+	})
+
+	c.OnError(func(_ *colly.Response, err error) {
+		fmt.Println("Something went wrong:", err)
+	})
+	c.OnHTML("div.p-1 p", func(e *colly.HTMLElement) {
+		elements := e.Text
+		// fmt.Println(elements)
+		test := strings.ReplaceAll(elements, " ", "")
+		xd := strings.Split(test, "\n")
+		for _, element := range xd {
+			phoneElements = append(phoneElements, element)
+		}
+
+	})
+
+	/////////// DZIALA
+	c.OnHTML("h1.tests-product-name", func(e *colly.HTMLElement) {
+		fullPhone := e.Text
+		// fmt.Println(fullPhone)
+		fullPhoneInfo := strings.Fields(fullPhone)
+
+		Brand := fullPhoneInfo[0]
+		Model := ""
+		for i := 1; i < len(fullPhoneInfo); i++ {
+			Model = Model + fullPhoneInfo[i] + " "
+		}
+		phoneInfo = append(phoneInfo, Brand)
+		phoneInfo = append(phoneInfo, Model)
+
+	})
+	/////////// DZIALA
+	c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
+		elemnt := e.Text
+		refactoring := strings.ReplaceAll(elemnt, " ", "")
+		phonePrice := strings.Split(refactoring, "\n")
+		phoneInfo = append(phoneInfo, phonePrice[0])
+	})
+
+	c.OnScraped(func(r *colly.Response) {
+		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
+		Brand := phoneInfo[0]
+		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
+		Price := phoneInfo[2]
+
+		Procesor := ""
+		RAM := ""
+		Storage := ""
+		Battery := ""
+
+		Cale := ""
+
+		fmt.Println("Finished", r.Request.URL)
+		storageRegex := regexp.MustCompile(`GB$`)
+		caleRegex := regexp.MustCompile(`^\d.\d{1,2}cale$`)
+		batteryRegex := regexp.MustCompile(`^\d{4}mAh$`)
+		for i := 0; i < len(phoneElements); i++ {
+			if storageRegex.MatchString(phoneElements[i]) {
+				if Storage == "" {
+					Storage = phoneElements[i]
+				} else if RAM == "" {
+					RAM = phoneElements[i]
+					if storageRegex.MatchString(phoneElements[i+2]) {
+						Procesor = phoneElements[i+4]
+					} else {
+						Procesor = phoneElements[i+2]
+					}
+				}
+			} else if caleRegex.MatchString(phoneElements[i]) {
+				if Cale == "" {
+					Cale = strings.ReplaceAll(phoneElements[i], "cale", `"`)
+				}
+			} else if batteryRegex.MatchString(phoneElements[i]) {
+				if Battery == "" {
+					Battery = phoneElements[i]
+				}
+			}
+		}
+		if Cale == "" {
+			Cale = "N/A"
+		}
+		if RAM == "" {
+			RAM = "N/A"
+		}
+		if Battery == "" {
+			Battery = "N/A"
+		}
+		if Procesor == "" {
+			Procesor = "N/A"
+		}
+
+		fullProductInfo = append(fullProductInfo, Brand)
+		fullProductInfo = append(fullProductInfo, Model)
+		fullProductInfo = append(fullProductInfo, Price)
+		fullProductInfo = append(fullProductInfo, Procesor)
+		fullProductInfo = append(fullProductInfo, RAM)
+		fullProductInfo = append(fullProductInfo, Storage)
+		fullProductInfo = append(fullProductInfo, Battery)
+		fullProductInfo = append(fullProductInfo, Cale)
+	})
+	c.Visit(baseURL)
+
+	return fullProductInfo
+}
+
 func MediaMarktScrapProductInfo() {
 	err := godotenv.Load("../.env")
 	if err != nil {
@@ -268,7 +381,6 @@ func MediaMarktScrapProductInfo() {
 
 func mediaMarktScrapHelper(baseURL string) []string {
 	c := colly.NewCollector()
-	// baseURL := "https://mediamarkt.pl/telefony-i-smartfony/smartfon-samsung-galaxy-s23-8-256gb-czarny-sm-s916bzkdeue"
 
 	phoneElements := make([]string, 0)
 	phoneInfo := make([]string, 0)
@@ -385,11 +497,11 @@ func FakeMediaMarktRequest() {
 
 func Test2() {
 	c := colly.NewCollector()
-	baseURL := "https://www.komputronik.pl/product/826977/xiaomi-redmi-note-12s-8-256gb-czarny-onyx-black-.htmla"
+	baseURL := "https://www.komputronik.pl/product/860694/telefon-xiaomi-13t-pro-12-512gb-black.html"
 
 	phoneElements := make([]string, 0)
-	// phoneInfo := make([]string, 0)
-	// fullProductInfo := make([]string, 0)
+	phoneInfo := make([]string, 0)
+	fullProductInfo := make([]string, 0)
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL)
 	})
@@ -399,86 +511,98 @@ func Test2() {
 	})
 	c.OnHTML("div.p-1 p", func(e *colly.HTMLElement) {
 		elements := e.Text
-		// fmt.Println(element)
+		// fmt.Println(elements)
 		test := strings.ReplaceAll(elements, " ", "")
-		// test = strings.ReplaceAll(elements, "\n", "")
-		// test := strings.Split(elements, "\n")
-		test = strings.ReplaceAll(test, " ", "")
 		xd := strings.Split(test, "\n")
 		for _, element := range xd {
 			phoneElements = append(phoneElements, element)
 		}
 
 	})
-	c.OnHTML("div.relative.flex span", func(e *colly.HTMLElement) {
-		fmt.Println(e.Text)
+
+	/////////// DZIALA
+	c.OnHTML("h1.tests-product-name", func(e *colly.HTMLElement) {
+		fullPhone := e.Text
+		// fmt.Println(fullPhone)
+		fullPhoneInfo := strings.Fields(fullPhone)
+
+		Brand := fullPhoneInfo[0]
+		Model := ""
+		for i := 1; i < len(fullPhoneInfo); i++ {
+			Model = Model + fullPhoneInfo[i] + " "
+		}
+		phoneInfo = append(phoneInfo, Brand)
+		phoneInfo = append(phoneInfo, Model)
+
 	})
 	/////////// DZIALA
-	// c.OnHTML("h1.tests-product-name", func(e *colly.HTMLElement) {
-	// 	fullPhone := e.Text
-	// 	fmt.Println(fullPhone)
-	// 	// fullPhoneInfo := strings.Split(fullPhone, " ")
-
-	// 	// Brand := fullPhoneInfo[1]
-	// 	// Model := ""
-	// 	// for i := 2; i < len(fullPhoneInfo); i++ {
-	// 	// 	Model = Model + fullPhoneInfo[i] + " "
-	// 	// }
-	// 	// phoneInfo = append(phoneInfo, Brand)
-	// 	// phoneInfo = append(phoneInfo, Model)
-
-	// })
-	/////////// DZIALA
-	// c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
-	// 	elemnt := e.Text
-	// 	fmt.Println(elemnt)
-	// 	// re := regexp.MustCompile(`\b\d+\b`)
-	// 	// matches := re.FindAllString(elemnt, 1)
-	// 	// phoneInfo = append(phoneInfo, matches[0])
-	// })
+	c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
+		elemnt := e.Text
+		refactoring := strings.ReplaceAll(elemnt, " ", "")
+		phonePrice := strings.Split(refactoring, "\n")
+		phoneInfo = append(phoneInfo, phonePrice[0])
+	})
 
 	c.OnScraped(func(r *colly.Response) {
-		// for _, element := range phoneElements {
-		// 	fmt.Println(element)
-		// }
-		// Brand := phoneInfo[0]
-		// Model := phoneInfo[1]
-		// Price := phoneInfo[2]
-		// Display := ""
-		// Procesor := ""
-		// RAM := ""
-		// Storage := ""
-		// Battery := ""
+		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
+		Brand := phoneInfo[0]
+		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
+		Price := phoneInfo[2]
 
-		// Cale := ""
-		// Herce := ""
-		// fmt.Println("Finished", r.Request.URL)
+		Procesor := ""
+		RAM := ""
+		Storage := ""
+		Battery := ""
 
-		// for i := 0; i < len(phoneElements); i++ {
-		// 	if strings.HasPrefix(phoneElements[i], "Rozmiar przekątnej") {
-		// 		Cale = phoneElements[i+1] + `"`
-		// 	} else if strings.HasPrefix(phoneElements[i], "Częstotliwość odświeżania") {
-		// 		Herce = phoneElements[i+1] + "Hz"
-		// 	} else if strings.HasPrefix(phoneElements[i], "Pamięć wewnętrzna") {
-		// 		Storage = phoneElements[i+1]
-		// 	} else if strings.HasPrefix(phoneElements[i], "Informuje o ilość") {
-		// 		RAM = phoneElements[i+1]
-		// 	} else if strings.HasPrefix(phoneElements[i], "Określa nazwę i model") {
-		// 		Procesor = phoneElements[i+1]
-		// 	} else if strings.HasPrefix(phoneElements[i], "Informuje o pojemności akumulatora") {
-		// 		Battery = phoneElements[i+1]
-		// 	}
-		// }
-		// Display = fmt.Sprintf("%s,%s", Cale, Herce)
+		Cale := ""
 
-		// fullProductInfo = append(fullProductInfo, Brand)
-		// fullProductInfo = append(fullProductInfo, Model)
-		// fullProductInfo = append(fullProductInfo, Price)
-		// fullProductInfo = append(fullProductInfo, Procesor)
-		// fullProductInfo = append(fullProductInfo, RAM)
-		// fullProductInfo = append(fullProductInfo, Storage)
-		// fullProductInfo = append(fullProductInfo, Battery)
-		// fullProductInfo = append(fullProductInfo, Display)
+		fmt.Println("Finished", r.Request.URL)
+		storageRegex := regexp.MustCompile(`GB$`)
+		caleRegex := regexp.MustCompile(`^\d.\d{1,2}cale$`)
+		batteryRegex := regexp.MustCompile(`^\d{4}mAh$`)
+		for i := 0; i < len(phoneElements); i++ {
+			if storageRegex.MatchString(phoneElements[i]) {
+				if Storage == "" {
+					Storage = phoneElements[i]
+				} else if RAM == "" {
+					RAM = phoneElements[i]
+					if storageRegex.MatchString(phoneElements[i+2]) {
+						Procesor = phoneElements[i+4]
+					} else {
+						Procesor = phoneElements[i+2]
+					}
+				}
+			} else if caleRegex.MatchString(phoneElements[i]) {
+				if Cale == "" {
+					Cale = strings.ReplaceAll(phoneElements[i], "cale", `"`)
+				}
+			} else if batteryRegex.MatchString(phoneElements[i]) {
+				if Battery == "" {
+					Battery = phoneElements[i]
+				}
+			}
+		}
+		if Cale == "" {
+			Cale = "N/A"
+		}
+		if RAM == "" {
+			RAM = "N/A"
+		}
+		if Battery == "" {
+			Battery = "N/A"
+		}
+		if Procesor == "" {
+			Procesor = "N/A"
+		}
+
+		fullProductInfo = append(fullProductInfo, Brand)
+		fullProductInfo = append(fullProductInfo, Model)
+		fullProductInfo = append(fullProductInfo, Price)
+		fullProductInfo = append(fullProductInfo, Procesor)
+		fullProductInfo = append(fullProductInfo, RAM)
+		fullProductInfo = append(fullProductInfo, Storage)
+		fullProductInfo = append(fullProductInfo, Battery)
+		fullProductInfo = append(fullProductInfo, Cale)
 
 	})
 	c.Visit(baseURL)
