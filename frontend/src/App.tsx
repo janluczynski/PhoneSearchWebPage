@@ -10,7 +10,7 @@ function App() {
       <center>
         <div className="waskie">
           <p>
-            Witaj na naszej porównywarce cen telefonów - miejscu, gdzie
+            WWitaj na naszej porównywarce cen telefonów - miejscu, gdzie
             znajdziesz najkorzystniejsze oferty na najnowsze modele smartfonów!
             Jesteśmy tutaj po to, aby ułatwić Ci wybór idealnego telefonu,
             dostarczając kompleksowe porównania cenowe ze sprawdzonych sklepów
