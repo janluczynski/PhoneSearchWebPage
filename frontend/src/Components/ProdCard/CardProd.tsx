@@ -1,28 +1,26 @@
 import "./CardProd.css";
+import { useNavigate } from "react-router-dom";
 interface ProductProps {
   name: string;
   price: number;
   imgSrc: string;
   link: string;
+  id: string;
 }
 
-const CardProd: React.FC<ProductProps> = ({ name, price, imgSrc, link }) => {
+const CardProd: React.FC<ProductProps> = ({ name, price, imgSrc, link, id }) => {
+const navigate = useNavigate();
+
   return (
     <div className="product">
-      <img
+        <img
         src={imgSrc}
         alt={name}
-        style={{ maxWidth: "100%", height: "auto" }}
+        style={{ maxWidth: "100%", height: "20vh" }}
       />
       <div className="text">
         <h3>{name}</h3>
-        <p>{price.toFixed(2)}zł</p>
-        <p>
-          <a href={link} target="_blank" rel="noopener noreferrer">
-            View Product
-          </a>
-        </p>
-        <button>Add to Cart</button>
+        <button onClick={() => navigate(`/CardProd/${id}`)}>ccccc</button>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
 function App() {
+
   return (
     <Layout>
       <SearchBar />
@@ -32,27 +33,31 @@ function App() {
             ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
           </p>
         </div>
-      </center>
+   
       <div className="products">
         <CardProd
           name="telefon"
           price={123}
           imgSrc="https://image.ceneostatic.pl/data/products/154326309/f-dreame-h12-dual.jpg"
           link="https://www.ceneo.pl/154326309#tag=pp2"
+          id="1"
         />
         <CardProd
           name="kawa"
           price={1233}
           imgSrc="https://image.ceneostatic.pl/data/products/117369540/f-saeco-xelsis-deluxe-sm8780-00-czarny.jpg"
           link="https://www.ceneo.pl/117369540;02514#tag=pp3"
+          id="2"
         />
         <CardProd
           name="szczotka"
           price={13}
           imgSrc="https://image.ceneostatic.pl/data/products/138638988/f-oral-b-io-series-10-white.jpg"
           link="https://www.ceneo.pl/138638988#tag=pp4"
+          id="3"
         />
       </div>
+      </center>
     </Layout>
   );
 }

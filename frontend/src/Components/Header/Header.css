@@ -6,7 +6,7 @@ h1 {
 }
 header {
   width: auto;
-  background: rgb(2, 0, 36);
+  background: #2b2c30;;
   top: 0px;
   height: 12vh;
   display: flex;
@@ -16,6 +16,7 @@ header {
   position: sticky;
   top: 0;
   justify-content: space-between;
+  border: 1px #ffffff;
 }
 .header-content {
   display: flex;
