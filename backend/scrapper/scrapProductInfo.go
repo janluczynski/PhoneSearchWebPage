@@ -105,7 +105,7 @@ func xkomScrapHelper(baseURL string) []string {
 		Storage := ""
 		Battery := ""
 		Inches := ""
-		Herce := ""
+		Hertz := ""
 
 		fmt.Println("Finished", r.Request.URL)
 		ramRegex := regexp.MustCompile(`^\b([1-9]|1\d|2[0-9])\b GB$`)
@@ -128,8 +128,8 @@ func xkomScrapHelper(baseURL string) []string {
 					Inches = strings.ReplaceAll(element, ",", ".")
 				}
 			} else if hertznRegex.MatchString(element) {
-				if Herce == "" {
-					Herce = element
+				if Hertz == "" {
+					Hertz = element
 				}
 			} else if batteryRegex.MatchString(element) {
 				if Battery == "" {
@@ -137,9 +137,9 @@ func xkomScrapHelper(baseURL string) []string {
 				}
 			}
 		}
-		if Inches != "" && Herce != "" {
-			Display = fmt.Sprintf("%s, %s", Inches, Herce)
-		} else if Inches != "" && Herce == "" {
+		if Inches != "" && Hertz != "" {
+			Display = fmt.Sprintf("%s, %s", Inches, Hertz)
+		} else if Inches != "" && Hertz == "" {
 			Display = Inches
 		} else {
 			Display = "N/A"
@@ -394,14 +394,14 @@ func mediaMarktScrapHelper(baseURL string) []string {
 		Battery := ""
 
 		Inches := ""
-		Herce := ""
+		Hertz := ""
 		fmt.Println("Finished", r.Request.URL)
 
 		for i := 0; i < len(phoneSpecification); i++ {
 			if strings.HasPrefix(phoneSpecification[i], "Rozmiar przekątnej") {
 				Inches = strings.TrimLeft(phoneSpecification[i+1], " ") + `"`
 			} else if strings.HasPrefix(phoneSpecification[i], "Częstotliwość odświeżania") {
-				Herce = phoneSpecification[i+1] + "Hz"
+				Hertz = phoneSpecification[i+1] + "Hz"
 			} else if strings.HasPrefix(phoneSpecification[i], "Pamięć wewnętrzna") {
 				Storage = strings.TrimLeft(phoneSpecification[i+1], " ")
 			} else if strings.HasPrefix(phoneSpecification[i], "Informuje o ilość") {
@@ -412,9 +412,9 @@ func mediaMarktScrapHelper(baseURL string) []string {
 				Battery = strings.TrimLeft(phoneSpecification[i+1], " ")
 			}
 		}
-		if Inches != "" && Herce != "" {
-			Display = fmt.Sprintf("%s,%s", Inches, Herce)
-		} else if Inches != "" && Herce == "" {
+		if Inches != "" && Hertz != "" {
+			Display = fmt.Sprintf("%s,%s", Inches, Hertz)
+		} else if Inches != "" && Hertz == "" {
 			Display = Inches
 		} else {
 			Display = "N/A"
