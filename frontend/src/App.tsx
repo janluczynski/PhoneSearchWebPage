@@ -2,7 +2,95 @@ import Layout from "./Components/Layout/Layout";
 import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
+import { useEffect, useState } from "react";
+import ProductPage from "./Components/ProductPage/ProductPage";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
 function App() {
+  type Product = {
+    product_url: string;
+    product_id: string;
+    brand: string;
+    model: string;
+    imageURL: string;
+    price: string;
+    display: string;
+    processor: string;
+    ram: string;
+    storage: string;
+    battery: string;
+  };
+  const product: Product = {
+    product_url: "https://www.ceneo.pl/143460739#tag=pp1",
+    product_id: "1",
+    brand: "test",
+    model: "testmodel",
+    imageURL:
+      "https://image.ceneostatic.pl/data/products/143460739/f-haxe-elektryczna-banka-antycellulitowa-hx801.jpg",
+    price: "2000",
+    display: "6'",
+    processor: "dobry",
+    ram: "5gb",
+    storage: "2gb",
+    battery: "1000",
+  };
+  const productsQuery = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:8080/parse/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: "d096efb3-9289-4d2d-8889-ab5af2a7d2f6",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data.product_url);
+      console.log(data.product_id);
+      return response.json();
+    },
+  });
+
+  // fetch("http://localhost:8080/parse/product",{
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     product_id: 'd096efb3-9289-4d2d-8889-ab5af2a7d2f6',
+  //   }),
+
+  // })
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log(data);
+  //     const transformedData = data.map((item: any) => ({
+  //       product_id: item.product_id,
+  //       brand: item.brand,
+  //       model: item.model,
+  //       price: item.price,
+  //       display: item.display,
+  //       processor: item.processor,
+  //       ram: item.ram,
+  //       storage: item.storage,
+  //       battery: item.battery,
+  //       imageURL: item.imageURL,
+  //       product_url: item.product_url,
+  //     }));
+  //       setProducts(transformedData);
+
+  //   })
+  // if(productsQuery.isLoading) return <div>Loading...</div>
 
   return (
     <Layout>
@@ -33,31 +121,24 @@ function App() {
             ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
           </p>
         </div>
-   
-      <div className="products">
-        <CardProd
-          name="telefon"
-          price={123}
-          imgSrc="https://image.ceneostatic.pl/data/products/154326309/f-dreame-h12-dual.jpg"
-          link="https://www.ceneo.pl/154326309#tag=pp2"
-          id="1"
-        />
-        <CardProd
-          name="kawa"
-          price={1233}
-          imgSrc="https://image.ceneostatic.pl/data/products/117369540/f-saeco-xelsis-deluxe-sm8780-00-czarny.jpg"
-          link="https://www.ceneo.pl/117369540;02514#tag=pp3"
-          id="2"
-        />
-        <CardProd
-          name="szczotka"
-          price={13}
-          imgSrc="https://image.ceneostatic.pl/data/products/138638988/f-oral-b-io-series-10-white.jpg"
-          link="https://www.ceneo.pl/138638988#tag=pp4"
-          id="3"
-        />
-      </div>
+        <div className="products">
+          <CardProd product={product} />
+        </div>
       </center>
+
+      {/* {products.map((product) => (
+  <div key={product.product_id}>
+    <h2>{product.brand} {product.model}</h2>
+    <img src={product.imageURL} alt={product.model} />
+    <p>Price: {product.price}</p>
+    <p>Display: {product.display}</p>
+    <p>Processor: {product.processor}</p>
+    <p>RAM: {product.ram}</p>
+    <p>Storage: {product.storage}</p>
+    <p>Battery: {product.battery}</p>
+    <a href={product.product_url}>Buy now</a>
+  </div>
+))} */}
     </Layout>
   );
 }

@@ -1,0 +1,19 @@
+.col40 {
+  width: 40%;
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.col60 {
+  width: 60%;
+  float: left;
+  display: block;
+}
+.productDetails li {
+  list-style: none;
+  padding: 2vh;
+}
+h2 {
+  font-size: 3vh;
+}

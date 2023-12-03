@@ -8,10 +8,6 @@
   cursor: pointer;
   margin: 10px;
 }
-ul {
-  display: flex;
-  position: sticky;
-}
 .bar {
   width: 25px;
   height: 3px;

@@ -9,7 +9,8 @@ body {
 }
 main {
   color: white;
-  background: #202124;;
+  background: #202124;
+  min-height: 100vh;
   /* background: linear-gradient(
     180deg,
     rgba(2, 0, 36, 1) 40%,

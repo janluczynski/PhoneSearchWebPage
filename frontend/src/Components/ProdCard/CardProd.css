@@ -1,12 +1,10 @@
 .product {
-
   padding: 16px;
   margin: 50px;
   width: 250px;
   text-align: center;
   background: white;
   color: black;
-
 }
 .product img {
   border-radius: 4px;
