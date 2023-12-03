@@ -8,10 +8,9 @@ func main() {
 	// scrappers.KomputronikScrap()
 	// scrappers.FakeMediaMarktRequest()
 	// scrappers.MediaMarktScrap()
-	scrappers.FakeXKomRequest()
-	scrappers.XkomScrapProductInfo()
+	// scrappers.FakeXKomRequest()
+	// scrappers.XkomScrapProductInfo()
 	// scrappers.KomputronikScrapProductInfo()
-	// scrappers.FakeMediaMarktRequest()
-	// scrappers.MediaMarktScrapProductInfo()
-
+	scrappers.FakeMediaMarktRequest()
+	scrappers.MediaMarktScrapProductInfo()
 }
