@@ -135,7 +135,7 @@ func xkomScrapHelper(baseURL string) []string {
 				}
 			} else if caleRegex.MatchString(element) {
 				if Cale == "" {
-					Cale = element
+					Cale = strings.ReplaceAll(element, ",", ".")
 				}
 			} else if hertznRegex.MatchString(element) {
 				if Herce == "" {
@@ -425,7 +425,12 @@ func mediaMarktScrapHelper(baseURL string) []string {
 		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
 		Brand := phoneInfo[0]
 		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
-		Price := phoneInfo[2] + " zł"
+		Price := ""
+		if len(phoneInfo) == 2 {
+			Price = "N/A"
+		} else {
+			Price = phoneInfo[2] + " zł"
+		}
 		Display := ""
 		Procesor := ""
 		RAM := ""
@@ -494,14 +499,9 @@ func FakeMediaMarktRequest() {
 	})
 	c.Visit(baseURL)
 }
-
-func Test2() {
+func FakeXKomRequest() {
 	c := colly.NewCollector()
-	baseURL := "https://www.komputronik.pl/product/860694/telefon-xiaomi-13t-pro-12-512gb-black.html"
-
-	phoneElements := make([]string, 0)
-	phoneInfo := make([]string, 0)
-	fullProductInfo := make([]string, 0)
+	baseURL := "https://www.x-kom.pl/p/1165774-smartfon-telefon-nokia-2660-4g-flip-rozowy-stacja-ladujaca.html"
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL)
 	})
@@ -509,102 +509,5 @@ func Test2() {
 	c.OnError(func(_ *colly.Response, err error) {
 		fmt.Println("Something went wrong:", err)
 	})
-	c.OnHTML("div.p-1 p", func(e *colly.HTMLElement) {
-		elements := e.Text
-		// fmt.Println(elements)
-		test := strings.ReplaceAll(elements, " ", "")
-		xd := strings.Split(test, "\n")
-		for _, element := range xd {
-			phoneElements = append(phoneElements, element)
-		}
-
-	})
-
-	/////////// DZIALA
-	c.OnHTML("h1.tests-product-name", func(e *colly.HTMLElement) {
-		fullPhone := e.Text
-		// fmt.Println(fullPhone)
-		fullPhoneInfo := strings.Fields(fullPhone)
-
-		Brand := fullPhoneInfo[0]
-		Model := ""
-		for i := 1; i < len(fullPhoneInfo); i++ {
-			Model = Model + fullPhoneInfo[i] + " "
-		}
-		phoneInfo = append(phoneInfo, Brand)
-		phoneInfo = append(phoneInfo, Model)
-
-	})
-	/////////// DZIALA
-	c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
-		elemnt := e.Text
-		refactoring := strings.ReplaceAll(elemnt, " ", "")
-		phonePrice := strings.Split(refactoring, "\n")
-		phoneInfo = append(phoneInfo, phonePrice[0])
-	})
-
-	c.OnScraped(func(r *colly.Response) {
-		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
-		Brand := phoneInfo[0]
-		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
-		Price := phoneInfo[2]
-
-		Procesor := ""
-		RAM := ""
-		Storage := ""
-		Battery := ""
-
-		Cale := ""
-
-		fmt.Println("Finished", r.Request.URL)
-		storageRegex := regexp.MustCompile(`GB$`)
-		caleRegex := regexp.MustCompile(`^\d.\d{1,2}cale$`)
-		batteryRegex := regexp.MustCompile(`^\d{4}mAh$`)
-		for i := 0; i < len(phoneElements); i++ {
-			if storageRegex.MatchString(phoneElements[i]) {
-				if Storage == "" {
-					Storage = phoneElements[i]
-				} else if RAM == "" {
-					RAM = phoneElements[i]
-					if storageRegex.MatchString(phoneElements[i+2]) {
-						Procesor = phoneElements[i+4]
-					} else {
-						Procesor = phoneElements[i+2]
-					}
-				}
-			} else if caleRegex.MatchString(phoneElements[i]) {
-				if Cale == "" {
-					Cale = strings.ReplaceAll(phoneElements[i], "cale", `"`)
-				}
-			} else if batteryRegex.MatchString(phoneElements[i]) {
-				if Battery == "" {
-					Battery = phoneElements[i]
-				}
-			}
-		}
-		if Cale == "" {
-			Cale = "N/A"
-		}
-		if RAM == "" {
-			RAM = "N/A"
-		}
-		if Battery == "" {
-			Battery = "N/A"
-		}
-		if Procesor == "" {
-			Procesor = "N/A"
-		}
-
-		fullProductInfo = append(fullProductInfo, Brand)
-		fullProductInfo = append(fullProductInfo, Model)
-		fullProductInfo = append(fullProductInfo, Price)
-		fullProductInfo = append(fullProductInfo, Procesor)
-		fullProductInfo = append(fullProductInfo, RAM)
-		fullProductInfo = append(fullProductInfo, Storage)
-		fullProductInfo = append(fullProductInfo, Battery)
-		fullProductInfo = append(fullProductInfo, Cale)
-
-	})
 	c.Visit(baseURL)
-
 }

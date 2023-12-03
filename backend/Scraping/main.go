@@ -3,11 +3,15 @@ package main
 import scrappers "main.go/scrapper"
 
 func main() {
-	//scrappers.XkomScrap()
-	// scrappers.XkomScrapProductInfo()
+	// scrappers.FakeXKomRequest()
+	// scrappers.XkomScrap()
+	// scrappers.KomputronikScrap()
 	// scrappers.FakeMediaMarktRequest()
 	// scrappers.MediaMarktScrap()
+	scrappers.FakeXKomRequest()
+	scrappers.XkomScrapProductInfo()
+	// scrappers.KomputronikScrapProductInfo()
+	// scrappers.FakeMediaMarktRequest()
 	// scrappers.MediaMarktScrapProductInfo()
-	//scrappers.Test2()
-	scrappers.UpdateProductPrice()
+
 }

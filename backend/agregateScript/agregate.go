@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main.go/commons"
@@ -21,6 +22,10 @@ type Phone struct {
 }
 
 func main() {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Printf("Some error occured. Err: %s \n", err)
+	}
 	m, err := mongodb.InitDB()
 	if err != nil {
 		log.Fatal(err)
@@ -52,6 +57,7 @@ func main() {
 			"storage":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Storage, " ")[0] + ".*", Options: "i"}},
 			"battery":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Battery, " ")[0] + ".*", Options: "i"}},
 			"processor": bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Processor, " ")[0] + ".*" + strings.Split(product.Processor, " ")[1], Options: "i"}},
+			"display":   bson.M{"$regex": primitive.Regex{Pattern: strings.ReplaceAll(strings.Split(product.Display, " ")[0], ",", "") + ".*", Options: "i"}},
 		}
 		cur, err := m.ProductCollection.Find(context.Background(), filter)
 		if err != nil {
