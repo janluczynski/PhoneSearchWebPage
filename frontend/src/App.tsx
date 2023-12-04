@@ -67,6 +67,27 @@ function App() {
         </div>
         <div className="products">
           <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
         </div>
         </center>
 
