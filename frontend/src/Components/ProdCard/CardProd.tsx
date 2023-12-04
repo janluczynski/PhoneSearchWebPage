@@ -21,13 +21,13 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
   return (
     <div className="product">
       <img
-        src={product.imageURL}
+        src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/4/pr_2023_4_12_13_2_59_532_01.jpg"
         alt={product.model}
         style={{ maxWidth: "100%", height: "20vh" }}
       />
       <div className="text">
         <h3>{product.model}</h3>
-        <Link to={`/product/${product.product_id}`}>cccc</Link>
+        <Link to={`/product/${product.product_id}`} target="_blank">Check details</Link>
       </div>
     </div>
   );

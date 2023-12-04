@@ -4,6 +4,8 @@ import SearchBar from "../Searchbar/Searchbar";
 import "./ProductPage.css";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import {Button, Link} from "@chakra-ui/react";
+import {ExternalLinkIcon} from "@chakra-ui/icons";
 type Product = {
   product_url: string;
   product_id: string;
@@ -40,9 +42,6 @@ const ProductPage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data.product_url);
-      console.log(data.product_id);
-      console.log(data.brand);
       return data;
     },
   });
@@ -53,14 +52,9 @@ const ProductPage = () => {
   if (productsQuery.error) {
     return <span>Error: {productsQuery.error.message}</span>;
   }
-  console.log(productsQuery.data);
   const product = productsQuery.data;
-  console.log(product);
-
   return (
     <Layout>
-      <SearchBar />
-
       <div className="col40">
         <img
           src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/4/pr_2023_4_12_13_2_59_532_01.jpg"
@@ -79,8 +73,8 @@ const ProductPage = () => {
             <li>RAM: {product.ram}</li>
             <li>Storage: {product.storage}</li>
             <li>Battery: {product.battery}</li>
+            <li><Link href={product.product_url} target="_blank"><Button leftIcon={<ExternalLinkIcon />}>Buy now</Button></Link></li>
           </ul>
-          <a href={product.product_url}>Buy now</a>
         </div>
       </div>
     </Layout>

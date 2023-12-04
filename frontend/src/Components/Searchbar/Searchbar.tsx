@@ -1,11 +1,86 @@
+import React, { useState } from 'react';
 import "./Searchbar.css";
-
+import { useQuery } from "@tanstack/react-query";
+import CardProd from '../ProdCard/CardProd';
+type Product = {
+  product_url: string;
+  product_id: string;
+  brand: string;
+  model: string;
+  imageURL: string;
+  price: string;
+  display: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
+};
 const SearchBar = () => {
+  const [itemsToShow, setItemsToShow] = useState(5);
+
+  const handleShowMore = () => {
+    setItemsToShow(itemsToShow + 5);
+  };
+  const [inputValue, setInputValue] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const searchQuery = useQuery({
+    queryKey: ["search", searchTerm],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:8080/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          SearchedPhrase: searchTerm,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      return data;
+    },
+    enabled: searchTerm !== '', // The query will not run until searchTerm is not an empty string
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSearchTerm(inputValue);
+  };
+
   return (
     <div>
-      <form id="search-form">
-        <input type="text" id="search-input" placeholder="Wyszukaj..." />
+      <form id="search-form" onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Wyszukaj..." 
+          value={inputValue} 
+          onChange={handleInputChange}
+        />
       </form>
+      {searchQuery.isLoading && <span>Loading...</span>}
+      {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
+      {searchQuery.data && (
+        <div>
+          {searchQuery.data.slice(0, itemsToShow).map((product: any) => (
+            <CardProd
+              key={product.product_id}
+              product={product}
+            />
+          ))}
+          {itemsToShow < searchQuery.data.length && (
+            <button onClick={handleShowMore}>Load more</button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
