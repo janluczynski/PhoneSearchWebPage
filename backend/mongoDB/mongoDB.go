@@ -19,6 +19,7 @@ import (
 type MongoDB struct {
 	Client            *mongo.Client
 	ProductCollection *mongo.Collection
+	PhoneCollection   *mongo.Collection
 }
 
 // func check if collection exists and create it if not
@@ -67,9 +68,15 @@ func InitDB() (*MongoDB, error) {
 		return nil, err
 	}
 
+	phoneCollection, err := CreateIfNotExists(db, "phone")
+	if err != nil {
+		return nil, err
+	}
+
 	return &MongoDB{
 		Client:            client,
 		ProductCollection: productCollection,
+		PhoneCollection:   phoneCollection,
 	}, nil
 
 }

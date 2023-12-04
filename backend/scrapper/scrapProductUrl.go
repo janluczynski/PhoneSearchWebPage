@@ -53,12 +53,10 @@ func XkomScrap() {
 	}
 
 	err := godotenv.Load("../.env")
-	log.Println(err)
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}
 	m, err := mongodb.InitDB()
-	log.Println("dzy to dziłą")
 	if err != nil {
 		fmt.Println("Error:", err)
 	}

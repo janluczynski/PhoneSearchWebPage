@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/joho/godotenv"
@@ -12,6 +13,8 @@ import (
 	"main.go/commons"
 	mongodb "main.go/mongoDB"
 )
+
+var c = colly.NewCollector()
 
 func UpdateProductPrice() {
 	err := godotenv.Load("../.env")
@@ -23,7 +26,7 @@ func UpdateProductPrice() {
 		fmt.Println("Error:", err)
 	}
 
-	filter := bson.M{"product_url": bson.M{}}
+	filter := bson.M{"product_url": bson.M{"$regex": "https://www.komputronik.pl/product/"}}
 
 	var products []commons.Product
 
@@ -44,11 +47,23 @@ func UpdateProductPrice() {
 		price := product.Price
 		updatedPrice := ""
 		if xkomRegex.MatchString(link) {
-			updatedPrice = xkomPriceScraper(link)
+
 		} else if mediaMarktRegex.MatchString(link) {
 			updatedPrice = mediaMarktPriceScraper(link)
 		} else if komputronikRegex.MatchString(link) {
-			updatedPrice = komputronikPriceScraper(link)
+			var t3 []string
+			c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
+				elemnt := e.Text
+				t1 := strings.ReplaceAll(elemnt, " ", "")
+				t2 := strings.Split(t1, "\n")
+				t3 = append(t3, t2[0])
+			})
+			c.Visit(link)
+			c.OnScraped(func(r *colly.Response) {
+				fmt.Println("Visiting: ", link, "Price: ", t3)
+				fmt.Println("Updated price: ", t3[0])
+			})
+			updatedPrice = t3[0]
 		}
 		if updatedPrice != price {
 			update := bson.M{"$set": bson.M{"sale_price": updatedPrice}}
@@ -60,7 +75,6 @@ func UpdateProductPrice() {
 	}
 }
 func xkomPriceScraper(link string) string {
-	c := colly.NewCollector()
 	var updatedPrice string
 	c.OnHTML(".sc-n4n86h-1.hYfBFq", func(e *colly.HTMLElement) {
 		updatedPrice = e.Text
@@ -69,7 +83,6 @@ func xkomPriceScraper(link string) string {
 	return updatedPrice
 }
 func mediaMarktPriceScraper(link string) string {
-	c := colly.NewCollector()
 	var updatedPrice string
 	c.OnHTML("div.main-price.is-big span.whole", func(e *colly.HTMLElement) {
 		elemnt := e.Text
@@ -79,17 +92,4 @@ func mediaMarktPriceScraper(link string) string {
 	})
 	c.Visit(link)
 	return updatedPrice
-}
-
-func komputronikPriceScraper(link string) string {
-	// c := colly.NewCollector()
-	// var updatedPrice string
-	// c.OnHTML(".sc-1h16fat-0.bXZyjH", func(e *colly.HTMLElement) {
-	// 	updatedPrice = e.Text
-	// })
-	// c.Visit(link)
-	// return updatedPrice
-	//////////////////// TODO
-	var TODO string
-	return TODO
 }
