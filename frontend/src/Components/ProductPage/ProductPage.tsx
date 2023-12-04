@@ -3,6 +3,7 @@ import Layout from "../Layout/Layout";
 import SearchBar from "../Searchbar/Searchbar";
 import "./ProductPage.css";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 type Product = {
   product_url: string;
   product_id: string;
@@ -21,7 +22,8 @@ type Product = {
 //   product: Product;
 // };
 
-const ProductPage: React.FC<Product> = ({ product_id }) => {
+const ProductPage = () => {
+  const { product_id } = useParams();
   const productsQuery = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -31,7 +33,7 @@ const ProductPage: React.FC<Product> = ({ product_id }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          product_id: "980c4164-e73d-4b51-a206-b51849092c91",
+          product_id: `${product_id}`,
         }),
       });
       if (!response.ok) {
