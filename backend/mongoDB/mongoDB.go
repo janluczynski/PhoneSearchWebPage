@@ -129,20 +129,12 @@ func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 }
 
 func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Product, error) {
-	filter := bson.M{
-		"$or": []bson.M{
-			{"brand": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: ""}}},
-		},
-	}
-
-	filter2 := bson.M{
-		"$or": []bson.M{
-			{"model": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: ""}}},
-		},
-	}
+	filter := bson.M{"$or": []bson.M{
+		{"brand": primitive.Regex{Pattern: searchedPhrase, Options: "i"}},
+		{"model": primitive.Regex{Pattern: searchedPhrase, Options: "i"}},
+	}}
 
 	var products []commons.Product
-	var products2 []commons.Product
 
 	cursor, err := m.ProductCollection.Find(context.Background(), filter)
 	if err != nil {
@@ -155,21 +147,6 @@ func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Pr
 
 		return nil, err
 	}
-
-	cursor, err = m.ProductCollection.Find(context.Background(), filter2)
-	if err != nil {
-
-		return nil, err
-	}
-	defer cursor.Close(context.Background())
-
-	err = cursor.All(context.Background(), &products2)
-	if err != nil {
-
-		return nil, err
-	}
-	//merge products and products2
-	products = append(products, products2...)
 
 	return products, nil
 }
