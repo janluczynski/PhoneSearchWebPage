@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	mongodb "main.go/mongoDB"
@@ -23,7 +24,7 @@ func main() {
 	}
 
 	r := gin.Default()
-
+	r.Use(cors.Default())
 	routes.PostProductInfo(r, m)
 	routes.SearchProductsFromSearchBar(r, m)
 

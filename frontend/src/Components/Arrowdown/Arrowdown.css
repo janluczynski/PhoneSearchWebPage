@@ -1,33 +1,32 @@
-.arrow-down{
-    position: sticky;
-    bottom: 2vh;
-    background-color: #333;
-    color: white;
-    width: 11vh;
-    height: 15vh;
-    border-radius: 3vh;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 1s;
-    color: #ffffff;
-    font-size: 50px; 
-    animation: pulse 1.5s infinite;
-    opacity: 0.9;
+.arrow-down {
+  position: sticky;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: rgb(0, 0, 0);
+  width: 30vw;
+  height: 15vh;
+  border-radius: 10vh 10vh 0 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s;
+  font-size: 50px;
+  animation: pulse 1.5s infinite;
+  border: 2px solid black;
 }
 @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
   }
-.hidden{
-    transition: opacity 1s ease;
-    opacity: 0;
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.hidden {
+  transition: opacity 1s ease;
+  opacity: 0;
 }

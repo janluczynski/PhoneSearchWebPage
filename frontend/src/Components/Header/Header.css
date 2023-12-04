@@ -1,27 +1,33 @@
-
-h1{
-    position: relative;
-    line-height: 100%;
-    font-size: 8vh;
-    float: left;
+h1 {
+  position: relative;
+  line-height: 100%;
+  font-size: 8vh;
+  float: left;
 }
 header {
-    width: auto;
-    background: #88c9ee;
-    top:0px;
-    height: 8vh;
-    display: flex;
-    align-items: center;
-    padding-inline: 3vw;
-    color: rgb(255, 255, 255);
-    position: sticky;
-    top: 0;
-    justify-content: space-between;
+  width: auto;
+  background: #2b2c30;
+  top: 0px;
+  height: 12vh;
+  display: flex;
+  align-items: center;
+  padding-inline: 3vw;
+  color: rgb(255, 255, 255);
+  position: sticky;
+  top: 0;
+  justify-content: space-between;
+  border: 1px #ffffff;
 }
 .header-content {
-    display: flex;
-    align-items: center;
-  }
-  .header-content > :first-child {
-    margin-right: 10px; /* Adjust the margin as needed */
-  }
+  display: flex;
+  align-items: center;
+}
+.header-content > :first-child {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+#logo {
+  height: 22vh;
+  width: 22vh;
+  left: 0;
+  position: absolute;
+}

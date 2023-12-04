@@ -1,0 +1,21 @@
+.product {
+  padding: 16px;
+  margin: 50px;
+  width: 250px;
+  text-align: center;
+  background: white;
+  color: black;
+}
+.product img {
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.product h3 {
+  font-size: 18px;
+  margin: 3px 0;
+}
+
+.product p {
+  margin: 8px 0;
+}

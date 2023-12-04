@@ -18,6 +18,7 @@ type sphrase struct {
 }
 
 func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
+
 	r.POST("/parse/product", func(c *gin.Context) {
 		var product productID
 		err := c.BindJSON(&product)

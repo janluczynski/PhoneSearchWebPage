@@ -7,8 +7,6 @@
 *.env
 *.txt
 *.http
-*.html
-
 photoscrapper/bin/
 # Test binary, built with `go test -c`
 *.test
