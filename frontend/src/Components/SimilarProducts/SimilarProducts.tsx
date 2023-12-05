@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
 import { useState } from "react";
+import { Button } from "@chakra-ui/react";
 type SimilarProductsProps = {
   name: string;
 };
@@ -51,9 +52,11 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
               <CardProd key={product.product_id} product={product} />
             ))}
       </div>
-      <button className="c" onClick={handleShowMore}>
+      {similarProdQuery.data && similarProdQuery.data.length > itemsToShow && (
+      <Button className="c" onClick={handleShowMore}>
         Pokaż więcej
-      </button>
+      </ Button>
+    )}
     </>
   );
 };

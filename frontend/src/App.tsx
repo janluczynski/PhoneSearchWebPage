@@ -10,7 +10,7 @@ function App() {
     brand: string;
     model: string;
     imageURL: string;
-    price: string;
+    sale_price: string;
     display: string;
     processor: string;
     ram: string;
@@ -24,7 +24,7 @@ function App() {
     model: "testmodel",
     imageURL:
       "https://image.ceneostatic.pl/data/products/143460739/f-haxe-elektryczna-banka-antycellulitowa-hx801.jpg",
-    price: "2000",
+    sale_price: "2000 zł",
     display: "6'",
     processor: "dobry",
     ram: "5gb",
@@ -34,6 +34,10 @@ function App() {
 
   return (
     <Layout>
+      <center>
+        <h2>Wybierz najtańszy telefon dla siebie</h2>
+      </center>
+              <SearchBar />
       <center>
         <div className="waskie">
           <p>
@@ -59,7 +63,7 @@ function App() {
             ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
           </p>
         </div>
-        <SearchBar />
+
         <h2 className="c">
           <i>Popularne produkty</i>
         </h2>

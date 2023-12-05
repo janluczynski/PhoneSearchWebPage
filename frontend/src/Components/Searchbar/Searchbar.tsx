@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Searchbar.css";
 import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
+import { Button } from "@chakra-ui/react";
 const SearchBar = () => {
   const [itemsToShow, setItemsToShow] = useState(5);
 
@@ -62,11 +63,11 @@ const SearchBar = () => {
           ))}
         </div>
       )}
-      {location.pathname === "xd" && (
-        <button className="c" onClick={handleShowMore}>
-          Pokaż więcej
-        </button>
-      )}
+    {searchQuery.data && searchQuery.data.length > itemsToShow && (
+      <Button className="c" onClick={handleShowMore}>
+        Pokaż więcej
+      </Button>
+    )}
     </div>
   );
 };

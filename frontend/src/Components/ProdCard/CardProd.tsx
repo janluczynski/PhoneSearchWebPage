@@ -1,5 +1,4 @@
 import "./CardProd.css";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 type Product = {
   product_url: string;
@@ -7,7 +6,7 @@ type Product = {
   brand: string;
   model: string;
   imageURL: string;
-  price: string;
+  sale_price: string;
   display: string;
   processor: string;
   ram: string;
@@ -27,7 +26,7 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
       />
       <div className="text">
         <h3>{product.model}</h3>
-        <h3>{product.price} pln</h3>
+        <h3>{product.sale_price}</h3>
         <Link to={`/product/${product.product_id}`} target="_blank">
           Check details
         </Link>
