@@ -64,7 +64,6 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 			return
 		}
 
-		log.Println(products)
 		// Sending data as JSON response
 		c.JSON(http.StatusOK, products)
 	})
