@@ -3,6 +3,7 @@ import "./Searchbar.css";
 import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
 import { Button } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 const SearchBar = () => {
   const [itemsToShow, setItemsToShow] = useState(5);
 
@@ -64,7 +65,7 @@ const SearchBar = () => {
         </div>
       )}
     {searchQuery.data && searchQuery.data.length > itemsToShow && (
-      <Button className="c" onClick={handleShowMore}>
+      <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon/>}>
         Pokaż więcej
       </Button>
     )}

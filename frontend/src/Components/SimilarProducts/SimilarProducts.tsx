@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
 import { useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { ChevronDownIcon, AddIcon } from "@chakra-ui/icons";
 type SimilarProductsProps = {
   name: string;
 };
@@ -53,7 +54,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
             ))}
       </div>
       {similarProdQuery.data && similarProdQuery.data.length > itemsToShow && (
-      <Button className="c" onClick={handleShowMore}>
+      <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon/>} >
         Pokaż więcej
       </ Button>
     )}
