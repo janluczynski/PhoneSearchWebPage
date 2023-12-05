@@ -14,9 +14,22 @@
   list-style: none;
   padding: 2vh;
 }
-.productDetails{
+.productDetails {
   text-align: left;
 }
 h2 {
   font-size: 3vh;
+}
+.similarProd {
+  clear: both;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.c {
+  clear: both;
+}
+button.c {
+  margin-bottom: 50px; /* adjust as needed */
 }

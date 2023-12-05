@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
 import "./Header.css";
 import Navbar from "../Navbar/Navbar.js";
 import SearchBar from "../Searchbar/Searchbar.js";
@@ -29,7 +28,7 @@ const Header = () => {
       <h1>GigaDeals</h1>
 
       <div className="header-content">
-        <Collapse in={isVisibleNav && location.pathname === '/'} >
+        <Collapse in={isVisibleNav && location.pathname === "/"}>
           <div className="HeadNav">
             <SearchBar />
           </div>

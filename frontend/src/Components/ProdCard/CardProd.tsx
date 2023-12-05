@@ -27,7 +27,10 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
       />
       <div className="text">
         <h3>{product.model}</h3>
-        <Link to={`/product/${product.product_id}`} target="_blank">Check details</Link>
+        <h3>{product.price} pln</h3>
+        <Link to={`/product/${product.product_id}`} target="_blank">
+          Check details
+        </Link>
       </div>
     </div>
   );

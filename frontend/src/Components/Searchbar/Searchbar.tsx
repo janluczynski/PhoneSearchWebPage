@@ -1,28 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "./Searchbar.css";
 import { useQuery } from "@tanstack/react-query";
-import CardProd from '../ProdCard/CardProd';
-type Product = {
-  product_url: string;
-  product_id: string;
-  brand: string;
-  model: string;
-  imageURL: string;
-  price: string;
-  display: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-};
+import CardProd from "../ProdCard/CardProd";
 const SearchBar = () => {
   const [itemsToShow, setItemsToShow] = useState(5);
 
   const handleShowMore = () => {
     setItemsToShow(itemsToShow + 5);
   };
-  const [inputValue, setInputValue] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const searchQuery = useQuery({
     queryKey: ["search", searchTerm],
@@ -43,7 +30,7 @@ const SearchBar = () => {
       console.log(data);
       return data;
     },
-    enabled: searchTerm !== '', // The query will not run until searchTerm is not an empty string
+    enabled: searchTerm !== "", // The query will not run until searchTerm is not an empty string
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,28 +45,27 @@ const SearchBar = () => {
   return (
     <div>
       <form id="search-form" onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="Wyszukaj..." 
-          value={inputValue} 
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Wyszukaj telefon..."
+          value={inputValue}
           onChange={handleInputChange}
         />
       </form>
       {searchQuery.isLoading && <span>Loading...</span>}
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
-        <div>
+        <div className="similarProd">
           {searchQuery.data.slice(0, itemsToShow).map((product: any) => (
-            <CardProd
-              key={product.product_id}
-              product={product}
-            />
+            <CardProd key={product.product_id} product={product} />
           ))}
-          {itemsToShow < searchQuery.data.length && (
-            <button onClick={handleShowMore}>Load more</button>
-          )}
         </div>
+      )}
+      {location.pathname === "xd" && (
+        <button className="c" onClick={handleShowMore}>
+          Pokaż więcej
+        </button>
       )}
     </div>
   );

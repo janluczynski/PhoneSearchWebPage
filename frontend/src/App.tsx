@@ -2,10 +2,6 @@ import Layout from "./Components/Layout/Layout";
 import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
-import { useEffect, useState } from "react";
-import ProductPage from "./Components/ProductPage/ProductPage";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import searchQuery from "./Components/Searchbar/Searchbar";
 
 function App() {
   type Product = {
@@ -38,12 +34,10 @@ function App() {
 
   return (
     <Layout>
-      <SearchBar />
-
       <center>
         <div className="waskie">
           <p>
-            WWitaj na naszej porównywarce cen telefonów - miejscu, gdzie
+            Witaj na naszej porównywarce cen telefonów - miejscu, gdzie
             znajdziesz najkorzystniejsze oferty na najnowsze modele smartfonów!
             Jesteśmy tutaj po to, aby ułatwić Ci wybór idealnego telefonu,
             dostarczając kompleksowe porównania cenowe ze sprawdzonych sklepów
@@ -65,6 +59,10 @@ function App() {
             ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
           </p>
         </div>
+        <SearchBar />
+        <h2 className="c">
+          <i>Popularne produkty</i>
+        </h2>
         <div className="products">
           <CardProd product={product} />
           <CardProd product={product} />
@@ -89,9 +87,7 @@ function App() {
           <CardProd product={product} />
           <CardProd product={product} />
         </div>
-        </center>
-
-
+      </center>
     </Layout>
   );
 }

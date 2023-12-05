@@ -1,33 +1,15 @@
-import React from "react";
 import Layout from "../Layout/Layout";
-import SearchBar from "../Searchbar/Searchbar";
 import "./ProductPage.css";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import {Button, Link} from "@chakra-ui/react";
-import {ExternalLinkIcon} from "@chakra-ui/icons";
-type Product = {
-  product_url: string;
-  product_id: string;
-  brand: string;
-  model: string;
-  imageURL: string;
-  price: string;
-  display: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-};
-// 'd096efb3-9289-4d2d-8889-ab5af2a7d2f6'
-// type ProductPageProps = {
-//   product: Product;
-// };
-
+import { Button, Link } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import SimilarProducts from "../SimilarProducts/SimilarProducts";
 const ProductPage = () => {
   const { product_id } = useParams();
+
   const productsQuery = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", product_id],
     queryFn: async () => {
       const response = await fetch("http://localhost:8080/parse/product", {
         method: "POST",
@@ -45,12 +27,11 @@ const ProductPage = () => {
       return data;
     },
   });
-  if (productsQuery.isLoading) {
-    return <span>Loading...</span>;
-  }
-
   if (productsQuery.error) {
     return <span>Error: {productsQuery.error.message}</span>;
+  }
+  if (productsQuery.isLoading) {
+    return <span>Loading...</span>;
   }
   const product = productsQuery.data;
   return (
@@ -73,9 +54,16 @@ const ProductPage = () => {
             <li>RAM: {product.ram}</li>
             <li>Storage: {product.storage}</li>
             <li>Battery: {product.battery}</li>
-            <li><Link href={product.product_url} target="_blank"><Button leftIcon={<ExternalLinkIcon />}>Buy now</Button></Link></li>
+            <li>
+              <Link href={product.product_url} target="_blank">
+                <Button leftIcon={<ExternalLinkIcon />}>Buy now</Button>
+              </Link>
+            </li>
           </ul>
         </div>
+      </div>
+      <div>
+        <SimilarProducts name={product.brand} />
       </div>
     </Layout>
   );

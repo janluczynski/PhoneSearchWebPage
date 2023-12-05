@@ -5,7 +5,8 @@
   text-align: center;
   background: white;
   color: rgb(0, 0, 0);
-  border-radius: 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
 }
 .product:hover {
   border: 2px solid #7c7c7c;
