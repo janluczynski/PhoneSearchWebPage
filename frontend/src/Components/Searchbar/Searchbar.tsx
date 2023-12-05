@@ -64,11 +64,11 @@ const SearchBar = () => {
           ))}
         </div>
       )}
-    {searchQuery.data && searchQuery.data.length > itemsToShow && (
-      <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon/>}>
-        Pokaż więcej
-      </Button>
-    )}
+      {searchQuery.data && searchQuery.data.length > itemsToShow && (
+        <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon />}>
+          Pokaż więcej
+        </Button>
+      )}
     </div>
   );
 };

@@ -37,7 +37,7 @@ function App() {
       <center>
         <h2>Wybierz najtańszy telefon dla siebie</h2>
       </center>
-              <SearchBar />
+      <SearchBar />
       <center>
         <div className="waskie">
           <p>

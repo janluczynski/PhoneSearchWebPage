@@ -54,10 +54,10 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
             ))}
       </div>
       {similarProdQuery.data && similarProdQuery.data.length > itemsToShow && (
-      <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon/>} >
-        Pokaż więcej
-      </ Button>
-    )}
+        <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon />}>
+          Pokaż więcej
+        </Button>
+      )}
     </>
   );
 };
