@@ -5,34 +5,20 @@ import { useParams } from "react-router-dom";
 import { Button, Link } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import SimilarProducts from "../SimilarProducts/SimilarProducts";
+import { fetchProduct } from "../../API/Api";
 const ProductPage = () => {
   const { product_id } = useParams();
 
   const productsQuery = useQuery({
     queryKey: ["products", product_id],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:8080/parse/product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product_id: `${product_id}`,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    queryFn: () => {
+      if (typeof product_id === "string") {
+        return fetchProduct(product_id);
+      } else {
+        throw new Error(`Product ID is undefined`);
       }
-      const data = await response.json();
-      return data;
     },
   });
-  // if (productsQuery.error) {
-  //   return <span>Error: {productsQuery.error.message}</span>;
-  // }
-  // if (productsQuery.isLoading) {
-  //   return <span>Loading...</span>;
-  // }
   const product = productsQuery.data;
   return (
     <Layout>
@@ -42,7 +28,6 @@ const ProductPage = () => {
           <span>Error: {productsQuery.error.message}</span>
         )}
         {!productsQuery.isLoading && !productsQuery.error && (
-          // Your existing content here...
           <>
             <div className="col40">
               <img
@@ -56,12 +41,17 @@ const ProductPage = () => {
               </h2>
               <div className="productDetails">
                 <ul>
-                  <li>Price: {product.sale_price}</li>
-                  <li>Display: {product.display}</li>
-                  <li>Processor: {product.processor}</li>
+                  <li>
+                    Cena:{" "}
+                    {product.sale_price === "N/A"
+                      ? "Produkt niedostępny"
+                      : product.sale_price}
+                  </li>
+                  <li>Wyświetlacz: {product.display}</li>
+                  <li>Procesor: {product.processor}</li>
                   <li>RAM: {product.ram}</li>
-                  <li>Storage: {product.storage}</li>
-                  <li>Battery: {product.battery}</li>
+                  <li>Pamięć: {product.storage}</li>
+                  <li>Bateria: {product.battery}</li>
                   <li>
                     <Link href={product.product_url} target="_blank">
                       <Button leftIcon={<ExternalLinkIcon />}>Buy now</Button>

@@ -31,3 +31,15 @@ header {
   left: 0;
   position: absolute;
 }
+@media screen and (max-width: 768px) {
+  header {
+    height: 10vh;
+  }
+  #logo {
+    height: 15vh;
+    width: 15vh;
+  }
+  h1 {
+    font-size: 5vh;
+  }
+}

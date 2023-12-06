@@ -7,3 +7,17 @@
   display: flex;
   justify-content: center;
 }
+@media screen and (max-width: 768px) {
+  .waskie {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .products {
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

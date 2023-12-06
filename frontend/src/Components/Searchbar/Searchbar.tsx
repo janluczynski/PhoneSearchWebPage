@@ -42,6 +42,7 @@ const SearchBar = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchTerm(inputValue);
+    setItemsToShow(5);
   };
 
   return (
@@ -59,9 +60,15 @@ const SearchBar = () => {
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
         <div className="similarProd">
-          {searchQuery.data.slice(0, itemsToShow).map((product: any) => (
-            <CardProd key={product.product_id} product={product} />
-          ))}
+          {searchQuery.data
+            .sort(
+              (a: any, b: any) =>
+                parseFloat(a.sale_price) - parseFloat(b.sale_price),
+            ) // sort by price
+            .slice(0, itemsToShow)
+            .map((product: any) => (
+              <CardProd key={product.product_id} product={product} />
+            ))}
         </div>
       )}
       {searchQuery.data && searchQuery.data.length > itemsToShow && (
