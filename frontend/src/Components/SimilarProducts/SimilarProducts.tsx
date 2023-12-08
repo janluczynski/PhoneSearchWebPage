@@ -3,7 +3,7 @@ import CardProd from "../ProdCard/CardProd";
 import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { ChevronDownIcon, AddIcon } from "@chakra-ui/icons";
-import { fetchProductsSearch } from "../../API/Api";
+import { fetchSimilarProducts } from "../../API/Api";
 import { Product } from "../../types";
 type SimilarProductsProps = {
   name: string;
@@ -21,7 +21,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
     enabled: name !== "",
     queryFn: () => {
       if (typeof name === "string") {
-        return fetchProductsSearch(name);
+        return fetchSimilarProducts(name);
       } else {
         throw new Error(`Search term is undefined`);
       }
