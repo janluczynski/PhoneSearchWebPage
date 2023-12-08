@@ -2,21 +2,8 @@ import Layout from "./Components/Layout/Layout";
 import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
-
+import { Product } from "./types";
 function App() {
-  type Product = {
-    product_url: string;
-    product_id: string;
-    brand: string;
-    model: string;
-    imageURL: string;
-    sale_price: string;
-    display: string;
-    processor: string;
-    ram: string;
-    storage: string;
-    battery: string;
-  };
   const product: Product = {
     product_url: "https://www.ceneo.pl/143460739#tag=pp1",
     product_id: "d096efb3-9289-4d2d-8889-ab5af2a7d2f6",

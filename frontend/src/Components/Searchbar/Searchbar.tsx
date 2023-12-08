@@ -4,35 +4,27 @@ import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
 import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import { Product } from "../../types";
+import { fetchProductsSearch } from "../../API/Api";
 const SearchBar = () => {
   const [itemsToShow, setItemsToShow] = useState(5);
 
   const handleShowMore = () => {
-    setItemsToShow(itemsToShow + 5);
+    setItemsToShow((itemsToShow) => itemsToShow + 5);
   };
   const [inputValue, setInputValue] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchQuery = useQuery({
     queryKey: ["search", searchTerm],
+    enabled: searchTerm !== "",
     queryFn: async () => {
-      const response = await fetch("http://localhost:8080/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          SearchedPhrase: searchTerm,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (typeof searchTerm === "string") {
+        return fetchProductsSearch(searchTerm);
+      } else {
+        throw new Error(`Search term is undefined`);
       }
-      const data = await response.json();
-      console.log(data);
-      return data;
     },
-    enabled: searchTerm !== "", // The query will not run until searchTerm is not an empty string
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,11 +54,11 @@ const SearchBar = () => {
         <div className="similarProd">
           {searchQuery.data
             .sort(
-              (a: any, b: any) =>
+              (a: Product, b: Product) =>
                 parseFloat(a.sale_price) - parseFloat(b.sale_price),
-            ) // sort by price
+            )
             .slice(0, itemsToShow)
-            .map((product: any) => (
+            .map((product: Product) => (
               <CardProd key={product.product_id} product={product} />
             ))}
         </div>

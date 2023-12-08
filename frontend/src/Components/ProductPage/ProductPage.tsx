@@ -6,6 +6,7 @@ import { Button, Link } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import SimilarProducts from "../SimilarProducts/SimilarProducts";
 import { fetchProduct } from "../../API/Api";
+import { Product } from "../../types";
 const ProductPage = () => {
   const { product_id } = useParams();
 
@@ -19,7 +20,7 @@ const ProductPage = () => {
       }
     },
   });
-  const product = productsQuery.data;
+  const product: Product = productsQuery.data;
   return (
     <Layout>
       <div>
