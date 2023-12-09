@@ -1,18 +1,6 @@
 import "./CardProd.css";
 import { Link } from "react-router-dom";
-type Product = {
-  product_url: string;
-  product_id: string;
-  brand: string;
-  model: string;
-  imageURL: string;
-  sale_price: string;
-  display: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-};
+import { Product } from "../../types";
 type ProductPageProps = {
   product: Product;
 };

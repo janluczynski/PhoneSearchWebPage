@@ -55,7 +55,7 @@ const SearchBar = () => {
           {searchQuery.data
             .sort(
               (a: Product, b: Product) =>
-                parseFloat(a.sale_price) - parseFloat(b.sale_price),
+                parseInt(a.sale_price) - parseInt(b.sale_price),
             )
             .slice(0, itemsToShow)
             .map((product: Product) => (

@@ -33,7 +33,6 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
   if (similarProdQuery.isLoading) {
     return <span>Loading...</span>;
   }
-  console.log(similarProdQuery.data);
 
   return (
     <>
