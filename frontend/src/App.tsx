@@ -1,8 +1,11 @@
-import Layout from "./Components/Layout/Layout";
 import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
 import { Product } from "./types";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
+import { useState } from "react";
+import SearchedProds from "./Components/SearchedProds/SearchedProds";
 function App() {
   const product: Product = {
     product_url: "https://www.ceneo.pl/143460739#tag=pp1",
@@ -10,7 +13,7 @@ function App() {
     brand: "test",
     model: "testmodel",
     imageURL:
-      "https://image.ceneostatic.pl/data/products/143460739/f-haxe-elektryczna-banka-antycellulitowa-hx801.jpg",
+      "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/7/pr_2022_7_4_13_46_24_503_05.jpg",
     sale_price: "2000 zł",
     display: "6'",
     processor: "dobry",
@@ -18,13 +21,17 @@ function App() {
     storage: "2gb",
     battery: "1000",
   };
-
+  const [searchTerm, setSearchTerm] = useState("");
   return (
-    <Layout>
+    <>
+      <Header setSearchTerm={setSearchTerm} />
       <center>
         <h2>Wybierz najtańszy telefon dla siebie</h2>
       </center>
-      <SearchBar />
+      <SearchBar setSearchTerm={setSearchTerm} />
+      <div className="searchedprods">
+        <SearchedProds searchTerm={searchTerm} />
+      </div>
       <center>
         <div className="waskie">
           <p>
@@ -79,7 +86,8 @@ function App() {
           <CardProd product={product} />
         </div>
       </center>
-    </Layout>
+      <Footer />
+    </>
   );
 }
 

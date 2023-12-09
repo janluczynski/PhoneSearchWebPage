@@ -9,7 +9,7 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
     <Link to={`/product/${product.product_id}`} target="_blank">
       <div className="product">
         <img
-          src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/4/pr_2023_4_12_13_2_59_532_01.jpg"
+          src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/7/pr_2022_7_4_13_46_24_503_05.jpg"
           alt={product.model}
           style={{ maxWidth: "100%", height: "20vh" }}
         />

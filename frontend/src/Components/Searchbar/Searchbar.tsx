@@ -1,31 +1,12 @@
 import React, { useState } from "react";
 import "./Searchbar.css";
-import { useQuery } from "@tanstack/react-query";
-import CardProd from "../ProdCard/CardProd";
-import { Button } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
-import { Product } from "../../types";
-import { fetchProductsSearch } from "../../API/Api";
-const SearchBar = () => {
+type SearchBarProps = {
+  setSearchTerm: (searchTerm: string) => void;
+};
+const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   const [itemsToShow, setItemsToShow] = useState(5);
 
-  const handleShowMore = () => {
-    setItemsToShow((itemsToShow) => itemsToShow + 5);
-  };
   const [inputValue, setInputValue] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const searchQuery = useQuery({
-    queryKey: ["search", searchTerm],
-    enabled: searchTerm !== "",
-    queryFn: async () => {
-      if (typeof searchTerm === "string") {
-        return fetchProductsSearch(searchTerm);
-      } else {
-        throw new Error(`Search term is undefined`);
-      }
-    },
-  });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -35,6 +16,7 @@ const SearchBar = () => {
     event.preventDefault();
     setSearchTerm(inputValue);
     setItemsToShow(5);
+    setInputValue("");
   };
 
   return (
@@ -48,26 +30,6 @@ const SearchBar = () => {
           onChange={handleInputChange}
         />
       </form>
-      {searchQuery.isLoading && <span>Loading...</span>}
-      {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
-      {searchQuery.data && (
-        <div className="similarProd">
-          {searchQuery.data
-            .sort(
-              (a: Product, b: Product) =>
-                parseInt(a.sale_price) - parseInt(b.sale_price),
-            )
-            .slice(0, itemsToShow)
-            .map((product: Product) => (
-              <CardProd key={product.product_id} product={product} />
-            ))}
-        </div>
-      )}
-      {searchQuery.data && searchQuery.data.length > itemsToShow && (
-        <Button className="c" onClick={handleShowMore} leftIcon={<AddIcon />}>
-          Pokaż więcej
-        </Button>
-      )}
     </div>
   );
 };
