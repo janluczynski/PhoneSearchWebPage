@@ -51,11 +51,11 @@ func main() {
 
 	for _, product := range products {
 		filter := bson.M{
-			"brand":     bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}},
-			"model":     bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Model, " ")[0] + ".*" + strings.Split(product.Model, " ")[1], Options: "i"}},
-			"ram":       bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.RAM, " ")[0] + ".*", Options: "i"}},
-			"storage":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Storage, " ")[0] + ".*", Options: "i"}},
-			"battery":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Battery, " ")[0] + ".*", Options: "i"}},
+			"brand": bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}},
+			"model": bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Model, " ")[0] + ".*" + strings.Split(product.Model, " ")[1], Options: "i"}},
+			// "ram":       bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.RAM, " ")[0] + ".*", Options: "i"}},
+			// "storage":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Storage, " ")[0] + ".*", Options: "i"}},
+			// "battery":   bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Battery, " ")[0] + ".*", Options: "i"}},
 			"processor": bson.M{"$regex": primitive.Regex{Pattern: strings.Split(product.Processor, " ")[0] + ".*" + strings.Split(product.Processor, " ")[1], Options: "i"}},
 			"display":   bson.M{"$regex": primitive.Regex{Pattern: strings.ReplaceAll(strings.Split(product.Display, " ")[0], ",", "") + ".*", Options: "i"}},
 		}

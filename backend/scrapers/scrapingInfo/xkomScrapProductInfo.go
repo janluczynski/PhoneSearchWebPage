@@ -1,10 +1,10 @@
-package scrappers
+package scrapers
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"regexp"
+	"strconv"
 
 	"strings"
 
@@ -16,7 +16,7 @@ import (
 )
 
 func XkomScrapProductInfo() {
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("C:/Users/lepar/VSdev/Projekt3rok/backend/.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}
@@ -40,17 +40,18 @@ func XkomScrapProductInfo() {
 	}
 	for _, product := range products {
 		link := product.ProductURL
-		phoneInfo := xkomScrapHelper(link)
+		phone := xkomScrapHelper(link)
 		update := bson.M{
 			"$set": bson.M{
-				"brand":      phoneInfo[0],
-				"model":      phoneInfo[1],
-				"sale_price": phoneInfo[2],
-				"processor":  phoneInfo[3],
-				"ram":        phoneInfo[4],
-				"storage":    phoneInfo[5],
-				"battery":    phoneInfo[6],
-				"display":    phoneInfo[7],
+				"brand":     phone.Brand,
+				"model":     phone.Model,
+				"image":     phone.ImageURL,
+				"price":     phone.Price,
+				"processor": phone.Processor,
+				"ram":       phone.RAM,
+				"storage":   phone.Storage,
+				"battery":   phone.Battery,
+				"display":   phone.Display,
 			},
 		}
 		_, err := m.ProductCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
@@ -59,106 +60,86 @@ func XkomScrapProductInfo() {
 		}
 	}
 }
-func xkomScrapHelper(baseURL string) []string {
+func xkomScrapHelper(baseURL string) commons.Product {
 	c := colly.NewCollector()
-	// baseURL := "https://www.x-kom.pl/p/1160711-smartfon-telefon-samsung-galaxy-a23-4-128gb-black-25w-120hz.html"
+	//baseURL := "https://www.x-kom.pl/p/1160711-smartfon-telefon-samsung-galaxy-a23-4-128gb-black-25w-120hz.html"
 
-	phoneSpecification := make([]string, 0)
-	phoneInfo := make([]string, 0)
-	fullProductInfo := make([]string, 0)
+	var Specification []string
+	var Product commons.Product
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
+	c.OnHTML(".sc-13p5mv-2.fxqQxb .sc-1s1zksu-0.sc-1s1zksu-1.hHQkLn.sc-13p5mv-0.VGBov", func(e *colly.HTMLElement) {
+		Specification = append(Specification, e.Text)
 	})
-
-	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
+	c.OnHTML(".sc-1bker4h-10.kHPtVn h1", func(e *colly.HTMLElement) {
+		Product.Brand = strings.Split(e.Text, " ")[0]
+		Product.Model = strings.Join(strings.Split(e.Text, " ")[1:], " ")
 	})
-	c.OnHTML(".sc-13p5mv-3", func(e *colly.HTMLElement) { // scraping specyfication
-		element := e.Text
-		dividedPhoneSpecification := strings.Split(element, "\n")
-		for _, specification := range dividedPhoneSpecification {
-			phoneSpecification = append(phoneSpecification, specification)
+	c.OnHTML(".sc-n4n86h-1.hYfBFq", func(e *colly.HTMLElement) {
+		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(e.Text, ",00 zł", ""), " ", ""), 32)
+		if err != nil {
+			fmt.Println(err)
 		}
+		Product.Price = float32(Price)
 	})
-	c.OnHTML(".sc-1bker4h-10.kHPtVn", func(e *colly.HTMLElement) { //scraping brand + model
-		element := e.Text
-		fullPhoneInfo := strings.Split(element, " ")
-
-		Brand := fullPhoneInfo[0]
-		Model := strings.Join(fullPhoneInfo[1:], " ")
-		phoneInfo = append(phoneInfo, Brand, Model)
-
-	})
-	c.OnHTML(".sc-n4n86h-1.hYfBFq", func(e *colly.HTMLElement) { //scraping price
-		phoneInfo = append(phoneInfo, e.Text)
+	c.OnHTML(".sc-1tblmgq-0.sc-1tblmgq-3.cIswgX.sc-jiiyfe-2.jGSlBb img", func(e *colly.HTMLElement) {
+		Product.ImageURL = e.Attr("src")
 	})
 
 	c.OnScraped(func(r *colly.Response) {
-		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
-		Brand := phoneInfo[0]
-		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
-		Price := phoneInfo[2]
-		Display := ""
-		Procesor := phoneSpecification[0]
-		RAM := ""
-		Storage := ""
-		Battery := ""
-		Inches := ""
-		Hertz := ""
-
 		fmt.Println("Finished", r.Request.URL)
-		ramRegex := regexp.MustCompile(`^\b([1-9]|1\d|2[0-9])\b GB$`)
-		storageRegex := regexp.MustCompile(`^(32|[4-9][0-9]|[1-4][0-9][0-9]|5[0-1][0-2]) GB$|1 TB$`)
-		inchesRegex := regexp.MustCompile(`^\d,\d{1,2}"$`)
-		hertznRegex := regexp.MustCompile(`^\d{2,3} Hz$`)
-		batteryRegex := regexp.MustCompile(`^\d{4} mAh$`)
-		for _, element := range phoneSpecification {
-
-			if ramRegex.MatchString(element) {
-				if RAM == "" {
-					RAM = element
+		for _, element := range Specification {
+			if strings.Contains(element, "Procesor") {
+				Product.Processor = strings.ReplaceAll(element, "Procesor", "")
+			} else if strings.Contains(element, "Pamięć RAM") {
+				ram := strings.ReplaceAll(element, "Pamięć RAM", "")
+				if strings.Contains(ram, "GB") {
+					ram = strings.ReplaceAll(ram, " GB", "")
+					ramInt, err := strconv.Atoi(ram)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.RAM = ramInt * 1024
+				} else if strings.Contains(ram, "MB") {
+					ram = strings.ReplaceAll(ram, " MB", "")
+					ramInt, err := strconv.Atoi(ram)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.RAM = ramInt * 1024
 				}
-			} else if storageRegex.MatchString(element) {
-				if Storage == "" {
-					Storage = element
+			} else if strings.Contains(element, "Pamięć wbudowana") {
+				Storage := strings.ReplaceAll(element, "Pamięć wbudowana", "")
+				if strings.Contains(Storage, "GB") {
+					Storage = strings.ReplaceAll(Storage, " GB", "")
+					StorageInt, err := strconv.Atoi(Storage)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.Storage = StorageInt * 1024
+				} else if strings.Contains(Storage, "MB") {
+					Storage = strings.ReplaceAll(Storage, " MB", "")
+					StorageInt, err := strconv.Atoi(Storage)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.Storage = StorageInt * 1024
 				}
-			} else if inchesRegex.MatchString(element) {
-				if Inches == "" {
-					Inches = strings.ReplaceAll(element, ",", ".")
+			} else if strings.Contains(element, "Pojemność baterii") {
+				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(element, "Pojemność baterii", ""), " mAh", ""))
+				if err != nil {
+					fmt.Println(err)
 				}
-			} else if hertznRegex.MatchString(element) {
-				if Hertz == "" {
-					Hertz = element
-				}
-			} else if batteryRegex.MatchString(element) {
-				if Battery == "" {
-					Battery = element
-				}
+				Product.Battery = BatteryInt
+			} else if strings.Contains(element, "Przekątna ekranu") {
+				Product.Display = strings.ReplaceAll(strings.ReplaceAll(element, "Przekątna ekranu", ""), ",", ".")
 			}
 		}
-		if Inches != "" && Hertz != "" {
-			Display = fmt.Sprintf("%s, %s", Inches, Hertz)
-		} else if Inches != "" && Hertz == "" {
-			Display = Inches
-		} else {
-			Display = "N/A"
-		}
-		if RAM == "" {
-			RAM = "N/A"
-		}
-		if Battery == "" {
-			Battery = "N/A"
-		}
-
-		fullProductInfo = append(fullProductInfo, Brand, Model, Price, Procesor, RAM, Storage, Battery, Display)
 	})
 
 	c.Visit(baseURL)
 
-	return fullProductInfo
+	return Product
 }
-
 func FakeXKomRequest() {
 	c := colly.NewCollector()
 	baseURL := "https://www.x-kom.pl/p/1165774-smartfon-telefon-nokia-2660-4g-flip-rozowy-stacja-ladujaca.html"

@@ -1,4 +1,4 @@
-package scrappers
+package scrapers
 
 import (
 	"fmt"
@@ -52,7 +52,7 @@ func XkomScrap() {
 		linksOnly = append(linksOnly, correctLink)
 	}
 
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("C:/Users/lepar/VSdev/Projekt3rok/backend/.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}
