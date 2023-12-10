@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strconv"
 
 	"strings"
 
@@ -16,7 +17,7 @@ import (
 )
 
 func KomputronikScrapProductInfo() {
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}
@@ -40,17 +41,18 @@ func KomputronikScrapProductInfo() {
 	}
 	for _, product := range products {
 		link := product.ProductURL
-		phoneInfo := komputronikScrapHelper(link) // CHANGE TO KOMPUTRONIKSCRAP HELPER
+		phone := komputronikScrapHelper(link)
 		update := bson.M{
 			"$set": bson.M{
-				"brand":      phoneInfo[0],
-				"model":      phoneInfo[1],
-				"sale_price": phoneInfo[2],
-				"processor":  phoneInfo[3],
-				"ram":        phoneInfo[4],
-				"storage":    phoneInfo[5],
-				"battery":    phoneInfo[6],
-				"display":    phoneInfo[7],
+				"brand":     phone.Brand,
+				"model":     phone.Model,
+				"image":     phone.ImageURL,
+				"price":     phone.Price,
+				"processor": phone.Processor,
+				"ram":       phone.RAM,
+				"storage":   phone.Storage,
+				"battery":   phone.Battery,
+				"display":   phone.Display,
 			},
 		}
 		_, err := m.ProductCollection.UpdateOne(context.Background(), bson.M{"product_url": link}, update)
@@ -59,94 +61,98 @@ func KomputronikScrapProductInfo() {
 		}
 	}
 }
-func komputronikScrapHelper(baseURL string) []string {
+func komputronikScrapHelper(baseURL string) commons.Product {
 	c := colly.NewCollector()
 	//baseURL := "https://www.komputronik.pl/product/826982/poco-f5-pro-12-256gb-czarny.html"
 
-	phoneSpecification := make([]string, 0)
-	phoneInfo := make([]string, 0)
-	fullProductInfo := make([]string, 0)
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
+	var Specification []string
+	var Product commons.Product
+	var StringPrice []string
 
-	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
+	c.OnHTML(".tests-full-specification.wrap-text .grid.grid-cols-2.text-sm", func(e *colly.HTMLElement) {
+		Specification = append(Specification, e.Text)
 	})
-	c.OnHTML("div.p-1 p", func(e *colly.HTMLElement) { //scraping specification
-		elements := e.Text
-		dividePhoneSpecification := strings.Split(strings.ReplaceAll(elements, " ", ""), "\n")
-		for _, specification := range dividePhoneSpecification {
-			phoneSpecification = append(phoneSpecification, specification)
+	c.OnHTML("div.inline-flex.items-center.mt-2.flex-wrap div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
+		StringPrice = append(StringPrice, e.Text)
+	})
+	c.OnHTML("div.overflow-hidden.flex.justify-center.items-center.w-80.h-80 img", func(e *colly.HTMLElement) {
+		Product.ImageURL = e.Attr("src")
+	})
+	c.OnHTML("h1.tests-product-name.font-headline.text-lg.font-bold.leading-8.line-clamp-2", func(e *colly.HTMLElement) {
+		trimRegex := regexp.MustCompile(` {2,}`)
+		PhoneName := strings.Split(strings.ReplaceAll(trimRegex.ReplaceAllString(e.Text, ""), "\n", ""), " ")
+		GBRegex := regexp.MustCompile(`GB$`)
+		Product.Brand = PhoneName[0]
+		Model := ""
+		for i := 1; i < len(PhoneName); i++ {
+			if GBRegex.MatchString(PhoneName[i]) || strings.Contains(PhoneName[i], "5G") {
+				break
+			} else {
+				Model += PhoneName[i] + " "
+			}
 		}
-
-	})
-	c.OnHTML("h1.tests-product-name", func(e *colly.HTMLElement) { // scraping brand + model
-		element := e.Text
-		fullPhoneInfo := strings.Fields(element)
-
-		Brand := fullPhoneInfo[0]
-		Model := strings.Join(fullPhoneInfo[1:], " ")
-		phoneInfo = append(phoneInfo, Brand, Model)
-
-	})
-	c.OnHTML("div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) { //scraping price
-		phoneInfo = append(phoneInfo, e.Text)
+		Product.Model = Model
 	})
 
 	c.OnScraped(func(r *colly.Response) {
-		bracketsReegx := regexp.MustCompile(`\([^)]*\)`)
-		Brand := phoneInfo[0]
-		Model := bracketsReegx.ReplaceAllString(phoneInfo[1], "")
-		Price := phoneInfo[2]
-		Procesor := ""
-		RAM := ""
-		Storage := ""
-		Battery := ""
-		Inches := ""
 		fmt.Println("Finished", r.Request.URL)
-		storageRegex := regexp.MustCompile(`GB$`)
-		inchesRegex := regexp.MustCompile(`^\d.\d{1,2}cale$`)
-		batteryRegex := regexp.MustCompile(`^\d{4}mAh$`)
-
-		for i := 0; i < len(phoneSpecification); i++ {
-			if storageRegex.MatchString(phoneSpecification[i]) {
-				if Storage == "" {
-					Storage = phoneSpecification[i]
-				} else if RAM == "" {
-					RAM = phoneSpecification[i]
-					if storageRegex.MatchString(phoneSpecification[i+2]) {
-						Procesor = phoneSpecification[i+4]
-					} else {
-						Procesor = phoneSpecification[i+2]
+		trimRegex := regexp.MustCompile(` {2,}`)
+		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(StringPrice[0], ",", "."), " zł", ""), "\u00a0", ""), 64)
+		if err != nil {
+			fmt.Println(err)
+		}
+		Product.Price = Price
+		for _, specification := range Specification {
+			specification = trimRegex.ReplaceAllString(strings.ReplaceAll(specification, "\n", ""), "")
+			if strings.Contains(specification, "Zastosowany procesor") {
+				Product.Processor = strings.ReplaceAll(specification, "Zastosowany procesor", "")
+			} else if strings.Contains(specification, "Pamięć RAM") {
+				ram := strings.ReplaceAll(specification, "Pamięć RAM", "")
+				if strings.Contains(ram, "GB") {
+					ram = strings.ReplaceAll(ram, " GB", "")
+					ramInt, err := strconv.Atoi(ram)
+					if err != nil {
+						fmt.Println(err)
 					}
+					Product.RAM = ramInt * 1024
+				} else if strings.Contains(ram, "MB") {
+					ram = strings.ReplaceAll(ram, " MB", "")
+					ramInt, err := strconv.Atoi(ram)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.RAM = ramInt * 1024
 				}
-			} else if inchesRegex.MatchString(phoneSpecification[i]) {
-				if Inches == "" {
-					Inches = strings.ReplaceAll(phoneSpecification[i], "cale", `"`)
+			} else if strings.Contains(specification, "Pamięć Flash") {
+				Storage := strings.ReplaceAll(specification, "Pamięć Flash", "")
+				if strings.Contains(Storage, "GB") {
+					Storage = strings.ReplaceAll(Storage, " GB", "")
+					StorageInt, err := strconv.Atoi(Storage)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.Storage = StorageInt * 1024
+				} else if strings.Contains(Storage, "MB") {
+					Storage = strings.ReplaceAll(Storage, " MB", "")
+					StorageInt, err := strconv.Atoi(Storage)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.Storage = StorageInt * 1024
 				}
-			} else if batteryRegex.MatchString(phoneSpecification[i]) {
-				if Battery == "" {
-					Battery = phoneSpecification[i]
+			} else if strings.Contains(specification, "Pojemność akumulatora") {
+				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(specification, "Pojemność akumulatora", ""), " mAh", ""))
+				if err != nil {
+					fmt.Println(err)
 				}
+				Product.Battery = BatteryInt
+			} else if strings.Contains(specification, "Przekątna wyświetlacza") {
+				Product.Display = strings.ReplaceAll(strings.ReplaceAll(specification, "Przekątna wyświetlacza", ""), " cale", "\"")
 			}
 		}
-		if Inches == "" {
-			Inches = "N/A"
-		}
-		if RAM == "" {
-			RAM = "N/A"
-		}
-		if Battery == "" {
-			Battery = "N/A"
-		}
-		if Procesor == "" {
-			Procesor = "N/A"
-		}
-
-		fullProductInfo = append(fullProductInfo, Brand, Model, Price, Procesor, RAM, Storage, Battery, Inches)
 	})
+
 	c.Visit(baseURL)
 
-	return fullProductInfo
+	return Product
 }

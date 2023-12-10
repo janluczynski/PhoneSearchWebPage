@@ -52,7 +52,7 @@ func MediaMarktScrap() {
 		linksOnly = append(linksOnly, correctLink)
 	}
 
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}

@@ -6,7 +6,7 @@ type Product struct {
 	Brand      string  `json:"brand" bson:"brand"`
 	Model      string  `json:"model" bson:"model"`
 	ImageURL   string  `json:"image" bson:"image"`
-	Price      float32 `json:"price" bson:"price"`
+	Price      float64 `json:"price" bson:"price"`
 	Display    string  `json:"display" bson:"display"`
 	Processor  string  `json:"processor" bson:"processor"`
 	RAM        int     `json:"ram" bson:"ram"`

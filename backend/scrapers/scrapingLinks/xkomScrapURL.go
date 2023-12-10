@@ -52,7 +52,7 @@ func XkomScrap() {
 		linksOnly = append(linksOnly, correctLink)
 	}
 
-	err := godotenv.Load("C:/Users/lepar/VSdev/Projekt3rok/backend/.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}

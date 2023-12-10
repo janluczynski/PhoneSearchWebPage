@@ -29,7 +29,6 @@ func KomputronikScrap() {
 			if productLinkRegex.MatchString(link) && !visitedLinks[link] {
 				productLinks = append(productLinks, link)
 				visitedLinks[link] = true
-				// fmt.Println(modifiedLink)
 			}
 		})
 
@@ -46,11 +45,10 @@ func KomputronikScrap() {
 
 	var linksOnly []string
 	for link := range visitedLinks {
-		// correctLink := "https://www.x-kom.pl" + link
 		linksOnly = append(linksOnly, link)
 	}
 
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"regexp"
 	"strconv"
 
 	"strings"
@@ -16,7 +17,7 @@ import (
 )
 
 func XkomScrapProductInfo() {
-	err := godotenv.Load("C:/Users/lepar/VSdev/Projekt3rok/backend/.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
 	}
@@ -62,7 +63,7 @@ func XkomScrapProductInfo() {
 }
 func xkomScrapHelper(baseURL string) commons.Product {
 	c := colly.NewCollector()
-	//baseURL := "https://www.x-kom.pl/p/1160711-smartfon-telefon-samsung-galaxy-a23-4-128gb-black-25w-120hz.html"
+	//baseURL := "https://www.x-kom.pl/p/1127067-smartfon-telefon-xiaomi-redmi-note-12-4-128gb-ice-blue.html"
 
 	var Specification []string
 	var Product commons.Product
@@ -71,15 +72,25 @@ func xkomScrapHelper(baseURL string) commons.Product {
 		Specification = append(Specification, e.Text)
 	})
 	c.OnHTML(".sc-1bker4h-10.kHPtVn h1", func(e *colly.HTMLElement) {
-		Product.Brand = strings.Split(e.Text, " ")[0]
-		Product.Model = strings.Join(strings.Split(e.Text, " ")[1:], " ")
+		PhoneName := strings.Split(e.Text, " ")
+		GBRegex := regexp.MustCompile(`GB$`)
+		Product.Brand = PhoneName[0]
+		Model := ""
+		for i := 1; i < len(PhoneName); i++ {
+			if GBRegex.MatchString(PhoneName[i]) || strings.Contains(PhoneName[i], "5G") {
+				break
+			} else {
+				Model += PhoneName[i] + " "
+			}
+		}
+		Product.Model = Model
 	})
 	c.OnHTML(".sc-n4n86h-1.hYfBFq", func(e *colly.HTMLElement) {
-		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(e.Text, ",00 zł", ""), " ", ""), 32)
+		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(e.Text, ",00 zł", ""), " ", ""), 64)
 		if err != nil {
 			fmt.Println(err)
 		}
-		Product.Price = float32(Price)
+		Product.Price = Price
 	})
 	c.OnHTML(".sc-1tblmgq-0.sc-1tblmgq-3.cIswgX.sc-jiiyfe-2.jGSlBb img", func(e *colly.HTMLElement) {
 		Product.ImageURL = e.Attr("src")
@@ -87,11 +98,11 @@ func xkomScrapHelper(baseURL string) commons.Product {
 
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished", r.Request.URL)
-		for _, element := range Specification {
-			if strings.Contains(element, "Procesor") {
-				Product.Processor = strings.ReplaceAll(element, "Procesor", "")
-			} else if strings.Contains(element, "Pamięć RAM") {
-				ram := strings.ReplaceAll(element, "Pamięć RAM", "")
+		for _, specification := range Specification {
+			if strings.Contains(specification, "Procesor") {
+				Product.Processor = strings.ReplaceAll(specification, "Procesor", "")
+			} else if strings.Contains(specification, "Pamięć RAM") {
+				ram := strings.ReplaceAll(specification, "Pamięć RAM", "")
 				if strings.Contains(ram, "GB") {
 					ram = strings.ReplaceAll(ram, " GB", "")
 					ramInt, err := strconv.Atoi(ram)
@@ -107,8 +118,8 @@ func xkomScrapHelper(baseURL string) commons.Product {
 					}
 					Product.RAM = ramInt * 1024
 				}
-			} else if strings.Contains(element, "Pamięć wbudowana") {
-				Storage := strings.ReplaceAll(element, "Pamięć wbudowana", "")
+			} else if strings.Contains(specification, "Pamięć wbudowana") {
+				Storage := strings.ReplaceAll(specification, "Pamięć wbudowana", "")
 				if strings.Contains(Storage, "GB") {
 					Storage = strings.ReplaceAll(Storage, " GB", "")
 					StorageInt, err := strconv.Atoi(Storage)
@@ -124,16 +135,18 @@ func xkomScrapHelper(baseURL string) commons.Product {
 					}
 					Product.Storage = StorageInt * 1024
 				}
-			} else if strings.Contains(element, "Pojemność baterii") {
-				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(element, "Pojemność baterii", ""), " mAh", ""))
+			} else if strings.Contains(specification, "Pojemność baterii") {
+				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(specification, "Pojemność baterii", ""), " mAh", ""))
 				if err != nil {
 					fmt.Println(err)
 				}
 				Product.Battery = BatteryInt
-			} else if strings.Contains(element, "Przekątna ekranu") {
-				Product.Display = strings.ReplaceAll(strings.ReplaceAll(element, "Przekątna ekranu", ""), ",", ".")
+			} else if strings.Contains(specification, "Przekątna ekranu") {
+				Product.Display = strings.ReplaceAll(strings.ReplaceAll(specification, "Przekątna ekranu", ""), ",", ".")
 			}
 		}
+		fmt.Println(Product)
+
 	})
 
 	c.Visit(baseURL)
