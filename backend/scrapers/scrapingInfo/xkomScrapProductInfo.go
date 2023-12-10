@@ -63,7 +63,7 @@ func XkomScrapProductInfo() {
 }
 func xkomScrapHelper(baseURL string) commons.Product {
 	c := colly.NewCollector()
-	//baseURL := "https://www.x-kom.pl/p/1127067-smartfon-telefon-xiaomi-redmi-note-12-4-128gb-ice-blue.html"
+	//baseURL := "https://www.x-kom.pl/p/1180117-smartfon-telefon-apple-iphone-15-pro-max-1tb-black-titanium.html"
 
 	var Specification []string
 	var Product commons.Product
@@ -73,7 +73,7 @@ func xkomScrapHelper(baseURL string) commons.Product {
 	})
 	c.OnHTML(".sc-1bker4h-10.kHPtVn h1", func(e *colly.HTMLElement) {
 		PhoneName := strings.Split(e.Text, " ")
-		GBRegex := regexp.MustCompile(`GB$`)
+		GBRegex := regexp.MustCompile(`(GB|1TB)$`)
 		Product.Brand = PhoneName[0]
 		Model := ""
 		for i := 1; i < len(PhoneName); i++ {
@@ -134,6 +134,13 @@ func xkomScrapHelper(baseURL string) commons.Product {
 						fmt.Println(err)
 					}
 					Product.Storage = StorageInt * 1024
+				} else if strings.Contains(Storage, "TB") {
+					Storage = strings.ReplaceAll(Storage, " TB", "")
+					StorageInt, err := strconv.Atoi(Storage)
+					if err != nil {
+						fmt.Println(err)
+					}
+					Product.Storage = StorageInt * 1024 * 1024
 				}
 			} else if strings.Contains(specification, "Pojemność baterii") {
 				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(specification, "Pojemność baterii", ""), " mAh", ""))
@@ -145,8 +152,6 @@ func xkomScrapHelper(baseURL string) commons.Product {
 				Product.Display = strings.ReplaceAll(strings.ReplaceAll(specification, "Przekątna ekranu", ""), ",", ".")
 			}
 		}
-		fmt.Println(Product)
-
 	})
 
 	c.Visit(baseURL)
