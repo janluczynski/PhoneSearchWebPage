@@ -3,11 +3,11 @@ export type Product = {
   product_id: string;
   brand: string;
   model: string;
-  imageURL: string;
-  sale_price: string;
+  image: string;
+  price: number;
   display: string;
   processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
+  ram: number;
+  storage: number;
+  battery: number;
 };

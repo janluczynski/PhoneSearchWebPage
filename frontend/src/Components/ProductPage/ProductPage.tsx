@@ -31,10 +31,7 @@ const ProductPage = () => {
         {!productsQuery.isLoading && !productsQuery.error && (
           <>
             <div className="col40">
-              <img
-                src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/4/pr_2023_4_12_13_2_59_532_01.jpg"
-                alt={product.model}
-              />
+              <img src={product.image} alt={product.model} />
             </div>
             <div className="col60">
               <h2>
@@ -42,12 +39,7 @@ const ProductPage = () => {
               </h2>
               <div className="productDetails">
                 <ul>
-                  <li>
-                    Cena:{" "}
-                    {product.sale_price === "N/A"
-                      ? "Produkt niedostępny"
-                      : product.sale_price}
-                  </li>
+                  <li>Cena: {product.price} zł</li>
                   <li>Wyświetlacz: {product.display}</li>
                   <li>Procesor: {product.processor}</li>
                   <li>RAM: {product.ram}</li>

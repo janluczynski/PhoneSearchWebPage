@@ -21,3 +21,19 @@
     justify-content: center;
   }
 }
+
+body {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  min-height: 200vh;
+  color: rgb(255, 255, 255);
+  align-items: center;
+  text-align: center;
+  background: #202124;
+}
+main {
+  color: white;
+  background: #202124;
+  min-height: 100vh;
+}

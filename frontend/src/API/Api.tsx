@@ -30,6 +30,7 @@ export const fetchProductsSearch = async (searchTerm: string) => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const data = await response.json();
+
   return data as unknown as Product[];
 };
 

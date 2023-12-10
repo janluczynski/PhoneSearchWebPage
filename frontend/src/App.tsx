@@ -12,14 +12,14 @@ function App() {
     product_id: "d096efb3-9289-4d2d-8889-ab5af2a7d2f6",
     brand: "test",
     model: "testmodel",
-    imageURL:
+    image:
       "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/7/pr_2022_7_4_13_46_24_503_05.jpg",
-    sale_price: "2000 zł",
+    price: 2000,
     display: "6'",
     processor: "dobry",
-    ram: "5gb",
-    storage: "2gb",
-    battery: "1000",
+    ram: 5,
+    storage: 2,
+    battery: 1000,
   };
   const [searchTerm, setSearchTerm] = useState("");
   return (
@@ -65,22 +65,18 @@ function App() {
           <CardProd product={product} />
           <CardProd product={product} />
           <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
           <CardProd product={product} />
         </div>
         <div className="products">
           <CardProd product={product} />
           <CardProd product={product} />
           <CardProd product={product} />
-          <CardProd product={product} />
         </div>
         <div className="products">
-          <CardProd product={product} />
-          <CardProd product={product} />
-          <CardProd product={product} />
-          <CardProd product={product} />
-        </div>
-        <div className="products">
-          <CardProd product={product} />
           <CardProd product={product} />
           <CardProd product={product} />
           <CardProd product={product} />

@@ -37,10 +37,7 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
       {searchQuery.data && (
         <div className="similarProd">
           {searchQuery.data
-            .sort(
-              (a: Product, b: Product) =>
-                parseInt(a.sale_price) - parseInt(b.sale_price),
-            )
+            .sort((a: Product, b: Product) => a.price - b.price)
             .slice(0, itemsToShow)
             .map((product: Product) => (
               <CardProd key={product.product_id} product={product} />
