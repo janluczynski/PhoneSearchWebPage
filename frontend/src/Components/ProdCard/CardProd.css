@@ -5,7 +5,7 @@
   text-align: center;
   background: white;
   color: rgb(0, 0, 0);
-  border: 2px solid;
+  border: 2px solid transparent;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
