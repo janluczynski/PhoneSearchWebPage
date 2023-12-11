@@ -33,7 +33,6 @@ const Suggestions: React.FC<SuggestionsProps> = ({
       }
     },
   });
-  console.log(debouncedInputValue.length);
   return (
     <div>
       {debouncedInputValue.length > 2 &&

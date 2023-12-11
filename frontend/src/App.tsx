@@ -22,6 +22,7 @@ function App() {
     battery: 1000,
   };
   const [searchTerm, setSearchTerm] = useState("");
+  var item = sessionStorage.getItem("searchTerm");
   return (
     <>
       <Header setSearchTerm={setSearchTerm} />

@@ -4,21 +4,21 @@ import Navbar from "../Navbar/Navbar.js";
 import SearchBar from "../Searchbar/Searchbar.js";
 import { Collapse } from "@chakra-ui/react";
 import logo from "../../Images/logo.png";
+import { debounce } from "lodash";
 type SearchBarProps = {
   setSearchTerm: (searchTerm: string) => void;
 };
 const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   const [isVisibleNav, setIsVisibleNav] = useState(false);
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-
+    const handleScroll = debounce(() => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
       if (scrollY > 150) {
         setIsVisibleNav(true);
       } else {
         setIsVisibleNav(false);
       }
-    };
+    }, 400);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -26,14 +26,13 @@ const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   }, []);
   return (
     <header>
-      <img id="logo" src={logo} />
-      <h1>GigaDeals</h1>
-
-      <div className="header-content">
+      <div className="headerContent">
+        <img id="logo" src={logo} />
+        <h1>GigaDeals</h1>
+      </div>
+      <div className="headerContent">
         <Collapse in={isVisibleNav && location.pathname === "/"}>
-          <div className="HeadNav">
-            <SearchBar setSearchTerm={setSearchTerm} />
-          </div>
+          <SearchBar setSearchTerm={setSearchTerm} />
         </Collapse>
 
         <Navbar />
