@@ -28,7 +28,7 @@
 .product p {
   margin: 8px 0;
 }
-.product .text h3.product-model {
+.product .text h3.productModel {
   height: 2.4em; /* adjust as needed */
   line-height: 1.2em; /* adjust as needed */
   overflow: hidden;

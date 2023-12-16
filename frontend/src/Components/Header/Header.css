@@ -1,4 +1,4 @@
-h1 {
+.headerH  h1{
   position: relative;
   line-height: 100%;
   font-size: 8vh;
@@ -6,7 +6,7 @@ h1 {
 }
 header {
   width: auto;
-  background: #990011;
+  background: #860000;
   top: 0px;
   height: 12vh;
   display: flex;
@@ -19,6 +19,7 @@ header {
   border: 1px #000000;
 }
 .headerContent {
+  height: 100%;
   display: flex;
   align-items: center;
 }
@@ -26,8 +27,8 @@ header {
   margin-right: 10px; /* Adjust the margin as needed */
 }
 #logo {
-  height: 22vh;
-  width: 22vh;
+  height: 12vh;
+  width: 12vh;
   left: 0;
 }
 @media screen and (max-width: 768px) {

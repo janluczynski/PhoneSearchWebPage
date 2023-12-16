@@ -26,9 +26,9 @@ const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   }, []);
   return (
     <header>
-      <div className="headerContent">
+      <div className="headerContent headerH">
         <img id="logo" src={logo} />
-        <h1>GigaDeals</h1>
+        <h1>PhoneCompass</h1>
       </div>
       <div className="headerContent">
         <Collapse in={isVisibleNav && location.pathname === "/"}>

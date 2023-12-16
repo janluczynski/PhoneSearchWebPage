@@ -14,10 +14,27 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
           style={{ maxWidth: "100%", height: "20vh" }}
         />
         <div className="text">
-          <h3 className="product-model">
+          <h3 className="productModel">
             {product.brand} {product.model}
           </h3>
-          <h3>{product.price} zł</h3>
+          <h3>
+            <b>{product.price} zł</b>
+          </h3>
+          <h3>
+            {" "}
+            {product.storage >= 1048576
+              ? product.storage / 1048576 + "TB"
+              : product.storage >= 1024
+                ? product.storage / 1024 + "GB"
+                : product.storage + "MB"}
+          </h3>
+          <h3>
+            {" "}
+            RAM:{" "}
+            {product.ram > 1024
+              ? product.ram / 1024 + "GB"
+              : product.ram + "MB"}
+          </h3>
         </div>
       </div>
     </Link>

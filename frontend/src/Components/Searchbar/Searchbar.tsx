@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Searchbar.css";
 import Suggestions from "../Suggestions/Suggestions";
+import { Input } from "@chakra-ui/react";
 type SearchBarProps = {
   setSearchTerm: (searchTerm: string) => void;
 };

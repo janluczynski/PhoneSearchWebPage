@@ -53,16 +53,16 @@ const ProductPage = () => {
 
                   <li>
                     Pamięć:{" "}
-                    {product.storage > 1048576
+                    {product.storage >= 1048576
                       ? product.storage / 1048576 + "TB"
-                      : product.storage > 1024
+                      : product.storage >= 1024
                         ? product.storage / 1024 + "GB"
                         : product.storage + "MB"}
                   </li>
                   <li>Bateria: {product.battery} mAh</li>
                   <li>
                     <Link href={product.product_url} target="_blank">
-                      <Button leftIcon={<ExternalLinkIcon />}>Buy now</Button>
+                      <Button leftIcon={<ExternalLinkIcon />}>Kup teraz</Button>
                     </Link>
                   </li>
                 </ul>

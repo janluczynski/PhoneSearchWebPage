@@ -34,22 +34,25 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   });
   return (
     <>
-      <SortOptions onSortChange={setSortOption} />
+      <center>
+        <SortOptions onSortChange={setSortOption} />
+      </center>
       {searchQuery.isLoading && <span>Loading...</span>}
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
         <div className="similarProd">
           {searchQuery.data
+            .filter((product: Product) => product.price > 0)
             .sort((a: Product, b: Product) => {
               switch (sortOption) {
                 case "price":
-                  return a.price - b.price;
+                  return b.price - a.price;
                 case "ram":
-                  return a.ram - b.ram;
+                  return b.ram - a.ram;
                 case "storage":
-                  return a.storage - b.storage;
+                  return b.storage - a.storage;
                 case "battery":
-                  return a.battery - b.battery;
+                  return b.battery - a.battery;
                 default:
                   return 0;
               }

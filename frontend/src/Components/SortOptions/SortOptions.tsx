@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Radio, Stack, RadioGroup } from "@chakra-ui/react";
 interface SortOptionsProps {
   onSortChange: (sortOption: string) => void;
 }
@@ -7,42 +7,38 @@ interface SortOptionsProps {
 const SortOptions: React.FC<SortOptionsProps> = ({ onSortChange }) => {
   return (
     <div>
-      <label>
-        <input
-          type="radio"
-          value="price"
-          name="sort"
-          onChange={(e) => onSortChange(e.target.value)}
-        />
-        Price
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="ram"
-          name="sort"
-          onChange={(e) => onSortChange(e.target.value)}
-        />
-        RAM
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="storage"
-          name="sort"
-          onChange={(e) => onSortChange(e.target.value)}
-        />
-        Storage
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="battery"
-          name="sort"
-          onChange={(e) => onSortChange(e.target.value)}
-        />
-        Battery
-      </label>
+      <RadioGroup>
+        <Stack direction="row">
+          <Radio
+            value="price"
+            name="sort"
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            Price
+          </Radio>
+          <Radio
+            value="ram"
+            name="sort"
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            RAM
+          </Radio>
+          <Radio
+            value="battery"
+            name="sort"
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            Battery
+          </Radio>
+          <Radio
+            value="storage"
+            name="sort"
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            Storage
+          </Radio>
+        </Stack>
+      </RadioGroup>
     </div>
   );
 };

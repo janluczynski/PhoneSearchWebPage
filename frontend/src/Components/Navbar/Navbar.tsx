@@ -19,8 +19,8 @@ const Navbar = () => {
           <MenuButton as={IconButton} icon={<HamburgerIcon />}>
             Menu
           </MenuButton>
-          <MenuList backgroundColor="black">
-            <MenuGroup title="Profile" backgroundColor="black">
+          <MenuList>
+            <MenuGroup title="Profile">
               <MenuItem>Log in</MenuItem>
               <MenuItem>Register</MenuItem>
               <MenuItem>Payments </MenuItem>
