@@ -24,20 +24,14 @@ const Suggestions: React.FC<SuggestionsProps> = ({
 
   const searchQuery = useQuery({
     queryKey: ["search", debouncedInputValue],
-    enabled: debouncedInputValue !== "" && debouncedInputValue.length > 2,
+    enabled: debouncedInputValue.length > 2,
     queryFn: async () => {
-      if (typeof debouncedInputValue === "string") {
-        return fetchProductsSearch(debouncedInputValue);
-      } else {
-        throw new Error(`Search term is undefined`);
-      }
+      return fetchProductsSearch(debouncedInputValue);
     },
   });
-  console.log(debouncedInputValue.length);
   return (
     <div>
       {debouncedInputValue.length > 2 &&
-        searchQuery &&
         searchQuery.data &&
         searchQuery.data.length > 0 && (
           <div className="dropdown">
