@@ -16,7 +16,7 @@ import (
 	mongodb "main.go/mongoDB"
 )
 
-func XkomScrapProductInfo() {
+func KomputronikScrapProductInfo() {
 	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Printf("Some error occured. Err: %s \n", err)
@@ -26,7 +26,7 @@ func XkomScrapProductInfo() {
 		fmt.Println("Error:", err)
 	}
 
-	filter := bson.M{"product_url": bson.M{"$regex": "https://www.x-kom.pl/p"}}
+	filter := bson.M{"product_url": bson.M{"$regex": "https://www.komputronik.pl/"}}
 
 	var products []commons.Product
 
@@ -39,9 +39,10 @@ func XkomScrapProductInfo() {
 	if err := cur.All(context.TODO(), &products); err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(len(products))
 	for _, product := range products {
 		link := product.ProductURL
-		phone := xkomScrapHelper(link)
+		phone := komputronikScrapHelper(link)
 		update := bson.M{
 			"$set": bson.M{
 				"brand":     phone.Brand,
@@ -61,18 +62,26 @@ func XkomScrapProductInfo() {
 		}
 	}
 }
-func xkomScrapHelper(baseURL string) commons.Product {
+func komputronikScrapHelper(baseURL string) commons.Product {
 	c := colly.NewCollector()
-	//baseURL := "https://www.x-kom.pl/p/1180117-smartfon-telefon-apple-iphone-15-pro-max-1tb-black-titanium.html"
+	//baseURL := "https://www.komputronik.pl/product/860865/telefon-apple-iphone-15-pro-max-1tb-tytan-czarny.html"
 
 	var Specification []string
 	var Product commons.Product
+	var StringPrice []string
 
-	c.OnHTML(".sc-13p5mv-2.fxqQxb .sc-1s1zksu-0.sc-1s1zksu-1.hHQkLn.sc-13p5mv-0.VGBov", func(e *colly.HTMLElement) {
+	c.OnHTML(".tests-full-specification.wrap-text .grid.grid-cols-2.text-sm", func(e *colly.HTMLElement) {
 		Specification = append(Specification, e.Text)
 	})
-	c.OnHTML(".sc-1bker4h-10.kHPtVn h1", func(e *colly.HTMLElement) {
-		PhoneName := strings.Split(e.Text, " ")
+	c.OnHTML("div.inline-flex.items-center.mt-2.flex-wrap div.font-bold.leading-8.text-3xl", func(e *colly.HTMLElement) {
+		StringPrice = append(StringPrice, e.Text)
+	})
+	c.OnHTML("div.overflow-hidden.flex.justify-center.items-center.w-80.h-80 img", func(e *colly.HTMLElement) {
+		Product.ImageURL = e.Attr("src")
+	})
+	c.OnHTML("h1.tests-product-name.font-headline.text-lg.font-bold.leading-8.line-clamp-2", func(e *colly.HTMLElement) {
+		trimRegex := regexp.MustCompile(` {2,}`)
+		PhoneName := strings.Split(strings.ReplaceAll(trimRegex.ReplaceAllString(e.Text, ""), "\n", ""), " ")
 		GBRegex := regexp.MustCompile(`(GB|1TB)$`)
 		Product.Brand = PhoneName[0]
 		Model := ""
@@ -85,22 +94,19 @@ func xkomScrapHelper(baseURL string) commons.Product {
 		}
 		Product.Model = Model
 	})
-	c.OnHTML(".sc-n4n86h-1.hYfBFq", func(e *colly.HTMLElement) {
-		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(e.Text, ",00 zł", ""), " ", ""), 64)
+
+	c.OnScraped(func(r *colly.Response) {
+		fmt.Println("Finished", r.Request.URL)
+		trimRegex := regexp.MustCompile(` {2,}`)
+		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(StringPrice[0], ",", "."), " zł", ""), "\u00a0", ""), 64)
 		if err != nil {
 			fmt.Println(err)
 		}
 		Product.Price = Price
-	})
-	c.OnHTML(".sc-1tblmgq-0.sc-1tblmgq-3.cIswgX.sc-jiiyfe-2.jGSlBb img", func(e *colly.HTMLElement) {
-		Product.ImageURL = e.Attr("src")
-	})
-
-	c.OnScraped(func(r *colly.Response) {
-		fmt.Println("Finished", r.Request.URL)
 		for _, specification := range Specification {
-			if strings.Contains(specification, "Procesor") {
-				Product.Processor = strings.ReplaceAll(specification, "Procesor", "")
+			specification = trimRegex.ReplaceAllString(strings.ReplaceAll(specification, "\n", ""), "")
+			if strings.Contains(specification, "Zastosowany procesor") {
+				Product.Processor = strings.ReplaceAll(specification, "Zastosowany procesor", "")
 			} else if strings.Contains(specification, "Pamięć RAM") {
 				ram := strings.ReplaceAll(specification, "Pamięć RAM", "")
 				if strings.Contains(ram, "GB") {
@@ -116,10 +122,10 @@ func xkomScrapHelper(baseURL string) commons.Product {
 					if err != nil {
 						fmt.Println(err)
 					}
-					Product.RAM = ramInt * 1024
+					Product.RAM = ramInt
 				}
-			} else if strings.Contains(specification, "Pamięć wbudowana") {
-				Storage := strings.ReplaceAll(specification, "Pamięć wbudowana", "")
+			} else if strings.Contains(specification, "Pamięć Flash") {
+				Storage := strings.ReplaceAll(specification, "Pamięć Flash", "")
 				if strings.Contains(Storage, "GB") {
 					Storage = strings.ReplaceAll(Storage, " GB", "")
 					StorageInt, err := strconv.Atoi(Storage)
@@ -142,14 +148,14 @@ func xkomScrapHelper(baseURL string) commons.Product {
 					}
 					Product.Storage = StorageInt * 1024 * 1024
 				}
-			} else if strings.Contains(specification, "Pojemność baterii") {
-				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(specification, "Pojemność baterii", ""), " mAh", ""))
+			} else if strings.Contains(specification, "Pojemność akumulatora") {
+				BatteryInt, err := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(specification, "Pojemność akumulatora", ""), " mAh", ""))
 				if err != nil {
 					fmt.Println(err)
 				}
 				Product.Battery = BatteryInt
-			} else if strings.Contains(specification, "Przekątna ekranu") {
-				Product.Display = strings.ReplaceAll(strings.ReplaceAll(specification, "Przekątna ekranu", ""), ",", ".")
+			} else if strings.Contains(specification, "Przekątna wyświetlacza") {
+				Product.Display = strings.ReplaceAll(strings.ReplaceAll(specification, "Przekątna wyświetlacza", ""), " cale", "\"")
 			}
 		}
 	})
@@ -157,16 +163,4 @@ func xkomScrapHelper(baseURL string) commons.Product {
 	c.Visit(baseURL)
 
 	return Product
-}
-func FakeXKomRequest() {
-	c := colly.NewCollector()
-	baseURL := "https://www.x-kom.pl/p/1165774-smartfon-telefon-nokia-2660-4g-flip-rozowy-stacja-ladujaca.html"
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
-
-	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
-	})
-	c.Visit(baseURL)
 }

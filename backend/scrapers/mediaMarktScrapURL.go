@@ -22,7 +22,7 @@ func MediaMarktScrap() {
 	productLinkRegex := regexp.MustCompile(`/telefony-i-smartfony/smartfon-`)
 
 	for i := 1; i <= 33; i++ {
-		scrapeURL := baseURL + fmt.Sprintf("%d", i) //+ ".bhtml"
+		scrapeURL := baseURL + fmt.Sprintf("%d", i)
 
 		c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")

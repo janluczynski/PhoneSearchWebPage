@@ -20,7 +20,6 @@ func XkomScrap() {
 	var productLinks []string
 	visitedLinks := make(map[string]bool)
 
-	// Regular expression to match product links
 	productLinkRegex := regexp.MustCompile(`/p/\d+-[a-z0-9-]+\.html`)
 
 	for i := 1; i <= 26; i++ {
@@ -31,7 +30,6 @@ func XkomScrap() {
 			if productLinkRegex.MatchString(link) && !visitedLinks[link] && !strings.HasSuffix(link, "#Opinie") && !strings.HasPrefix(link, "https://www.x-kom.pl") {
 				productLinks = append(productLinks, link)
 				visitedLinks[link] = true
-				// fmt.Println(modifiedLink)
 			}
 		})
 
