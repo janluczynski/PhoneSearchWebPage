@@ -1,13 +1,15 @@
 # Projekt zespołowy- Porównywarka cen telefonów
 
-Amelia Ziemann
-Błażej Gajewski
-Jan Łuczyński
-Mateusz Śledzikowski
+ - Amelia Ziemann
+ - Błażej Gajewski
+ - Jan Łuczyński
+ - Mateusz Śledzikowski
+
 # Wymagane technologie
-Golang
-NPM v10.2.4
-NodeJS v20.10.0
+
+ - Golang
+ - NPM v10.2.4
+ - NodeJS v20.10.0
 
 ## Instalacja
 Po sklonowaniu repozytorium 
