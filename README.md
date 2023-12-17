@@ -36,6 +36,7 @@ Następnie w konsoli należy wpisać komendę
     go run main.go
 
 **Frontend**
+
 W konsoli należy wejść do folderu
 
 > Projekt3Rok/frontend
