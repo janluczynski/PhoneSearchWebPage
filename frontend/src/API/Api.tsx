@@ -23,7 +23,7 @@ export const fetchProductsSearch = async (searchTerm: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      SearchedPhrase: searchTerm,
+      searchedPhrase: searchTerm,
     }),
   });
   if (!response.ok) {
@@ -41,7 +41,7 @@ export const fetchSimilarProducts = async (name: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      SearchedPhrase: name,
+      searchedPhrase: name,
     }),
   });
   if (!response.ok) {

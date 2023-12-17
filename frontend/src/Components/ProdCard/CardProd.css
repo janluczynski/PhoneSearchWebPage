@@ -13,7 +13,7 @@
   justify-content: center;
 }
 .product:hover {
-  border: 2px solid #7c7c7c;
+  border: 2px solid #990011;
 }
 .product img {
   border-radius: 4px;
@@ -28,7 +28,7 @@
 .product p {
   margin: 8px 0;
 }
-.product .text h3.product-model {
+.product .text h3.productModel {
   height: 2.4em; /* adjust as needed */
   line-height: 1.2em; /* adjust as needed */
   overflow: hidden;

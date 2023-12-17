@@ -8,7 +8,7 @@ body {
   text-align: center;
 }
 main {
-  color: white;
-  background: #202124;
+  color: rgb(0, 0, 0);
+  background: white;
   min-height: 100vh;
 }

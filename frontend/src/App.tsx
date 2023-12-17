@@ -26,7 +26,9 @@ function App() {
     <>
       <Header setSearchTerm={setSearchTerm} />
       <center>
-        <h2>Wybierz najtańszy telefon dla siebie</h2>
+        <div className="mainHeader">
+          <h1>Wybierz najtańszy telefon dla siebie</h1>
+        </div>
       </center>
       <SearchBar setSearchTerm={setSearchTerm} />
       <div className="searchedprods">
@@ -35,26 +37,15 @@ function App() {
       <center>
         <div className="waskie">
           <p>
-            Witaj na naszej porównywarce cen telefonów - miejscu, gdzie
-            znajdziesz najkorzystniejsze oferty na najnowsze modele smartfonów!
-            Jesteśmy tutaj po to, aby ułatwić Ci wybór idealnego telefonu,
-            dostarczając kompleksowe porównania cenowe ze sprawdzonych sklepów
-            internetowych. Dzięki naszej intuicyjnej platformie porównywawczej,
-            możesz szybko i łatwo znaleźć najlepsze oferty na telefony mobilne,
-            bez konieczności przeszukiwania wielu stron internetowych. Nasza
-            baza danych jest regularnie aktualizowana, zapewniając Ci dostęp do
-            najnowszych informacji o cenach i promocjach. Znajdziesz u nas pełne
-            specyfikacje techniczne każdego modelu, recenzje użytkowników oraz
-            profesjonalne opinie, co pozwoli Ci dokładnie zorientować się w
-            dostępnych opcjach. Niezależnie od tego, czy szukasz najnowszego
-            flagowca czy też bardziej przystępnego cenowo modelu, nasza
-            porównywarka pomoże Ci znaleźć najlepszą ofertę na rynku. Dodatkowo,
-            oferujemy informacje o dodatkowych promocjach, rabatach i darmowej
-            dostawie, dzięki czemu możesz maksymalnie zaoszczędzić na zakupie
-            swojego wymarzonego telefonu. Korzystaj z naszej porównywarki cen i
-            ciesz się nowym smartfonem w atrakcyjnej cenie! Nie trać czasu na
-            przeszukiwanie różnych stron - znajdź najlepszą ofertę już teraz i
-            ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
+            Witaj w naszej porównywarce cen telefonów, gdzie znajdziesz
+            najlepsze oferty na najnowsze modele smartfonów z różnych
+            sprawdzonych sklepów internetowych. Nasza intuicyjna platforma
+            porównawcza umożliwia szybkie i łatwe znalezienie atrakcyjnych ofert
+            bez konieczności przeszukiwania wielu stron. Skorzystaj z regularnie
+            aktualizowanej bazy danych, pełnych specyfikacji technicznych,
+            recenzji użytkowników i profesjonalnych opinii, aby maksymalnie
+            zaoszczędzić na zakupie i cieszyć się nowym smartfonem w atrakcyjnej
+            cenie!
           </p>
         </div>
 

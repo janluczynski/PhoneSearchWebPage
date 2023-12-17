@@ -5,11 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProductsSearch } from "../../API/Api";
 import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import SortOptions from "../SortOptions/SortOptions";
 type SearchedProdsProps = {
   searchTerm: string;
 };
 
 const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
+  const [sortOption, setSortOption] = useState("");
   const [itemsToShow, setItemsToShow] = useState(5);
 
   useEffect(() => {
@@ -32,12 +34,29 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   });
   return (
     <>
+      <center>
+        <SortOptions onSortChange={setSortOption} />
+      </center>
       {searchQuery.isLoading && <span>Loading...</span>}
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
         <div className="similarProd">
           {searchQuery.data
-            .sort((a: Product, b: Product) => a.price - b.price)
+            .filter((product: Product) => product.price > 0)
+            .sort((a: Product, b: Product) => {
+              switch (sortOption) {
+                case "price":
+                  return b.price - a.price;
+                case "ram":
+                  return b.ram - a.ram;
+                case "storage":
+                  return b.storage - a.storage;
+                case "battery":
+                  return b.battery - a.battery;
+                default:
+                  return 0;
+              }
+            })
             .slice(0, itemsToShow)
             .map((product: Product) => (
               <CardProd key={product.product_id} product={product} />
