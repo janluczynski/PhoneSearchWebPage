@@ -4,8 +4,10 @@ import Navbar from "../Navbar/Navbar.js";
 import SearchBar from "../Searchbar/Searchbar.js";
 import { Collapse } from "@chakra-ui/react";
 import logo from "../../Images/logo.png";
-
-const Header = () => {
+type SearchBarProps = {
+  setSearchTerm: (searchTerm: string) => void;
+};
+const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   const [isVisibleNav, setIsVisibleNav] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -28,9 +30,9 @@ const Header = () => {
       <h1>GigaDeals</h1>
 
       <div className="header-content">
-        <Collapse in={isVisibleNav}>
+        <Collapse in={isVisibleNav && location.pathname === "/"}>
           <div className="HeadNav">
-            <SearchBar />
+            <SearchBar setSearchTerm={setSearchTerm} />
           </div>
         </Collapse>
 

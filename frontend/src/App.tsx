@@ -1,105 +1,41 @@
-import Layout from "./Components/Layout/Layout";
 import "./App.css";
 import SearchBar from "./Components/Searchbar/Searchbar";
 import CardProd from "./Components/ProdCard/CardProd";
-import { useEffect, useState } from "react";
-import ProductPage from "./Components/ProductPage/ProductPage";
-import { useMutation, useQuery } from "@tanstack/react-query";
-
+import { Product } from "./types";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
+import { useState } from "react";
+import SearchedProds from "./Components/SearchedProds/SearchedProds";
 function App() {
-  type Product = {
-    product_url: string;
-    product_id: string;
-    brand: string;
-    model: string;
-    imageURL: string;
-    price: string;
-    display: string;
-    processor: string;
-    ram: string;
-    storage: string;
-    battery: string;
-  };
   const product: Product = {
     product_url: "https://www.ceneo.pl/143460739#tag=pp1",
-    product_id: "1",
+    product_id: "d096efb3-9289-4d2d-8889-ab5af2a7d2f6",
     brand: "test",
     model: "testmodel",
-    imageURL:
-      "https://image.ceneostatic.pl/data/products/143460739/f-haxe-elektryczna-banka-antycellulitowa-hx801.jpg",
-    price: "2000",
+    image:
+      "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/7/pr_2022_7_4_13_46_24_503_05.jpg",
+    price: 2000,
     display: "6'",
     processor: "dobry",
-    ram: "5gb",
-    storage: "2gb",
-    battery: "1000",
+    ram: 5,
+    storage: 2,
+    battery: 1000,
   };
-  const productsQuery = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:8080/parse/product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product_id: "d096efb3-9289-4d2d-8889-ab5af2a7d2f6",
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log(data.product_url);
-      console.log(data.product_id);
-      return response.json();
-    },
-  });
-
-  // fetch("http://localhost:8080/parse/product",{
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     product_id: 'd096efb3-9289-4d2d-8889-ab5af2a7d2f6',
-  //   }),
-
-  // })
-  //   .then((response) => {
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     console.log(data);
-  //     const transformedData = data.map((item: any) => ({
-  //       product_id: item.product_id,
-  //       brand: item.brand,
-  //       model: item.model,
-  //       price: item.price,
-  //       display: item.display,
-  //       processor: item.processor,
-  //       ram: item.ram,
-  //       storage: item.storage,
-  //       battery: item.battery,
-  //       imageURL: item.imageURL,
-  //       product_url: item.product_url,
-  //     }));
-  //       setProducts(transformedData);
-
-  //   })
-  // if(productsQuery.isLoading) return <div>Loading...</div>
-
+  const [searchTerm, setSearchTerm] = useState("");
   return (
-    <Layout>
-      <SearchBar />
-
+    <>
+      <Header setSearchTerm={setSearchTerm} />
+      <center>
+        <h2>Wybierz najtańszy telefon dla siebie</h2>
+      </center>
+      <SearchBar setSearchTerm={setSearchTerm} />
+      <div className="searchedprods">
+        <SearchedProds searchTerm={searchTerm} />
+      </div>
       <center>
         <div className="waskie">
           <p>
-            WWitaj na naszej porównywarce cen telefonów - miejscu, gdzie
+            Witaj na naszej porównywarce cen telefonów - miejscu, gdzie
             znajdziesz najkorzystniejsze oferty na najnowsze modele smartfonów!
             Jesteśmy tutaj po to, aby ułatwić Ci wybór idealnego telefonu,
             dostarczając kompleksowe porównania cenowe ze sprawdzonych sklepów
@@ -121,25 +57,33 @@ function App() {
             ułatw sobie zakupy dzięki naszej porównywarce cen telefonów!
           </p>
         </div>
+
+        <h2 className="c">
+          <i>Popularne produkty</i>
+        </h2>
         <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
+          <CardProd product={product} />
+        </div>
+        <div className="products">
+          <CardProd product={product} />
+          <CardProd product={product} />
           <CardProd product={product} />
         </div>
       </center>
-
-      {/* {products.map((product) => (
-  <div key={product.product_id}>
-    <h2>{product.brand} {product.model}</h2>
-    <img src={product.imageURL} alt={product.model} />
-    <p>Price: {product.price}</p>
-    <p>Display: {product.display}</p>
-    <p>Processor: {product.processor}</p>
-    <p>RAM: {product.ram}</p>
-    <p>Storage: {product.storage}</p>
-    <p>Battery: {product.battery}</p>
-    <a href={product.product_url}>Buy now</a>
-  </div>
-))} */}
-    </Layout>
+      <Footer />
+    </>
   );
 }
 
