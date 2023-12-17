@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./Searchbar.css";
+import Suggestions from "../Suggestions/Suggestions";
 type SearchBarProps = {
   setSearchTerm: (searchTerm: string) => void;
 };
 const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
-  const [itemsToShow, setItemsToShow] = useState(5);
-
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +14,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchTerm(inputValue);
-    setItemsToShow(5);
     setInputValue("");
   };
 
@@ -28,8 +26,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
           placeholder="Wyszukaj telefon..."
           value={inputValue}
           onChange={handleInputChange}
+          autoComplete="off"
         />
       </form>
+      <center>
+        <Suggestions inputValue={inputValue} setSearchTerm={setSearchTerm} />
+      </center>
     </div>
   );
 };
