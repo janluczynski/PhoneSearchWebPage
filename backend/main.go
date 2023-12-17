@@ -27,6 +27,7 @@ func main() {
 	r.Use(cors.Default())
 	routes.PostProductInfo(r, m)
 	routes.SearchProductsFromSearchBar(r, m)
+	routes.GetSimilarProducts(r, m)
 
 	err = r.Run(":8080")
 	if err != nil {

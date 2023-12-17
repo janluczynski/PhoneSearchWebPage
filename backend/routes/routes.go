@@ -68,3 +68,30 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 		c.JSON(http.StatusOK, products)
 	})
 }
+
+func GetSimilarProducts(r *gin.Engine, m *mongodb.MongoDB) {
+	r.POST("/similar", func(c *gin.Context) {
+
+		type similarProduct struct {
+			Name    string `json:"name" bson:"name"`
+			Ram     int    `json:"ram" bson:"ram"`
+			Storage int    `json:"storage" bson:"storage"`
+		}
+
+		var productInfo similarProduct
+
+		if err := c.ShouldBindJSON(&productInfo); err != nil {
+			c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		products, err := m.FindSimilarPhones(productInfo.Name, productInfo.Ram, productInfo.Storage)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
+			return
+		}
+
+		// Sending data as JSON response
+		c.JSON(http.StatusOK, products)
+	})
+}
