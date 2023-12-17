@@ -19,10 +19,9 @@ Po sklonowaniu repozytorium
 Wchodzimy do folderu 
 > Projekt3Rok/frontend
 
-Następnie wpisujemy komendy
+Następnie wpisujemy komendę
 
     npm install
-    npm install vite
 
 ## Uruchomionie
  **Backend**
@@ -48,4 +47,5 @@ Następnie należy wpisać komendę
 Wyświetlony zostanie link w postaci
 
     http://localhost:5173/
-Po kliknięciu w niego zostanie otworzona strona
+
+Po kliknięciu (ctrl + lmb) w niego zostanie otworzona strona
