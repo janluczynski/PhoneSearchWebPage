@@ -1,8 +1,48 @@
 .waskie {
   display: flex;
   justify-content: center;
-  width: 10%;
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  text-align: justify;
+  text-justify: inter-word;
 }
 .products {
   display: flex;
+  justify-content: center;
+}
+@media screen and (max-width: 768px) {
+  .waskie {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .products {
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+body {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  min-height: 200vh;
+  color: rgb(255, 255, 255);
+  align-items: center;
+  text-align: center;
+  background: #202124;
+}
+main {
+  color: white;
+  background: #202124;
+  min-height: 100vh;
+}
+.mainHeader h1 {
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  font-size: 7vh;
+  font-family: "Roboto", sans-serif;
 }

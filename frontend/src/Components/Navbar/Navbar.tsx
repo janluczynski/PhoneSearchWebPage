@@ -15,23 +15,14 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <Stack spacing={3} direction="row" align="center">
-        <Button colorScheme="facebook" size="sm">
-          Login
-        </Button>
-        <Button colorScheme="facebook" size="sm">
-          Register
-        </Button>
         <Menu>
-          <MenuButton
-            as={IconButton}
-            colorScheme="facebook"
-            icon={<HamburgerIcon />}
-          >
+          <MenuButton as={IconButton} icon={<HamburgerIcon />}>
             Menu
           </MenuButton>
-          <MenuList backgroundColor="black">
-            <MenuGroup title="Profile" backgroundColor="black">
-              <MenuItem>My Account</MenuItem>
+          <MenuList>
+            <MenuGroup title="Profile">
+              <MenuItem>Log in</MenuItem>
+              <MenuItem>Register</MenuItem>
               <MenuItem>Payments </MenuItem>
             </MenuGroup>
             <MenuDivider />

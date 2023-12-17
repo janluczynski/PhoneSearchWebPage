@@ -4,7 +4,16 @@
   width: 250px;
   text-align: center;
   background: white;
-  color: black;
+  color: rgb(0, 0, 0);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.product:hover {
+  border: 2px solid #990011;
 }
 .product img {
   border-radius: 4px;
@@ -18,4 +27,13 @@
 
 .product p {
   margin: 8px 0;
+}
+.product .text h3.productModel {
+  height: 2.4em; /* adjust as needed */
+  line-height: 1.2em; /* adjust as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
