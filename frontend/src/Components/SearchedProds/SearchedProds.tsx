@@ -46,7 +46,7 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
             .sort((a: Product, b: Product) => {
               switch (sortOption) {
                 case "price":
-                  return b.price - a.price;
+                  return a.price - b.price;
                 case "ram":
                   return b.ram - a.ram;
                 case "storage":

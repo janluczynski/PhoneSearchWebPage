@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./Searchbar.css";
 import Suggestions from "../Suggestions/Suggestions";
-import { Input } from "@chakra-ui/react";
-type SearchBarProps = {
-  setSearchTerm: (searchTerm: string) => void;
-};
-const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
-  const [inputValue, setInputValue] = useState("");
+import { useContext } from "react";
+import { SearchContext } from "../../Contexts/SearchContexts";
+
+const SearchBar: React.FC = () => {
+  const { setSearchTerm, inputValue, setInputValue } =
+    useContext(SearchContext);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);

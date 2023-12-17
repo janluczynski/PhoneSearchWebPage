@@ -6,6 +6,7 @@ import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import { useState } from "react";
 import SearchedProds from "./Components/SearchedProds/SearchedProds";
+import { SearchContext } from "./Contexts/SearchContexts";
 function App() {
   const product1: Product = {
     product_url:
@@ -54,43 +55,48 @@ function App() {
     battery: 4400,
   };
   const [searchTerm, setSearchTerm] = useState("");
+  const [inputValue, setInputValue] = useState("");
   return (
     <>
-      <Header setSearchTerm={setSearchTerm} />
-      <center>
-        <div className="mainHeader">
-          <h1>Wybierz najtańszy telefon dla siebie</h1>
+      <SearchContext.Provider
+        value={{ searchTerm, setSearchTerm, inputValue, setInputValue }}
+      >
+        <Header />
+        <center>
+          <div className="mainHeader">
+            <h1>Wybierz najtańszy telefon dla siebie</h1>
+          </div>
+        </center>
+        <SearchBar />
+        <div className="searchedprods">
+          <SearchedProds searchTerm={searchTerm} />
         </div>
-      </center>
-      <SearchBar setSearchTerm={setSearchTerm} />
-      <div className="searchedprods">
-        <SearchedProds searchTerm={searchTerm} />
-      </div>
-      <center>
-        <div className="waskie">
-          <p>
-            Witaj w naszej porównywarce cen telefonów, gdzie znajdziesz
-            najlepsze oferty na najnowsze modele smartfonów z różnych
-            sprawdzonych sklepów internetowych. Nasza intuicyjna platforma
-            porównawcza umożliwia szybkie i łatwe znalezienie atrakcyjnych ofert
-            bez konieczności przeszukiwania wielu stron. Skorzystaj z regularnie
-            aktualizowanej bazy danych, pełnych specyfikacji technicznych,
-            recenzji użytkowników i profesjonalnych opinii, aby maksymalnie
-            zaoszczędzić na zakupie i cieszyć się nowym smartfonem w atrakcyjnej
-            cenie!
-          </p>
-        </div>
+        <center>
+          <div className="waskie">
+            <p>
+              Witaj w naszej porównywarce cen telefonów, gdzie znajdziesz
+              najlepsze oferty na najnowsze modele smartfonów z różnych
+              sprawdzonych sklepów internetowych. Nasza intuicyjna platforma
+              porównawcza umożliwia szybkie i łatwe znalezienie atrakcyjnych
+              ofert bez konieczności przeszukiwania wielu stron. Skorzystaj z
+              regularnie aktualizowanej bazy danych, pełnych specyfikacji
+              technicznych, recenzji użytkowników i profesjonalnych opinii, aby
+              maksymalnie zaoszczędzić na zakupie i cieszyć się nowym smartfonem
+              w atrakcyjnej cenie!
+            </p>
+          </div>
 
-        <h2 className="c">
-          <i>Popularne produkty</i>
-        </h2>
-        <div className="products">
-          <CardProd product={product1} />
-          <CardProd product={product2} />
-          <CardProd product={product3} />
-        </div>
-      </center>
-      <Footer />
+          <h2 className="c">
+            <i>Popularne produkty</i>
+          </h2>
+          <div className="products">
+            <CardProd product={product1} />
+            <CardProd product={product2} />
+            <CardProd product={product3} />
+          </div>
+        </center>
+        <Footer />
+      </SearchContext.Provider>
     </>
   );
 }

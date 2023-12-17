@@ -45,7 +45,7 @@ func InitDB() (*MongoDB, error) {
 	if database == "" {
 		return nil, fmt.Errorf("DBNAME env is empty")
 	}
-	clientOptions := options.Client().ApplyURI("mongodb+srv://projektzespolowy73:esFPWrGpjtdsYkCM@projekt.cch4qp1.mongodb.net/")
+	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		return nil, err

@@ -21,19 +21,19 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
             <b>{product.price} zł</b>
           </h3>
           <h3>
-            {" "}
-            {product.storage >= 1048576
-              ? product.storage / 1048576 + "TB"
-              : product.storage >= 1024
-                ? product.storage / 1024 + "GB"
-                : product.storage + "MB"}
-          </h3>
-          <h3>
-            {" "}
-            RAM:{" "}
-            {product.ram > 1024
-              ? product.ram / 1024 + "GB"
-              : product.ram + "MB"}
+            {""}
+            {product.ram === 0
+              ? ""
+              : product.ram > 1024
+                ? product.ram / 1024 + "GB/"
+                : product.ram + "MB/"}
+            {product.storage === 0
+              ? ""
+              : product.storage >= 1048576
+                ? product.storage / 1048576 + "TB"
+                : product.storage >= 1024
+                  ? product.storage / 1024 + "GB"
+                  : product.storage + "MB"}
           </h3>
         </div>
       </div>
