@@ -136,7 +136,7 @@ func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 }
 
 func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Product, error) {
-	filter := bson.M{"brand": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
+	filter := bson.M{"name": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
 
 	var products []commons.Product
 
