@@ -45,6 +45,7 @@ func KomputronikScrapProductInfo() {
 		phone := komputronikScrapHelper(link)
 		update := bson.M{
 			"$set": bson.M{
+				"name":      phone.Brand + " " + phone.Model,
 				"brand":     phone.Brand,
 				"model":     phone.Model,
 				"image":     phone.ImageURL,
