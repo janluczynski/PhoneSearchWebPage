@@ -6,6 +6,7 @@ import (
 	"log"
 	"regexp"
 	"strconv"
+	"time"
 
 	"strings"
 
@@ -39,7 +40,6 @@ func KomputronikScrapProductInfo() {
 	if err := cur.All(context.TODO(), &products); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(len(products))
 	for _, product := range products {
 		link := product.ProductURL
 		phone := komputronikScrapHelper(link)
@@ -61,6 +61,7 @@ func KomputronikScrapProductInfo() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		time.Sleep(1 * time.Second)
 	}
 }
 func komputronikScrapHelper(baseURL string) commons.Product {

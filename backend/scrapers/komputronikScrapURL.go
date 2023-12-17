@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/google/uuid"
@@ -14,6 +15,10 @@ import (
 
 func KomputronikScrap() {
 	c := colly.NewCollector()
+	c.Limit(&colly.LimitRule{
+		Delay:       1 * time.Second,
+		Parallelism: 2,
+	})
 
 	baseURL := "https://www.komputronik.pl/category/1596/telefony.html?showBuyActiveOnly=0&p="
 	var productLinks []string
@@ -21,26 +26,22 @@ func KomputronikScrap() {
 
 	productLinkRegex := regexp.MustCompile(`https:\/\/www\.komputronik\.pl\/product`)
 
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if productLinkRegex.MatchString(link) && !visitedLinks[link] {
+			productLinks = append(productLinks, link)
+			visitedLinks[link] = true
+		}
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL)
+	})
+
 	for i := 1; i <= 42; i++ {
 		scrapeURL := baseURL + fmt.Sprintf("%d", i)
-
-		c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			if productLinkRegex.MatchString(link) && !visitedLinks[link] {
-				productLinks = append(productLinks, link)
-				visitedLinks[link] = true
-			}
-		})
-
-		c.OnRequest(func(r *colly.Request) {
-			fmt.Println("Visiting", r.URL)
-		})
-
-		c.OnError(func(_ *colly.Response, err error) {
-			fmt.Println("Something went wrong:", err)
-		})
-
 		c.Visit(scrapeURL)
+		time.Sleep(3 * time.Second)
 	}
 
 	var linksOnly []string
