@@ -30,46 +30,58 @@ const ProductPage = () => {
         )}
         {!productsQuery.isLoading && !productsQuery.error && (
           <>
-            <div className="col40">
-              <img src={product.image} alt={product.model} />
-            </div>
-            <div className="col60">
-              <h2>
-                {product.brand} {product.model}
-              </h2>
-              <div className="productDetails">
-                <ul>
-                  <li>Cena: {product.price} zł</li>
-                  <li>Wyświetlacz: {product.display}</li>
-                  <li>Procesor: {product.processor}</li>
-                  {product.ram ? (
-                    <li>
-                      RAM:{" "}
-                      {product.ram > 1024
-                        ? product.ram / 1024 + "GB"
-                        : product.ram + "MB"}
-                    </li>
-                  ) : null}
-
-                  <li>
-                    Pamięć:{" "}
-                    {product.storage >= 1048576
-                      ? product.storage / 1048576 + "TB"
-                      : product.storage >= 1024
-                        ? product.storage / 1024 + "GB"
-                        : product.storage + "MB"}
-                  </li>
-                  <li>Bateria: {product.battery} mAh</li>
-                  <li>
-                    <Link href={product.product_url} target="_blank">
-                      <Button leftIcon={<ExternalLinkIcon />}>Kup teraz</Button>
-                    </Link>
-                  </li>
-                </ul>
+            <div className="productContainer">
+              <div className="col40">
+                <img src={product.image} alt={product.model} />
               </div>
-            </div>
-            <div>
-              <SimilarProducts name={product.model} />
+              <div className="col60">
+                <h2>
+                  <b>{product.name}</b>
+                </h2>
+                <div className="productDetails">
+                  <ul>
+                    <li>
+                      <b>Cena:</b> {product.price} zł
+                    </li>
+                    <li>
+                      <b>Wyświetlacz:</b> {product.display}
+                    </li>
+                    <li>
+                      <b>Procesor:</b> {product.processor}
+                    </li>
+                    {product.ram ? (
+                      <li>
+                        <b>RAM:</b>{" "}
+                        {product.ram > 1024
+                          ? product.ram / 1024 + "GB"
+                          : product.ram + "MB"}
+                      </li>
+                    ) : null}
+
+                    <li>
+                      <b>Pamięć:</b>{" "}
+                      {product.storage >= 1048576
+                        ? product.storage / 1048576 + "TB"
+                        : product.storage >= 1024
+                          ? product.storage / 1024 + "GB"
+                          : product.storage + "MB"}
+                    </li>
+                    <li>
+                      <b>Bateria:</b> {product.battery} mAh
+                    </li>
+                    <li>
+                      <Link href={product.product_url} target="_blank">
+                        <Button leftIcon={<ExternalLinkIcon />}>
+                          Kup teraz
+                        </Button>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <SimilarProducts name={product.model} />
+              </div>
             </div>
           </>
         )}

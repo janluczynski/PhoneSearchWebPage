@@ -14,3 +14,21 @@ code {
 html {
   overflow-x: hidden;
 }
+.fancy {
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-image: 
+      url("https://e0.pxfuel.com/wallpapers/529/468/desktop-wallpaper-color-dark-red-1-dark-red-background-color-thumbnail.jpg");
+    background-size: 110% auto;
+    background-position: center;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+.fancy {
+  padding: 0.5em 1em;
+  font-size: 8vh;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+}
