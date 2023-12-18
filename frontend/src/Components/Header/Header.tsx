@@ -5,6 +5,7 @@ import SearchBar from "../Searchbar/Searchbar.js";
 import { Collapse } from "@chakra-ui/react";
 import logo from "../../Images/logo.png";
 import { debounce } from "lodash";
+import Suggestions from "../Suggestions/Suggestions.js";
 
 const Header: React.FC = () => {
   const [isVisibleNav, setIsVisibleNav] = useState(false);
@@ -29,8 +30,16 @@ const Header: React.FC = () => {
         <h1>PhoneCompass</h1>
       </div>
       <div className="headerContent">
-        <Collapse in={isVisibleNav && location.pathname === "/"}>
-          <SearchBar />
+        <Collapse
+          in={isVisibleNav && location.pathname === "/"}
+          style={{ overflow: "visible" }}
+        >
+          <div className="searchContainer">
+            <SearchBar />
+            <div id="portal2">
+              <Suggestions portalId="portal2" />
+            </div>
+          </div>
         </Collapse>
 
         <Navbar />

@@ -3,22 +3,24 @@ import { fetchProductsSearch } from "../../API/Api";
 import { Product } from "../../types";
 import { debounce } from "lodash";
 import { useState, useEffect } from "react";
+import { SearchContext } from "../../Contexts/SearchContexts";
 import "./Suggestions.css";
-type SuggestionsProps = {
-  inputValue: string;
-  setSearchTerm: (searchTerm: string) => void;
-};
-const Suggestions: React.FC<SuggestionsProps> = ({
-  inputValue,
-  setSearchTerm,
-}) => {
-  const [debouncedInputValue, setDebouncedInputValue] = useState(inputValue);
+import { useContext } from "react";
+import ReactDOM from "react-dom";
 
+interface SuggestionsProps {
+  portalId: string;
+}
+
+const Suggestions: React.FC<SuggestionsProps> = ({ portalId }) => {
+  const { setSearchTerm, inputValue, setInputValue } =
+    useContext(SearchContext);
+  const [debouncedInputValue, setDebouncedInputValue] = useState(inputValue);
+  const debouncedUpdate = debounce(
+    () => setDebouncedInputValue(inputValue),
+    500,
+  );
   useEffect(() => {
-    const debouncedUpdate = debounce(
-      () => setDebouncedInputValue(inputValue),
-      500,
-    );
     debouncedUpdate();
     return debouncedUpdate.cancel;
   }, [inputValue]);
@@ -30,7 +32,11 @@ const Suggestions: React.FC<SuggestionsProps> = ({
       return fetchProductsSearch(debouncedInputValue);
     },
   });
-  return (
+  const portalElement = document.getElementById(portalId);
+  if (portalElement === null) {
+    return null;
+  }
+  return ReactDOM.createPortal(
     <div>
       {debouncedInputValue.length > 2 &&
         searchQuery.data &&
@@ -47,6 +53,8 @@ const Suggestions: React.FC<SuggestionsProps> = ({
                   key={product.product_id}
                   onClick={() => {
                     setSearchTerm(product.model);
+                    setInputValue("");
+                    window.scrollTo(0, 0);
                   }}
                   className="suggestion"
                 >
@@ -55,7 +63,8 @@ const Suggestions: React.FC<SuggestionsProps> = ({
               ))}
           </div>
         )}
-    </div>
+    </div>,
+    portalElement,
   );
 };
 
