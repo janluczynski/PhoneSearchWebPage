@@ -1,5 +1,6 @@
 import React from "react";
 import { Radio, Stack, RadioGroup } from "@chakra-ui/react";
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 interface SortOptionsProps {
   onSortChange: (sortOption: string) => void;
 }
@@ -10,12 +11,19 @@ const SortOptions: React.FC<SortOptionsProps> = ({ onSortChange }) => {
       <RadioGroup>
         <Stack direction="row">
           <Radio
-            value="price"
+            value="priceAsc"
             name="sort"
             onChange={(e) => onSortChange(e.target.value)}
           >
-            Price
+            Cena ({<ArrowUpIcon />})
           </Radio>
+          {/* <Radio
+            value="priceDesc"
+            name="sort"
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            Cena ({<ArrowDownIcon />})
+          </Radio> */}
           <Radio
             value="ram"
             name="sort"
@@ -28,14 +36,14 @@ const SortOptions: React.FC<SortOptionsProps> = ({ onSortChange }) => {
             name="sort"
             onChange={(e) => onSortChange(e.target.value)}
           >
-            Battery
+            Bateria
           </Radio>
           <Radio
             value="storage"
             name="sort"
             onChange={(e) => onSortChange(e.target.value)}
           >
-            Storage
+            Pamięć
           </Radio>
         </Stack>
       </RadioGroup>

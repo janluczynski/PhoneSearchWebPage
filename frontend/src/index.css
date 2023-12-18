@@ -5,8 +5,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-top: 12vh; /* This should be equal to the height of your header */
-  overflow-y: auto; /* Add this to make the body scrollable */
 }
 
 code {
@@ -16,7 +14,8 @@ code {
 html {
   overflow-x: hidden;
 }
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
 }

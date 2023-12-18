@@ -24,7 +24,7 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
           </h3>
           <h3>
             {""}
-            {product.ram === 0 ? "" : formatMemory(product.ram)}
+            {product.ram === 0 ? "" : formatMemory(product.ram) + "/"}
             {product.storage === 0 ? "" : formatMemory(product.storage)}
           </h3>
         </div>
