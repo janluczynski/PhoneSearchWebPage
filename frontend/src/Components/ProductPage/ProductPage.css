@@ -10,9 +10,14 @@
   float: left;
   display: block;
 }
+.col60 h2 {
+  padding: 3vh;
+  font-size: 5vh;
+}
 .productDetails li {
   list-style: none;
   padding: 2vh;
+  font-size: 2.5vh;
 }
 .productDetails {
   text-align: left;
@@ -32,6 +37,15 @@ h2 {
 }
 button.c {
   margin-bottom: 50px; /* adjust as needed */
+}
+.productContainer {
+  padding: 3vh;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 @media screen and (max-width: 768px) {
   .col40 {

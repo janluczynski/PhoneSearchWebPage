@@ -12,7 +12,8 @@ function App() {
   const product1: Product = {
     product_url:
       "https://www.x-kom.pl/p/1180085-smartfon-telefon-apple-iphone-15-pro-max-256gb-black-titanium.html",
-    product_id: "813e2688-f6ab-4c92-887f-510ad99fa483",
+    product_id: "c20e654c-cbeb-40be-aa68-f0cba7ffcfdd",
+    name: "Apple iPhone 15 PRO MAX",
     brand: "Apple",
     model: "iPhone 15 PRO MAX ",
     image:
@@ -27,7 +28,8 @@ function App() {
   const product2: Product = {
     product_url:
       "https://www.x-kom.pl/p/1180055-smartfon-telefon-apple-iphone-15-plus-2…",
-    product_id: "c0b94f44-bcb2-49b9-9c34-16a98191cb4a",
+    product_id: "ec98138c-613a-4aa3-9921-fadd39c3c972",
+    name: "Apple iPhone 15 Plus",
     brand: "Apple",
     model: "iPhone 15 Plus ",
     image:
@@ -42,7 +44,8 @@ function App() {
   const product3: Product = {
     product_url:
       "https://www.x-kom.pl/p/1158859-smartfon-telefon-samsung-galaxy-z-fold5…",
-    product_id: "c9c4a4d5-a4af-47f0-9c91-89fb25da92c6",
+    product_id: "badd47eb-5934-4311-9053-cd50e1007de7",
+    name: "Samsung Galaxy Z Fold5",
     brand: "Samsung",
     model: "Galaxy Z Fold5",
     image:
@@ -64,7 +67,7 @@ function App() {
       >
         <Header />
         <center>
-          <div className="mainHeader">
+          <div className="fancy">
             <h1>Wybierz najtańszy telefon dla siebie</h1>
           </div>
         </center>
@@ -80,15 +83,11 @@ function App() {
         <center>
           <div className="waskie">
             <p>
-              Witaj w naszej porównywarce cen telefonów, gdzie znajdziesz
-              najlepsze oferty na najnowsze modele smartfonów z różnych
-              sprawdzonych sklepów internetowych. Nasza intuicyjna platforma
-              porównawcza umożliwia szybkie i łatwe znalezienie atrakcyjnych
-              ofert bez konieczności przeszukiwania wielu stron. Skorzystaj z
-              regularnie aktualizowanej bazy danych, pełnych specyfikacji
-              technicznych, recenzji użytkowników i profesjonalnych opinii, aby
-              maksymalnie zaoszczędzić na zakupie i cieszyć się nowym smartfonem
-              w atrakcyjnej cenie!
+              PhoneCompass to strona, która pomoże Ci znaleźć najlepsze telefony
+              w najniższych cenach. Nasza strona oferuje łatwe i intuicyjne
+              narzędzia, które pomogą Ci znaleźć telefon, który spełni Twoje
+              wymagania. Dzięki naszej pomocy, nie musisz tracić czasu na
+              szukanie najlepszych ofert.
             </p>
           </div>
 
