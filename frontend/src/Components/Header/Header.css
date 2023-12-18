@@ -8,12 +8,11 @@
 header {
   width: 100%;
   background: #860000;
-  top: 0px;
   height: 12vh;
   display: flex;
   align-items: center;
   padding-inline: 3vw;
-  position: fixed;
+  position: sticky;
   top: 0;
   justify-content: space-between;
   border: 1px #000000;
@@ -41,7 +40,7 @@ header {
     width: 10vh;
   }
   h1 {
-    font-size: 5vh;
+    display: none;
   }
 }
 .searchContainer {

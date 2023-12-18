@@ -100,7 +100,7 @@ function App() {
             <CardProd product={product3} />
           </div>
         </center>
-        <Footer />
+        {/* <Footer /> */}
       </SearchContext.Provider>
     </>
   );
