@@ -7,6 +7,7 @@ import Footer from "./Components/Footer/Footer";
 import { useState } from "react";
 import SearchedProds from "./Components/SearchedProds/SearchedProds";
 import { SearchContext } from "./Contexts/SearchContexts";
+import Suggestions from "./Components/Suggestions/Suggestions";
 function App() {
   const product1: Product = {
     product_url:
@@ -67,7 +68,12 @@ function App() {
             <h1>Wybierz najtańszy telefon dla siebie</h1>
           </div>
         </center>
-        <SearchBar />
+        <div className="searchContainer">
+          <SearchBar />
+          <div id="portal1">
+            <Suggestions portalId="portal1" />
+          </div>
+        </div>
         <div className="searchedprods">
           <SearchedProds searchTerm={searchTerm} />
         </div>

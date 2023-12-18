@@ -20,21 +20,3 @@ input[type="text"]:focus {
   outline: none;
   border-color: #007bff;
 }
-.dropdown {
-  flex-direction: column;
-  border-radius: 0.25rem;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.suggestion {
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  width: 20vw;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-}
-
-.suggestion:hover {
-  background-color: #e9ecef;
-}

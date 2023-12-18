@@ -3,20 +3,21 @@
   line-height: 100%;
   font-size: 8vh;
   float: left;
+  color: rgb(255, 255, 255);
 }
 header {
-  width: auto;
+  width: 100%;
   background: #860000;
   top: 0px;
   height: 12vh;
   display: flex;
   align-items: center;
   padding-inline: 3vw;
-  color: rgb(255, 255, 255);
-  position: sticky;
+  position: fixed;
   top: 0;
   justify-content: space-between;
   border: 1px #000000;
+  z-index: 20;
 }
 .headerContent {
   height: 100%;
@@ -24,7 +25,7 @@ header {
   align-items: center;
 }
 .headerContent > :first-child {
-  margin-right: 10px; /* Adjust the margin as needed */
+  margin-right: 10px;
 }
 #logo {
   height: 12vh;
@@ -36,10 +37,13 @@ header {
     height: 10vh;
   }
   #logo {
-    height: 15vh;
-    width: 15vh;
+    height: 10vh;
+    width: 10vh;
   }
   h1 {
     font-size: 5vh;
   }
+}
+.searchContainer {
+  position: relative;
 }
