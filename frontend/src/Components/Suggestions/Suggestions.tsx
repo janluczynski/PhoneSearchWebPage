@@ -3,6 +3,7 @@ import { fetchProductsSearch } from "../../API/Api";
 import { Product } from "../../types";
 import { debounce } from "lodash";
 import { useState, useEffect } from "react";
+import "./Suggestions.css";
 type SuggestionsProps = {
   inputValue: string;
   setSearchTerm: (searchTerm: string) => void;
