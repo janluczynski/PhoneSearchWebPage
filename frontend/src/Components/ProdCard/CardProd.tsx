@@ -1,6 +1,8 @@
 import "./CardProd.css";
 import { Link } from "react-router-dom";
 import { Product } from "../../types";
+import { formatMemory } from "../../Utils/converters";
+
 type ProductPageProps = {
   product: Product;
 };
@@ -21,19 +23,13 @@ const CardProd: React.FC<ProductPageProps> = ({ product }) => {
             <b>{product.price} zł</b>
           </h3>
           <h3>
-            {" "}
-            {product.storage >= 1048576
-              ? product.storage / 1048576 + "TB"
-              : product.storage >= 1024
-                ? product.storage / 1024 + "GB"
-                : product.storage + "MB"}
-          </h3>
-          <h3>
-            {" "}
-            RAM:{" "}
-            {product.ram > 1024
-              ? product.ram / 1024 + "GB"
-              : product.ram + "MB"}
+            {""}
+            {product.ram === 0
+              ? ""
+              : formatMemory(product.ram)}
+            {product.storage === 0
+              ? ""
+              : formatMemory(product.storage)}
           </h3>
         </div>
       </div>

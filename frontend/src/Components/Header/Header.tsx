@@ -5,10 +5,8 @@ import SearchBar from "../Searchbar/Searchbar.js";
 import { Collapse } from "@chakra-ui/react";
 import logo from "../../Images/logo.png";
 import { debounce } from "lodash";
-type SearchBarProps = {
-  setSearchTerm: (searchTerm: string) => void;
-};
-const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
+
+const Header: React.FC = () => {
   const [isVisibleNav, setIsVisibleNav] = useState(false);
   useEffect(() => {
     const handleScroll = debounce(() => {
@@ -32,7 +30,7 @@ const Header: React.FC<SearchBarProps> = ({ setSearchTerm }) => {
       </div>
       <div className="headerContent">
         <Collapse in={isVisibleNav && location.pathname === "/"}>
-          <SearchBar setSearchTerm={setSearchTerm} />
+          <SearchBar />
         </Collapse>
 
         <Navbar />
