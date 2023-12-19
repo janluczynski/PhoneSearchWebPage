@@ -22,7 +22,7 @@ function App() {
     display: "6.7",
     processor: "Apple A17 Pro",
     ram: 0,
-    storage: 256,
+    storage: 262144,
     battery: 0,
   };
   const product2: Product = {
@@ -38,7 +38,7 @@ function App() {
     display: "6.7",
     processor: "Apple A16 Bionic",
     ram: 0,
-    storage: 256,
+    storage: 262144,
     battery: 0,
   };
   const product3: Product = {
