@@ -4,16 +4,19 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+
 }
 
 #search-input {
   padding: 10px;
   border: 1px solid #000000;
-  border-radius: 5px;
-  font-size: 16px;
-  width: 20vw;
-  height: 4vh;
+  border-radius: 50px;
   color: black;
+  padding-left: 4vw;
+  background-image: url('D:\Projekt3rok\frontend\src\Images\magnifying-glass.svg');
+  background-position: 1vw center;
+  background-repeat: no-repeat;
+  background-size: 3.65vh;
 }
 
 input[type="text"]:focus {

@@ -72,9 +72,9 @@ function App() {
           </div>
         </center>
         <div className="searchContainer">
-          <SearchBar />
+          <SearchBar width= "40vw" height="10vh" fontSize="40px" />
           <div id="portal1">
-            <Suggestions portalId="portal1" />
+            <Suggestions portalId="portal1" width= "40vw" top="11.2vh" />
           </div>
         </div>
         <div className="searchedprods">

@@ -10,9 +10,12 @@ import ReactDOM from "react-dom";
 
 interface SuggestionsProps {
   portalId: string;
+  width?: string;
+  height?: string;
+  top?: string;
 }
 
-const Suggestions: React.FC<SuggestionsProps> = ({ portalId }) => {
+const Suggestions: React.FC<SuggestionsProps> = ({ portalId, width = 'auto', height = 'auto', top = 'auto' }) => {
   const { setSearchTerm, inputValue, setInputValue } =
     useContext(SearchContext);
   const [debouncedInputValue, setDebouncedInputValue] = useState(inputValue);
@@ -41,7 +44,8 @@ const Suggestions: React.FC<SuggestionsProps> = ({ portalId }) => {
       {debouncedInputValue.length > 2 &&
         searchQuery.data &&
         searchQuery.data.length > 0 && (
-          <div className="dropdown">
+          <div className="dropdown"
+          style={{top:top, width:width}}>
             {searchQuery.data
               .filter(
                 (product: Product, index: number, self: Product[]) =>
@@ -57,6 +61,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ portalId }) => {
                     window.scrollTo(0, 0);
                   }}
                   className="suggestion"
+                  style={{ width: width, height: height}}
                 >
                   <p>{product.model}</p>
                 </div>

@@ -3,7 +3,13 @@ import "./Searchbar.css";
 import { useContext } from "react";
 import { SearchContext } from "../../Contexts/SearchContexts";
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  width?: string;
+  height?: string;
+  fontSize?: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ width = 'auto', height = 'auto', fontSize = '1em' }) => {
   const { setSearchTerm, inputValue, setInputValue } =
     useContext(SearchContext);
 
@@ -26,6 +32,7 @@ const SearchBar: React.FC = () => {
         value={inputValue}
         onChange={handleInputChange}
         autoComplete="off"
+        style={{ width: width, height: height, fontSize: fontSize }}
       />
     </form>
   );
