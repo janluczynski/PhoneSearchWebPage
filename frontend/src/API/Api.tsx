@@ -16,7 +16,7 @@ export const fetchProduct = async (product_id: string) => {
   return data;
 };
 
-export const fetchProductsSearch = async (searchTerm: string) => {
+export const fetchProductsSearch = async (searchTerm: string, sortedBy: string, order: number) => {
   const response = await fetch("http://localhost:8080/search", {
     method: "POST",
     headers: {
@@ -24,6 +24,8 @@ export const fetchProductsSearch = async (searchTerm: string) => {
     },
     body: JSON.stringify({
       searchedPhrase: searchTerm,
+      sortBy: sortedBy,
+      order: order,
     }),
   });
   if (!response.ok) {

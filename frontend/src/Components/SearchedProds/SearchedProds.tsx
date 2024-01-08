@@ -10,6 +10,9 @@ type SearchedProdsProps = {
   searchTerm: string;
 };
 
+const sortedBy = "ram";
+const order = -1;
+
 const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   const [sortOption, setSortOption] = useState("");
   const [itemsToShow, setItemsToShow] = useState(5);
@@ -22,11 +25,11 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
     setItemsToShow((itemsToShow) => itemsToShow + 5);
   };
   const searchQuery = useQuery({
-    queryKey: ["search", searchTerm],
+    queryKey: ["search",{ "searchedPhrase": searchTerm, "sortBy": sortedBy, "order": order }],
     enabled: searchTerm !== "",
     queryFn: async () => {
       if (typeof searchTerm === "string") {
-        return fetchProductsSearch(searchTerm);
+        return fetchProductsSearch(searchTerm, sortedBy, order);
       } else {
         throw new Error(`Search term is undefined`);
       }
