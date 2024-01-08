@@ -35,9 +35,9 @@ const Header: React.FC = () => {
           style={{ overflow: "visible" }}
         >
           <div className="searchContainer">
-            <SearchBar />
+            <SearchBar width= "20vw" height="4vh" fontSize="16px"/>
             <div id="portal2">
-              <Suggestions portalId="portal2" />
+              <Suggestions portalId="portal2" width= "20vw" top="5.13vh"/>
             </div>
           </div>
         </Collapse>
