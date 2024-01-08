@@ -80,7 +80,11 @@ const ProductPage = () => {
                 </div>
               </div>
               <div>
-                <SimilarProducts name={product.model} />
+                <SimilarProducts
+                  name={product.model}
+                  ram={product.ram}
+                  storage={product.storage}
+                />
               </div>
             </div>
           </>

@@ -7,9 +7,15 @@ import { fetchSimilarProducts } from "../../API/Api";
 import { Product } from "../../types";
 type SimilarProductsProps = {
   name: string;
+  ram: number;
+  storage: number;
 };
 
-const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
+const SimilarProducts: React.FC<SimilarProductsProps> = ({
+  name,
+  ram,
+  storage,
+}) => {
   const [similarItemsToShow, setSimilarItemsToShow] = useState(5);
 
   const handleShowMore = () => {
@@ -21,7 +27,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ name }) => {
     enabled: name !== "",
     queryFn: () => {
       if (typeof name === "string") {
-        return fetchSimilarProducts(name);
+        return fetchSimilarProducts(name, ram, storage);
       } else {
         throw new Error(`Search term is undefined`);
       }

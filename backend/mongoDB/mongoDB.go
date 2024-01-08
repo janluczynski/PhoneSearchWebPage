@@ -177,8 +177,7 @@ func (m *MongoDB) GetProductsWithoutSorting(searchedPhrase string) ([]commons.Pr
 	return products, nil
 }
 func (m *MongoDB) FindSimilarPhones(name string, ram, storage int) ([]commons.Product, error) {
-	filter := bson.M{"name": name, "ram": ram, "storage": storage}
-
+	filter := bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: name, Options: "i"}}, "ram": ram, "storage": storage}
 	var products []commons.Product
 
 	cursor, err := m.ProductCollection.Find(context.Background(), filter)

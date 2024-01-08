@@ -9,7 +9,11 @@ interface SearchBarProps {
   fontSize?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ width = 'auto', height = 'auto', fontSize = '1em' }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  width = "auto",
+  height = "auto",
+  fontSize = "1em",
+}) => {
   const { setSearchTerm, inputValue, setInputValue } =
     useContext(SearchContext);
 
