@@ -15,6 +15,8 @@ type productID struct {
 
 type sphrase struct {
 	SearchedPhrase string `json:"searchedPhrase"`
+	SortBy         string `json:"sortBy"`
+	Order          int    `json:"order"` //1 ascending, -1 descending
 }
 
 func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
@@ -58,7 +60,7 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 			return
 		}
 
-		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase)
+		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase, phrase.SortBy, phrase.Order)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return

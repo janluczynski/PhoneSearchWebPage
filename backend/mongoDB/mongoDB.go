@@ -135,12 +135,15 @@ func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 	return product, nil
 }
 
-func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Product, error) {
+func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder int) ([]commons.Product, error) {
 	filter := bson.M{"name": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
 
 	var products []commons.Product
 
-	cursor, err := m.ProductCollection.Find(context.Background(), filter)
+	options := options.Find()
+	options.SetSort(bson.D{{Key: sortByField, Value: sortOrder}})
+
+	cursor, err := m.ProductCollection.Find(context.Background(), filter, options)
 	if err != nil {
 		return nil, err
 	}
