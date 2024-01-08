@@ -16,7 +16,11 @@ export const fetchProduct = async (product_id: string) => {
   return data;
 };
 
-export const fetchProductsSearch = async (searchTerm: string, sortedBy: string, order: number) => {
+export const fetchProductsSearch = async (
+  searchTerm: string,
+  sortedBy: string,
+  order: number,
+) => {
   const response = await fetch("http://localhost:8080/search", {
     method: "POST",
     headers: {
@@ -35,7 +39,23 @@ export const fetchProductsSearch = async (searchTerm: string, sortedBy: string, 
 
   return data as unknown as Product[];
 };
+export const fetchSuggestions = async (searchTerm: string) => {
+  const response = await fetch("http://localhost:8080/searchbar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      searchedPhrase: searchTerm,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
 
+  return data as unknown as Product[];
+};
 export const fetchSimilarProducts = async (name: string) => {
   const response = await fetch("http://localhost:8080/search", {
     method: "POST",

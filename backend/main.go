@@ -28,7 +28,7 @@ func main() {
 	routes.PostProductInfo(r, m)
 	routes.SearchProductsFromSearchBar(r, m)
 	routes.GetSimilarProducts(r, m)
-
+	routes.SearchProducts(r, m)
 	err = r.Run(":8080")
 	if err != nil {
 		log.Fatal("Error running server")
