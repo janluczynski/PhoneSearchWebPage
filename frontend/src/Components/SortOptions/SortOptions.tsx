@@ -42,17 +42,17 @@ const SortOptions: React.FC<SortOptionsProps> = ({
       case 2:
         setTabIndex(index);
         setSortedBy("ram");
-        setOrder(1);
+        setOrder(-1);
         break;
       case 3:
         setTabIndex(index);
         setSortedBy("battery");
-        setOrder(1);
+        setOrder(-1);
         break;
       case 4:
         setTabIndex(index);
         setSortedBy("storage");
-        setOrder(1);
+        setOrder(-1);
         break;
       default:
         break;

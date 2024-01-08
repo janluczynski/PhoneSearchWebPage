@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-
 }
 
 #search-input {
@@ -13,7 +12,7 @@
   border-radius: 50px;
   color: black;
   padding-left: 4vw;
-  background-image: url('D:\Projekt3rok\frontend\src\Images\magnifying-glass.svg');
+  background-image: url("D:\Projekt3rok\frontend\src\Images\magnifying-glass.svg");
   background-position: 1vw center;
   background-repeat: no-repeat;
   background-size: 3.65vh;

@@ -15,7 +15,12 @@ interface SuggestionsProps {
   top?: string;
 }
 
-const Suggestions: React.FC<SuggestionsProps> = ({ portalId, width = 'auto', height = 'auto', top = 'auto' }) => {
+const Suggestions: React.FC<SuggestionsProps> = ({
+  portalId,
+  width = "auto",
+  height = "auto",
+  top = "auto",
+}) => {
   const { setSearchTerm, inputValue, setInputValue } =
     useContext(SearchContext);
   const [debouncedInputValue, setDebouncedInputValue] = useState(inputValue);
@@ -44,8 +49,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ portalId, width = 'auto', hei
       {debouncedInputValue.length > 2 &&
         searchQuery.data &&
         searchQuery.data.length > 0 && (
-          <div className="dropdown"
-          style={{top:top, width:width}}>
+          <div className="dropdown" style={{ top: top, width: width }}>
             {searchQuery.data
               .filter(
                 (product: Product, index: number, self: Product[]) =>
@@ -61,7 +65,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ portalId, width = 'auto', hei
                     window.scrollTo(0, 0);
                   }}
                   className="suggestion"
-                  style={{ width: width, height: height}}
+                  style={{ width: width, height: height }}
                 >
                   <p>{product.model}</p>
                 </div>

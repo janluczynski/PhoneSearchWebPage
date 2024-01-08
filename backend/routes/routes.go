@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -21,24 +21,22 @@ type sphrase struct {
 
 func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 
-	r.POST("/parse/product", func(c *gin.Context) {
-		var product productID
-		err := c.BindJSON(&product)
+	r.GET("/parse/product", func(c *gin.Context) {
+		ProductID := c.Query("product_id")
 
-		if err != nil || product.ProductID == "" {
+		if ProductID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in data"})
-
 			return
 		}
 		// Checking if product exists in DB
-		if !m.CheckIfProductInDB(product.ProductID) {
+		if !m.CheckIfProductInDB(ProductID) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Product doesn't exist"})
 
 			return
 		}
 
 		// Getting product data from DB
-		productData, err := m.GetProductData(product.ProductID)
+		productData, err := m.GetProductData(ProductID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
@@ -49,18 +47,21 @@ func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 	})
 }
 func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
-	r.POST("/search", func(c *gin.Context) {
+	r.GET("/search", func(c *gin.Context) {
 
-		var phrase sphrase
-		err := c.BindJSON(&phrase)
-
-		if err != nil || phrase.SearchedPhrase == "" {
-			log.Println(err)
+		searchedPhrase := c.Query("searchedPhrase")
+		sortBy := c.Query("sortBy")
+		orderInt, err := strconv.Atoi(c.Query("order"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting order to int"})
+			return
+		}
+		if searchedPhrase == "" || sortBy == "" || orderInt != 1 && orderInt != -1 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty search phrase"})
 			return
 		}
 
-		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase, phrase.SortBy, phrase.Order)
+		products, err := m.GetProductsByBrandOrModel(searchedPhrase, sortBy, orderInt)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
@@ -71,21 +72,16 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 	})
 }
 func SearchProducts(r *gin.Engine, m *mongodb.MongoDB) {
-	r.POST("/searchbar", func(c *gin.Context) {
+	r.GET("/searchbar", func(c *gin.Context) {
 
-		type searchedPhrase struct {
-			SearchedPhrase string `json:"searchedPhrase"`
-		}
-		var phrase searchedPhrase
-		err := c.BindJSON(&phrase)
+		name := c.Query("name")
 
-		if err != nil || phrase.SearchedPhrase == "" {
-			log.Println(err)
+		if name == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty search phrase"})
 			return
 		}
 
-		products, err := m.GetProductsWithoutSorting(phrase.SearchedPhrase)
+		products, err := m.GetProductsWithoutSorting(name)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
@@ -96,27 +92,24 @@ func SearchProducts(r *gin.Engine, m *mongodb.MongoDB) {
 	})
 }
 func GetSimilarProducts(r *gin.Engine, m *mongodb.MongoDB) {
-	r.POST("/similar", func(c *gin.Context) {
+	r.GET("/similar", func(c *gin.Context) {
 
-		type similarProduct struct {
-			Name    string `json:"name" bson:"name"`
-			Ram     int    `json:"ram" bson:"ram"`
-			Storage int    `json:"storage" bson:"storage"`
-		}
-
-		var productInfo similarProduct
-
-		if err := c.ShouldBindJSON(&productInfo); err != nil {
-			c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		name := c.Query("name")
+		ram, err := strconv.Atoi(c.Query("ram"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting ram to int"})
 			return
 		}
-
-		products, err := m.FindSimilarPhones(productInfo.Name, productInfo.Ram, productInfo.Storage)
+		storage, err := strconv.Atoi(c.Query("storage"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting storage to int"})
+			return
+		}
+		products, err := m.FindSimilarPhones(name, ram, storage)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
 		}
-
 		// Sending data as JSON response
 		c.JSON(http.StatusOK, products)
 	})
