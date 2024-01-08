@@ -11,8 +11,10 @@ type SearchedProdsProps = {
 };
 
 const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
-  const [sortOption, setSortOption] = useState("");
+  const [sortedBy, setSortedBy] = useState("price");
+  const [order, setOrder] = useState(1);
   const [itemsToShow, setItemsToShow] = useState(5);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     setItemsToShow(5);
@@ -22,42 +24,40 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
     setItemsToShow((itemsToShow) => itemsToShow + 5);
   };
   const searchQuery = useQuery({
-    queryKey: ["search", searchTerm],
-    enabled: searchTerm !== "",
+    queryKey: [
+      "search",
+      { searchedPhrase: searchTerm, sortBy: sortedBy, order: order },
+    ],
+    enabled: isReady,
     queryFn: async () => {
       if (typeof searchTerm === "string") {
-        return fetchProductsSearch(searchTerm);
+        return fetchProductsSearch(searchTerm, sortedBy, order);
       } else {
         throw new Error(`Search term is undefined`);
       }
     },
   });
+
+  useEffect(() => {
+    if (searchTerm !== "") {
+      setIsReady(true);
+    }
+  }, [searchTerm]);
   return (
     <>
+      <SortOptions
+        sortedBy={sortedBy}
+        setSortedBy={setSortedBy}
+        order={order}
+        setOrder={setOrder}
+      />
       {searchQuery.isLoading && <span>Loading...</span>}
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
         <>
-          <SortOptions onSortChange={setSortOption} />
           <div className="similarProd">
             {searchQuery.data
               .filter((product: Product) => product.price > 0)
-              .sort((a: Product, b: Product) => {
-                switch (sortOption) {
-                  case "priceAsc":
-                    return a.price - b.price;
-                  case "priceDes":
-                    return b.price - a.price;
-                  case "ram":
-                    return b.ram - a.ram;
-                  case "storage":
-                    return b.storage - a.storage;
-                  case "battery":
-                    return b.battery - a.battery;
-                  default:
-                    return 0;
-                }
-              })
               .slice(0, itemsToShow)
               .map((product: Product) => (
                 <CardProd key={product.product_id} product={product} />

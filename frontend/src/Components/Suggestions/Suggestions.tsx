@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchProductsSearch } from "../../API/Api";
+import { fetchSuggestions } from "../../API/Api";
 import { Product } from "../../types";
 import { debounce } from "lodash";
 import { useState, useEffect } from "react";
@@ -32,7 +32,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ portalId, width = 'auto', hei
     queryKey: ["search", debouncedInputValue],
     enabled: debouncedInputValue.length > 2,
     queryFn: async () => {
-      return fetchProductsSearch(debouncedInputValue);
+      return fetchSuggestions(debouncedInputValue);
     },
   });
   const portalElement = document.getElementById(portalId);

@@ -135,7 +135,29 @@ func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 	return product, nil
 }
 
-func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Product, error) {
+func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder int) ([]commons.Product, error) {
+	filter := bson.M{"name": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
+
+	var products []commons.Product
+
+	options := options.Find()
+	options.SetSort(bson.D{{Key: sortByField, Value: sortOrder}})
+
+	cursor, err := m.ProductCollection.Find(context.Background(), filter, options)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &products)
+	if err != nil {
+
+		return nil, err
+	}
+
+	return products, nil
+}
+func (m *MongoDB) GetProductsWithoutSorting(searchedPhrase string) ([]commons.Product, error) {
 	filter := bson.M{"name": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
 
 	var products []commons.Product
@@ -154,7 +176,6 @@ func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase string) ([]commons.Pr
 
 	return products, nil
 }
-
 func (m *MongoDB) FindSimilarPhones(name string, ram, storage int) ([]commons.Product, error) {
 	filter := bson.M{"name": name, "ram": ram, "storage": storage}
 

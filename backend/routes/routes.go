@@ -15,6 +15,8 @@ type productID struct {
 
 type sphrase struct {
 	SearchedPhrase string `json:"searchedPhrase"`
+	SortBy         string `json:"sortBy"`
+	Order          int    `json:"order"` //1 ascending, -1 descending
 }
 
 func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
@@ -58,7 +60,7 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 			return
 		}
 
-		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase)
+		products, err := m.GetProductsByBrandOrModel(phrase.SearchedPhrase, phrase.SortBy, phrase.Order)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
@@ -68,7 +70,31 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 		c.JSON(http.StatusOK, products)
 	})
 }
+func SearchProducts(r *gin.Engine, m *mongodb.MongoDB) {
+	r.POST("/searchbar", func(c *gin.Context) {
 
+		type searchedPhrase struct {
+			SearchedPhrase string `json:"searchedPhrase"`
+		}
+		var phrase searchedPhrase
+		err := c.BindJSON(&phrase)
+
+		if err != nil || phrase.SearchedPhrase == "" {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty search phrase"})
+			return
+		}
+
+		products, err := m.GetProductsWithoutSorting(phrase.SearchedPhrase)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
+			return
+		}
+
+		// Sending data as JSON response
+		c.JSON(http.StatusOK, products)
+	})
+}
 func GetSimilarProducts(r *gin.Engine, m *mongodb.MongoDB) {
 	r.POST("/similar", func(c *gin.Context) {
 
