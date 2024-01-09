@@ -2,11 +2,12 @@ import Layout from "../Layout/Layout";
 import "./ProductPage.css";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Button, Link } from "@chakra-ui/react";
+import { Button, Link, Spinner } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import SimilarProducts from "../SimilarProducts/SimilarProducts";
 import { fetchProduct } from "../../API/Api";
 import { Product } from "../../types";
+import { formatMemory } from "../../Utils/converters";
 const ProductPage = () => {
   const { product_id } = useParams();
 
@@ -24,7 +25,7 @@ const ProductPage = () => {
   return (
     <Layout>
       <div>
-        {productsQuery.isLoading && <span>Loading...</span>}
+        {productsQuery.isLoading && <span>{<Spinner color="#860000" />}</span>}
         {productsQuery.error && (
           <span>Error: {productsQuery.error.message}</span>
         )}
@@ -51,24 +52,17 @@ const ProductPage = () => {
                     </li>
                     {product.ram ? (
                       <li>
-                        <b>RAM:</b>{" "}
-                        {product.ram > 1024
-                          ? product.ram / 1024 + "GB"
-                          : product.ram + "MB"}
+                        <b>RAM:</b> {formatMemory(product.ram)}
                       </li>
                     ) : null}
-
                     <li>
-                      <b>Pamięć:</b>{" "}
-                      {product.storage >= 1048576
-                        ? product.storage / 1048576 + "TB"
-                        : product.storage >= 1024
-                          ? product.storage / 1024 + "GB"
-                          : product.storage + "MB"}
+                      <b>Pamięć:</b> {formatMemory(product.storage)}
                     </li>
-                    <li>
-                      <b>Bateria:</b> {product.battery} mAh
-                    </li>
+                    {product.battery ? (
+                      <li>
+                        <b>Bateria:</b> {product.battery} mAh
+                      </li>
+                    ) : null}
                     <li>
                       <Link href={product.product_url} target="_blank">
                         <Button leftIcon={<ExternalLinkIcon />}>

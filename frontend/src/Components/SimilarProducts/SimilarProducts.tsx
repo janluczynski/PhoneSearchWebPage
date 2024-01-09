@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import CardProd from "../ProdCard/CardProd";
 import { useState } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Spinner } from "@chakra-ui/react";
 import { ChevronDownIcon, AddIcon } from "@chakra-ui/icons";
 import { fetchSimilarProducts } from "../../API/Api";
 import { Product } from "../../types";
@@ -37,7 +37,11 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
     return <span>Error: {similarProdQuery.error.message}</span>;
   }
   if (similarProdQuery.isLoading) {
-    return <span>Loading...</span>;
+    return (
+      <span>
+        <Spinner color="#860000" />
+      </span>
+    );
   }
 
   return (
