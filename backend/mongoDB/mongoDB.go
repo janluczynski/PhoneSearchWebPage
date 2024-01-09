@@ -123,7 +123,21 @@ func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 }
 
 // function to get product data from database
-func (m *MongoDB) GetProductData(productID string) (commons.Product, map[string][]interface{}, error) {
+func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
+	var product commons.Product
+
+	filter := bson.M{"product_id": productID}
+
+	err := m.ProductCollection.FindOne(context.Background(), filter).Decode(&product)
+	if err != nil {
+		return commons.Product{}, err
+	}
+
+	return product, nil
+}
+
+// function to get product data from database
+func (m *MongoDB) GetSameProductData(productID string) (commons.Product, map[string][]interface{}, error) {
 	var product commons.Product
 
 	filter := bson.M{"product_id": productID}

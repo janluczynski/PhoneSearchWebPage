@@ -36,7 +36,35 @@ func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 		}
 
 		// Getting product data from DB
-		productData, sameProducts, err := m.GetProductData(ProductID)
+		productData, err := m.GetProductData(ProductID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
+			return
+		}
+
+		// Sending data as JSON response
+		c.JSON(http.StatusOK, productData)
+	})
+}
+
+func GetSamePhones(r *gin.Engine, m *mongodb.MongoDB) {
+
+	r.GET("/same/product", func(c *gin.Context) {
+		ProductID := c.Query("product_id")
+
+		if ProductID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "No variable in data"})
+			return
+		}
+		// Checking if product exists in DB
+		if !m.CheckIfProductInDB(ProductID) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Product doesn't exist"})
+
+			return
+		}
+
+		// Getting product data from DB
+		productData, sameProducts, err := m.GetSameProductData(ProductID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
