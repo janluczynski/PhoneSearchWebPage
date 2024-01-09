@@ -64,14 +64,14 @@ func GetSamePhones(r *gin.Engine, m *mongodb.MongoDB) {
 		}
 
 		// Getting product data from DB
-		productData, sameProducts, err := m.GetSameProductData(ProductID)
+		sameProducts, err := m.GetSameProductData(ProductID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
 		}
 
 		// Sending data as JSON response
-		c.JSON(http.StatusOK, gin.H{"productData": productData, "sameProducts": sameProducts})
+		c.JSON(http.StatusOK, sameProducts)
 	})
 }
 func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
