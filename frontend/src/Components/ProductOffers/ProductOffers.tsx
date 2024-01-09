@@ -2,27 +2,45 @@ import React from "react";
 import "./ProductOffers.css";
 import { Link } from "@chakra-ui/react";
 import { getPicture } from "../../Utils/pictures";
-const ProductOffers: React.FC = () => {
+import { useQuery } from "@tanstack/react-query";
+import { fetchSameProducts } from "../../API/Api";
+import { Spinner } from "@chakra-ui/react";
+type ProductOffersProps = {
+  product_id: string;
+};
+const ProductOffers: React.FC<ProductOffersProps> = ({ product_id }) => {
+  const sameProdQuery = useQuery({
+    queryKey: ["sameProductsByID", product_id],
+    enabled: product_id !== "",
+    queryFn: () => {
+      if (typeof product_id === "string") {
+        return fetchSameProducts(product_id);
+      } else {
+        throw new Error(`Search term is undefined`);
+      }
+    },
+  });
+  if (sameProdQuery.error) {
+    return <span>Error: {sameProdQuery.error.message}</span>;
+  }
+  if (sameProdQuery.isLoading) {
+    return (
+      <span>
+        <Spinner color="#860000" />
+      </span>
+    );
+  }
   return (
     <div className="productOffers">
-      <Link href="https://www.mediaexpert.pl/" target="blank">
-        <div className="offer">
-          <img src={getPicture("mediaexpert.pl")} alt="Komputronik" />
-          <p>Cena: 3000zł</p>
-        </div>
-      </Link>
-      <Link href="https://www.mediamarkt.pl/" target="blank">
-        <div className="offer">
-          <img src={getPicture("mediamarkt.pl")} alt="Mediamartk" />
-          <p>Cena: 4000zł</p>
-        </div>
-      </Link>
-      <Link href="https://www.komputronik.pl/" target="blank">
-        <div className="offer">
-          <img src={getPicture("komputronik.pl")} alt="Mediamartk" />
-          <p>Cena: 3300zł</p>
-        </div>
-      </Link>
+      {sameProdQuery.data &&
+        Object.values(sameProdQuery.data).map((sameProduct: any) => (
+          <Link href={sameProduct[0]} target="blank">
+            <div className="offer">
+              <img src={getPicture(sameProduct[1])} />
+              <p>{sameProduct[2]} zł</p>
+            </div>
+          </Link>
+        ))}
     </div>
   );
 };

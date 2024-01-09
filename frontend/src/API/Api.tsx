@@ -74,3 +74,20 @@ export const fetchSimilarProducts = async (
   const data = await response.json();
   return data;
 };
+export const fetchSameProducts = async (product_id: string) => {
+  const response = await fetch(
+    `http://localhost:8080/same/product?product_id=${product_id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  return data;
+};
