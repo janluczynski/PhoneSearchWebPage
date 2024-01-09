@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -132,7 +133,49 @@ func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
 	if err != nil {
 		return commons.Product{}, err
 	}
+
 	return product, nil
+}
+
+// function to get product data from database
+func (m *MongoDB) GetSameProductData(productID string) (map[string][]interface{}, error) {
+	var product commons.Product
+
+	filter := bson.M{"product_id": productID}
+
+	err := m.ProductCollection.FindOne(context.Background(), filter).Decode(&product)
+	if err != nil {
+		return nil, err
+	}
+
+	patternBrand := bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}}
+	filterSame := bson.M{"brand": patternBrand, "model": product.Model, "ram": product.RAM, "storage": product.Storage}
+
+	var sameProducts []commons.Product
+
+	cursor, err := m.ProductCollection.Find(context.Background(), filterSame)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &sameProducts)
+	if err != nil {
+		return nil, err
+	}
+
+	// creating map with product_id as key and [link,price] as value
+	sameProductsMap := make(map[string][]interface{})
+	for _, sameProduct := range sameProducts {
+		pattern := `//([^/]+)`
+		re := regexp.MustCompile(pattern)
+
+		match := re.FindStringSubmatch(sameProduct.ProductURL)
+
+		sameProductsMap[sameProduct.ProductID] = []interface{}{sameProduct.ProductURL, match[1], sameProduct.Price}
+	}
+
+	return sameProductsMap, nil
 }
 
 func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder int) ([]commons.Product, error) {

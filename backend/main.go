@@ -26,6 +26,7 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 	routes.PostProductInfo(r, m)
+	routes.GetSamePhones(r, m)
 	routes.SearchProductsFromSearchBar(r, m)
 	routes.GetSimilarProducts(r, m)
 	routes.SearchProducts(r, m)
