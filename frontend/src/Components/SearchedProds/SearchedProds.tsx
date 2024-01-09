@@ -3,7 +3,7 @@ import { Product } from "../../types";
 import CardProd from "../ProdCard/CardProd";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductsSearch } from "../../API/Api";
-import { Button } from "@chakra-ui/react";
+import { Button, Spinner } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import SortOptions from "../SortOptions/SortOptions";
 type SearchedProdsProps = {
@@ -51,7 +51,11 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
         order={order}
         setOrder={setOrder}
       />
-      {searchQuery.isLoading && <span>Loading...</span>}
+      {searchQuery.isLoading && (
+        <span>
+          <Spinner color="#860000" />
+        </span>
+      )}
       {searchQuery.error && <span>Error: {searchQuery.error.message}</span>}
       {searchQuery.data && (
         <>
