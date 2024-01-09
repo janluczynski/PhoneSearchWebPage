@@ -36,14 +36,14 @@ func PostProductInfo(r *gin.Engine, m *mongodb.MongoDB) {
 		}
 
 		// Getting product data from DB
-		productData, err := m.GetProductData(ProductID)
+		productData, sameProducts, err := m.GetProductData(ProductID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
 		}
 
 		// Sending data as JSON response
-		c.JSON(http.StatusOK, productData)
+		c.JSON(http.StatusOK, gin.H{"productData": productData, "sameProducts": sameProducts})
 	})
 }
 func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {

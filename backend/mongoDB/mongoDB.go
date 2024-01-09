@@ -123,16 +123,39 @@ func (m *MongoDB) CheckIfProductInDB(productID string) bool {
 }
 
 // function to get product data from database
-func (m *MongoDB) GetProductData(productID string) (commons.Product, error) {
+func (m *MongoDB) GetProductData(productID string) (commons.Product, map[string][]interface{}, error) {
 	var product commons.Product
 
 	filter := bson.M{"product_id": productID}
 
 	err := m.ProductCollection.FindOne(context.Background(), filter).Decode(&product)
 	if err != nil {
-		return commons.Product{}, err
+		return commons.Product{}, nil, err
 	}
-	return product, nil
+
+	patternBrand := bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}}
+	filterSame := bson.M{"brand": patternBrand, "model": product.Model, "ram": product.RAM, "storage": product.Storage}
+
+	var sameProducts []commons.Product
+
+	cursor, err := m.ProductCollection.Find(context.Background(), filterSame)
+	if err != nil {
+		return commons.Product{}, nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	err = cursor.All(context.Background(), &sameProducts)
+	if err != nil {
+		return commons.Product{}, nil, err
+	}
+
+	// creating map with product_id as key and [link,price] as value
+	sameProductsMap := make(map[string][]interface{})
+	for _, sameProduct := range sameProducts {
+		sameProductsMap[sameProduct.ProductID] = []interface{}{sameProduct.ProductURL, sameProduct.Price}
+	}
+
+	return product, sameProductsMap, nil
 }
 
 func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder int) ([]commons.Product, error) {
