@@ -33,14 +33,16 @@ const ProductOffers: React.FC<ProductOffersProps> = ({ product_id }) => {
   return (
     <div className="productOffers">
       {sameProdQuery.data &&
-        Object.values(sameProdQuery.data).map((sameProduct: any) => (
-          <Link href={sameProduct[0]} target="blank">
-            <div className="offer">
-              <img src={getPicture(sameProduct[1])} />
-              <p>{sameProduct[2]} zł</p>
-            </div>
-          </Link>
-        ))}
+        Object.values(sameProdQuery.data).map(
+          (sameProduct: any, index: number) => (
+            <Link href={sameProduct[0]} target="blank" key={index}>
+              <div className="offer">
+                <img src={getPicture(sameProduct[1])} />
+                <p>{sameProduct[2]} zł</p>
+              </div>
+            </Link>
+          ),
+        )}
     </div>
   );
 };
