@@ -37,7 +37,10 @@ const ProductOffers: React.FC<ProductOffersProps> = ({ product_id }) => {
           (sameProduct: any, index: number) => (
             <Link href={sameProduct[0]} target="blank" key={index}>
               <div className="offer">
-                <img src={getPicture(sameProduct[1])} />
+                <div>
+                  <img src={getPicture(sameProduct[1])} />
+                  <p>Samsung Galaxy Z Fold 5</p>
+                </div>
                 <p>{sameProduct[2]} zł</p>
               </div>
             </Link>
