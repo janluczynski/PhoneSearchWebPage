@@ -66,7 +66,10 @@ const ProductPage = () => {
                 </div>
               </div>
               <div>
-                <ProductOffers product_id={product.product_id} />
+                <ProductOffers
+                  product_id={product.product_id}
+                  product_name={product.name}
+                />
               </div>
               <div>
                 <SimilarProducts

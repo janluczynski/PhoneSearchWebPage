@@ -8,6 +8,8 @@ import { useState } from "react";
 import SearchedProds from "./Components/SearchedProds/SearchedProds";
 import { SearchContext } from "./Contexts/SearchContexts";
 import Suggestions from "./Components/Suggestions/Suggestions";
+import { Radio } from "@chakra-ui/react";
+import SortOptions from "./Components/SortOptions/SortOptions";
 function App() {
   const product1: Product = {
     product_url:
@@ -66,40 +68,47 @@ function App() {
         value={{ searchTerm, setSearchTerm, inputValue, setInputValue }}
       >
         <Header />
-        <center>
-          <div className="fancy">
-            <h1>Wybierz najtańszy telefon dla siebie</h1>
+        <div className="mainPage" style={{ width: "100%" }}>
+          <div className="sideBar" style={{ width: "20%" }}>
+            <div className="sort">
+              <SortOptions />
+            </div>
           </div>
-        </center>
-        <div className="searchContainer">
-          <SearchBar width="40vw" height="10vh" fontSize="40px" />
-          <div id="portal1">
-            <Suggestions portalId="portal1" width="40vw" top="11.2vh" />
-          </div>
-        </div>
-        <div className="searchedprods">
-          <SearchedProds searchTerm={searchTerm} />
-        </div>
-        <center>
-          <div className="waskie">
-            <p>
-              PhoneCompass to strona, która pomoże Ci znaleźć najlepsze telefony
-              w najniższych cenach. Nasza strona oferuje łatwe i intuicyjne
-              narzędzia, które pomogą Ci znaleźć telefon, który spełni Twoje
-              wymagania. Dzięki naszej pomocy, nie musisz tracić czasu na
-              szukanie najlepszych ofert.
-            </p>
-          </div>
+          <div className="content" style={{ width: "80% " }}>
+            <div className="fancy">
+              <h1>Wybierz najtańszy telefon dla siebie</h1>
+            </div>
 
-          <h2 className="c">
-            <i>Popularne produkty</i>
-          </h2>
-          <div className="products">
-            <CardProd product={product1} />
-            <CardProd product={product2} />
-            <CardProd product={product3} />
+            <div className="searchContainer">
+              <SearchBar width="40vw" height="10vh" fontSize="40px" />
+              <div id="portal1">
+                <Suggestions portalId="portal1" width="40vw" top="11.2vh" />
+              </div>
+            </div>
+            <div className="searchedprods">
+              <SearchedProds searchTerm={searchTerm} />
+            </div>
+
+            <div className="waskie">
+              <p>
+                PhoneCompass to strona, która pomoże Ci znaleźć najlepsze
+                telefony w najniższych cenach. Nasza strona oferuje łatwe i
+                intuicyjne narzędzia, które pomogą Ci znaleźć telefon, który
+                spełni Twoje wymagania. Dzięki naszej pomocy, nie musisz tracić
+                czasu na szukanie najlepszych ofert.
+              </p>
+            </div>
+
+            <h2 className="c">
+              <i>Popularne produkty</i>
+            </h2>
+            <div className="products">
+              <CardProd product={product1} />
+              <CardProd product={product2} />
+              <CardProd product={product3} />
+            </div>
           </div>
-        </center>
+        </div>
         <Footer />
       </SearchContext.Provider>
     </>

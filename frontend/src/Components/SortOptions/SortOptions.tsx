@@ -1,7 +1,19 @@
 import React from "react";
-import { Tabs, TabList, Tab, TabIndicator, Flex } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import {
+  Radio,
+  RadioGroup,
+  Stack,
+  RangeSlider,
+  RangeSliderTrack,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  Input,
+  Divider,
+  Flex,
+  Box,
+} from "@chakra-ui/react";
 
 interface SortOptionsProps {
   sortedBy: string;
@@ -13,97 +25,62 @@ interface SortOptionsProps {
 const SortOptions: React.FC<SortOptionsProps> = ({ setSortedBy, setOrder }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [sortIndex, setSortIndex] = useState(0);
-  const handleSortChange = (index: number) => {
-    switch (index) {
-      case 0:
-        setSortIndex(index);
-        setOrder(1);
-        break;
-      case 1:
-        setSortIndex(index);
-        setOrder(-1);
-        break;
-      default:
-        break;
-    }
-  };
-  const handleTabsChange = (index: number) => {
-    switch (index) {
-      case 0:
-        setTabIndex(index);
-        setSortedBy("price");
-        break;
-      case 1:
-        setTabIndex(index);
-        setSortedBy("ram");
-        break;
-      case 2:
-        setTabIndex(index);
-        setSortedBy("battery");
-        break;
-      case 3:
-        setTabIndex(index);
-        setSortedBy("storage");
-        break;
-      default:
-        break;
-    }
-  };
   return (
     <div>
+      <h2>Sortuj po:</h2>
+      <RadioGroup defaultValue="1" marginTop="7%">
+        <Stack>
+          <Radio value="1">Cena rosnąco</Radio>
+          <Radio value="2">Cena malejąco</Radio>
+        </Stack>
+      </RadioGroup>
+      <Divider my={4} borderWidth="2px" />
+      <h2>Filtry</h2>
+      <p>Cena</p>
+      {/* <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
+        <RangeSliderTrack bg="red.100">
+          <RangeSliderFilledTrack bg="tomato" />
+        </RangeSliderTrack>
+        <RangeSliderThumb boxSize={6} index={0} />
+        <RangeSliderThumb boxSize={6} index={1} />
+      </RangeSlider> */}
       <Flex>
-        <Tabs
-          defaultIndex={0}
-          index={tabIndex}
-          onChange={handleTabsChange}
-          position="relative"
-          variant="unstyled"
-          background="#ab7b7b"
-        >
-          <TabList>
-            <Tab _selected={{ color: "white", bg: "#860000" }} height="5vh">
-              Cena
-            </Tab>
-            <Tab _selected={{ color: "white", bg: "#860000" }} height="5vh">
-              RAM
-            </Tab>
-            <Tab _selected={{ color: "white", bg: "#860000" }} height="5vh">
-              Bateria
-            </Tab>
-            <Tab _selected={{ color: "white", bg: "#860000" }} height="5vh">
-              Pamięć
-            </Tab>
-          </TabList>
-          <TabIndicator
-            mt="-1.5px"
-            height="2px"
-            bg="#860000"
-            borderRadius="1px"
-          />
-        </Tabs>
-        <Tabs
-          index={sortIndex}
-          onChange={handleSortChange}
-          position="relative"
-          variant="unstyled"
-          background="#ab7b7b"
-        >
-          <TabList>
-            <Tab _selected={{ color: "white", bg: "#860000" }}>
-              {<ChevronUpIcon height="3.3vh" />}
-            </Tab>
-            <Tab _selected={{ color: "white", bg: "#860000" }}>
-              {<ChevronDownIcon height="3.3vh" />}
-            </Tab>
-          </TabList>
-          <TabIndicator
-            mt="-1.5px"
-            height="2px"
-            bg="#860000"
-            borderRadius="1px"
-          />
-        </Tabs>
+        <Input
+          width="30%"
+          placeholder="od"
+          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.1)"
+          focusBorderColor="#860000"
+        />
+        <Box
+          border="1px solid"
+          borderColor="gray.200"
+          width="1px"
+          alignSelf="center"
+          mx={2}
+          paddingLeft="20%"
+        />
+        <Input
+          width="30%"
+          placeholder="do"
+          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.1)"
+          focusBorderColor="#860000"
+        />
       </Flex>
+      <p>Pamięc</p>
+      <RadioGroup marginTop="7%">
+        <Stack>
+          <Radio value="1">128 GB</Radio>
+          <Radio value="2">256 GB</Radio>
+          <Radio value="3">512 GB</Radio>
+          <Radio value="4">1 TB</Radio>
+          <p>Ram</p>
+          <Radio value="5">4 GB</Radio>
+          <Radio value="6">6 GB</Radio>
+          <Radio value="7">8 GB</Radio>
+          <Radio value="8">12 GB</Radio>
+          <Radio value="9">16 GB</Radio>
+        </Stack>
+      </RadioGroup>
     </div>
   );
 };

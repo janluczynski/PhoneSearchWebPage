@@ -7,8 +7,12 @@ import { fetchSameProducts } from "../../API/Api";
 import { Spinner } from "@chakra-ui/react";
 type ProductOffersProps = {
   product_id: string;
+  product_name: string;
 };
-const ProductOffers: React.FC<ProductOffersProps> = ({ product_id }) => {
+const ProductOffers: React.FC<ProductOffersProps> = ({
+  product_id,
+  product_name,
+}) => {
   const sameProdQuery = useQuery({
     queryKey: ["sameProductsByID", product_id],
     enabled: product_id !== "",
@@ -39,7 +43,7 @@ const ProductOffers: React.FC<ProductOffersProps> = ({ product_id }) => {
               <div className="offer">
                 <div>
                   <img src={getPicture(sameProduct[1])} />
-                  <p>Samsung Galaxy Z Fold 5</p>
+                  <p>{product_name}</p>
                 </div>
                 <p>{sameProduct[2]} zł</p>
               </div>

@@ -45,12 +45,12 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   }, [searchTerm]);
   return (
     <>
-      <SortOptions
+      {/* <SortOptions
         sortedBy={sortedBy}
         setSortedBy={setSortedBy}
         order={order}
         setOrder={setOrder}
-      />
+      /> */}
       {searchQuery.isLoading && (
         <span>
           <Spinner color="#860000" />
