@@ -39,7 +39,7 @@ const ProductOffers: React.FC<ProductOffersProps> = ({
       {sameProdQuery.data &&
         Object.values(sameProdQuery.data).map(
           (sameProduct: any, index: number) => (
-            <Link href={sameProduct[0]} target="blank" key={index}>
+            <Link href={sameProduct[0]} target="blank" key={index} width="100%">
               <div className="offer">
                 <div>
                   <img src={getPicture(sameProduct[1])} />

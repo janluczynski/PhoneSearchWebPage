@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100vw;
+    width: 100%;
     margin-top: 2vh;
 }
 .offer{
@@ -11,7 +11,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 50vw;
+    width: 100%;
     margin-bottom: 1vh;
     border: 2px solid #860000;
     border-radius: 10px;
