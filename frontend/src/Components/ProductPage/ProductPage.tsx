@@ -42,16 +42,25 @@ const ProductPage = () => {
                     <h2>{product.name}</h2>
                     <div className="productDetails">
                       <ul>
-                        <li>Przekątna wyświetlacza: {product.display}</li>
-                        <li>Procesor: {product.processor}</li>
+                        <li>
+                          Przekątna wyświetlacza: <b>{product.display}</b>
+                        </li>
+                        <li>
+                          Procesor: <b>{product.processor}</b>
+                        </li>
                         {product.ram ? (
-                          <li>Pamięć RAM: {formatMemory(product.ram)}</li>
+                          <li>
+                            Pamięć RAM: <b>{formatMemory(product.ram)}</b>
+                          </li>
                         ) : null}
                         <li>
-                          Pamięć wewnętrzna: {formatMemory(product.storage)}
+                          Pamięć wewnętrzna:{" "}
+                          <b>{formatMemory(product.storage)}</b>
                         </li>
                         {product.battery ? (
-                          <li>Pojemność baterii: {product.battery} mAh</li>
+                          <li>
+                            Pojemność baterii: <b>{product.battery} mAh</b>
+                          </li>
                         ) : null}
                         <li></li>
                       </ul>

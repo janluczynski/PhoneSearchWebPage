@@ -42,7 +42,7 @@ const Header: React.FC = () => {
           </div>
         </Collapse>
 
-        <Navbar />
+        {/* <Navbar /> */}
       </div>
     </header>
   );

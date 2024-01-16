@@ -15,6 +15,7 @@ function App() {
     product_url:
       "https://www.x-kom.pl/p/1180085-smartfon-telefon-apple-iphone-15-pro-max-256gb-black-titanium.html",
     product_id: "c20e654c-cbeb-40be-aa68-f0cba7ffcfdd",
+    site_name: "",
     name: "Apple iPhone 15 PRO MAX",
     brand: "Apple",
     model: "iPhone 15 PRO MAX ",
@@ -32,6 +33,7 @@ function App() {
       "https://www.x-kom.pl/p/1180055-smartfon-telefon-apple-iphone-15-plus-2…",
     product_id: "ec98138c-613a-4aa3-9921-fadd39c3c972",
     name: "Apple iPhone 15 Plus",
+    site_name: "",
     brand: "Apple",
     model: "iPhone 15 Plus ",
     image:
@@ -48,6 +50,7 @@ function App() {
       "https://www.x-kom.pl/p/1158859-smartfon-telefon-samsung-galaxy-z-fold5…",
     product_id: "badd47eb-5934-4311-9053-cd50e1007de7",
     name: "Samsung Galaxy Z Fold5",
+    site_name: "",
     brand: "Samsung",
     model: "Galaxy Z Fold5",
     image:
