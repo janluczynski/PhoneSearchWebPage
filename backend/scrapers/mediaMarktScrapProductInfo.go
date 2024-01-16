@@ -45,6 +45,7 @@ func MediaMarktScrapProductInfo() {
 		update := bson.M{
 			"$set": bson.M{
 				"name":      phone.Brand + " " + phone.Model,
+				"site_name": phone.SiteName,
 				"brand":     phone.Brand,
 				"model":     phone.Model,
 				"image":     phone.ImageURL,
@@ -78,6 +79,7 @@ func mediaMarktScrapHelper(baseURL string) commons.Product {
 		PhoneName := strings.Split(e.Text, " ")
 		GBRegex := regexp.MustCompile(`(GB|1TB)$`)
 		Product.Brand = PhoneName[1]
+		Product.SiteName = strings.Join(PhoneName[1:], " ")
 		Model := ""
 		for i := 2; i < len(PhoneName); i++ {
 			if GBRegex.MatchString(PhoneName[i]) || strings.Contains(PhoneName[i], "5G") || strings.Contains(PhoneName[i], "LTE") {
@@ -88,7 +90,7 @@ func mediaMarktScrapHelper(baseURL string) commons.Product {
 		}
 		Product.Model = Model
 	})
-	c.OnHTML("div.price-box span.whole", func(e *colly.HTMLElement) {
+	c.OnHTML("div.price-box div.main-price.is-big span.whole", func(e *colly.HTMLElement) {
 		Price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(e.Text, "\n", ""), " ", ""), 64)
 		if err != nil {
 			fmt.Println(err)
@@ -145,7 +147,6 @@ func mediaMarktScrapHelper(baseURL string) commons.Product {
 
 	return Product
 }
-
 func FakeMediaMarktRequest() {
 	c := colly.NewCollector()
 	baseURL := "https://mediamarkt.pl/telefony-i-smartfony/smartfon-samsung-galaxy-s23-8-256gb-czarny-sm-s916bzkdeue"

@@ -3,6 +3,7 @@ package commons
 type Product struct {
 	ProductURL string  `json:"product_url" bson:"product_url"`
 	ProductID  string  `json:"product_id" bson:"product_id"`
+	SiteName   string  `json:"site_name" bson:"site_name"`
 	Name       string  `json:"name" bson:"name"`
 	Brand      string  `json:"brand" bson:"brand"`
 	Model      string  `json:"model" bson:"model"`
