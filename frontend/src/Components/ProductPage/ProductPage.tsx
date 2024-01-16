@@ -39,30 +39,19 @@ const ProductPage = () => {
                     <img src={product.image} alt={product.model} />
                   </div>
                   <div className="col60">
-                    <h2>
-                      <b>{product.name}</b>
-                    </h2>
+                    <h2>{product.name}</h2>
                     <div className="productDetails">
                       <ul>
-                        <li>
-                          <b>Przekątna wyświetlacza:</b> {product.display}
-                        </li>
-                        <li>
-                          <b>Procesor:</b> {product.processor}
-                        </li>
+                        <li>Przekątna wyświetlacza: {product.display}</li>
+                        <li>Procesor: {product.processor}</li>
                         {product.ram ? (
-                          <li>
-                            <b>Pamięć RAM:</b> {formatMemory(product.ram)}
-                          </li>
+                          <li>Pamięć RAM: {formatMemory(product.ram)}</li>
                         ) : null}
                         <li>
-                          <b>Pamięć wewnętrzna:</b>{" "}
-                          {formatMemory(product.storage)}
+                          Pamięć wewnętrzna: {formatMemory(product.storage)}
                         </li>
                         {product.battery ? (
-                          <li>
-                            <b>Pojemność baterii:</b> {product.battery} mAh
-                          </li>
+                          <li>Pojemność baterii: {product.battery} mAh</li>
                         ) : null}
                         <li></li>
                       </ul>
@@ -72,7 +61,7 @@ const ProductPage = () => {
                 <div style={{ width: "40%", overflow: "auto", height: "60vh" }}>
                   <ProductOffers
                     product_id={product.product_id}
-                    product_name={product.name}
+                    product_name={product.site_name}
                   />
                 </div>
               </div>

@@ -84,12 +84,17 @@ func SearchProductsFromSearchBar(r *gin.Engine, m *mongodb.MongoDB) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting order to int"})
 			return
 		}
-		if searchedPhrase == "" || sortBy == "" || orderInt != 1 && orderInt != -1 {
+		value, err := strconv.Atoi(c.Query("value"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting value to int"})
+			return
+		}
+		if searchedPhrase == "" || sortBy == "" || orderInt != 1 && orderInt != -1 || value < 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Empty search phrase"})
 			return
 		}
 
-		products, err := m.GetProductsByBrandOrModel(searchedPhrase, sortBy, orderInt)
+		products, err := m.GetProductsByBrandOrModel(searchedPhrase, sortBy, orderInt, value)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return

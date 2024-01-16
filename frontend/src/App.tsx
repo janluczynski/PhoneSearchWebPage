@@ -62,10 +62,24 @@ function App() {
   };
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [sortedBy, setSortedBy] = useState("price");
+  const [order, setOrder] = useState(1);
+  const [sortValue, setSortValue] = useState(0);
   return (
     <>
       <SearchContext.Provider
-        value={{ searchTerm, setSearchTerm, inputValue, setInputValue }}
+        value={{
+          searchTerm,
+          setSearchTerm,
+          inputValue,
+          setInputValue,
+          sortedBy,
+          setSortedBy,
+          order,
+          setOrder,
+          sortValue,
+          setSortValue,
+        }}
       >
         <Header />
         <div className="mainPage" style={{ width: "100%" }}>
