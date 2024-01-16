@@ -16,7 +16,7 @@ import {
   Flex,
   Box,
 } from "@chakra-ui/react";
-
+import { NotAllowedIcon } from "@chakra-ui/icons";
 const SortOptions = () => {
   const { setOrder, setSortValue, setSortedBy } = useContext(SearchContext);
   return (
@@ -65,8 +65,17 @@ const SortOptions = () => {
         />
       </Flex>
       <p>Pamięc</p>
-      <RadioGroup marginTop="7%">
+      <RadioGroup marginTop="7%" defaultValue="0">
         <Stack>
+          <Radio
+            value="0"
+            onChange={() => {
+              setSortedBy("price");
+              setSortValue(0);
+            }}
+          >
+            <NotAllowedIcon />
+          </Radio>
           <Radio
             value="1"
             onChange={() => {
