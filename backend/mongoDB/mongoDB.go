@@ -172,19 +172,28 @@ func (m *MongoDB) GetSameProductData(productID string) (map[string][]interface{}
 
 		match := re.FindStringSubmatch(sameProduct.ProductURL)
 
-		sameProductsMap[sameProduct.ProductID] = []interface{}{sameProduct.ProductURL, match[1], sameProduct.Price}
+		sameProductsMap[sameProduct.ProductID] = []interface{}{sameProduct.ProductURL, match[1], sameProduct.Price, sameProduct.SiteName}
 	}
 
 	return sameProductsMap, nil
 }
 
-func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder int) ([]commons.Product, error) {
-	filter := bson.M{"name": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}
+func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, sortOrder, value int) ([]commons.Product, error) {
+	var filter bson.M
+	if value > 0 {
 
+		if sortByField == "ram" {
+			filter = bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}, "ram": value}
+		} else {
+			filter = bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}, "storage": value}
+		}
+	} else {
+		filter = bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: searchedPhrase, Options: "i"}}}
+	}
 	var products []commons.Product
 
 	options := options.Find()
-	options.SetSort(bson.D{{Key: sortByField, Value: sortOrder}})
+	options.SetSort(bson.D{{Key: "price", Value: sortOrder}})
 
 	cursor, err := m.ProductCollection.Find(context.Background(), filter, options)
 	if err != nil {
@@ -194,7 +203,6 @@ func (m *MongoDB) GetProductsByBrandOrModel(searchedPhrase, sortByField string, 
 
 	err = cursor.All(context.Background(), &products)
 	if err != nil {
-
 		return nil, err
 	}
 

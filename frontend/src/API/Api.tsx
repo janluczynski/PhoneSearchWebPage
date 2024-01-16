@@ -20,9 +20,10 @@ export const fetchProductsSearch = async (
   searchTerm: string,
   sortedBy: string,
   order: number,
+  value: number,
 ) => {
   const response = await fetch(
-    `http://localhost:8080/search?searchedPhrase=${searchTerm}&sortBy=${sortedBy}&order=${order}`,
+    `http://localhost:8080/search?searchedPhrase=${searchTerm}&sortBy=${sortedBy}&order=${order}&value=${value}`,
     {
       method: "GET",
       headers: {

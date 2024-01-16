@@ -41,11 +41,15 @@ const ProductOffers: React.FC<ProductOffersProps> = ({
           (sameProduct: any, index: number) => (
             <Link href={sameProduct[0]} target="blank" key={index} width="100%">
               <div className="offer">
-                <div>
+                <div style={{ width: "85%" }}>
                   <img src={getPicture(sameProduct[1])} />
-                  <p>{product_name}</p>
+                  <p style={{ textAlign: "left" }}>{sameProduct[3]}</p>
                 </div>
-                <p>{sameProduct[2]} zł</p>
+                <div>
+                  <p>
+                    <b>{sameProduct[2]} zł</b>
+                  </p>
+                </div>
               </div>
             </Link>
           ),

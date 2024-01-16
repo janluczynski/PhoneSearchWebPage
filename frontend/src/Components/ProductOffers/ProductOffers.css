@@ -9,16 +9,17 @@
     padding: 1vh;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     margin-bottom: 1vh;
     border: 2px solid #860000;
     border-radius: 10px;
 }
 .offer p {
-    float:right;
-   font-size: 2.5vh;
+   font-size: 2vh;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   width: 100%; /* adjust as needed */
 }
 .offer div{
     display: flex;

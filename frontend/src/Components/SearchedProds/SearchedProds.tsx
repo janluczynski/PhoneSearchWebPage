@@ -5,17 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProductsSearch } from "../../API/Api";
 import { Button, Spinner } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import { SearchContext } from "../../Contexts/SearchContexts";
+import { useContext } from "react";
 import SortOptions from "../SortOptions/SortOptions";
 type SearchedProdsProps = {
   searchTerm: string;
 };
 
 const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
-  const [sortedBy, setSortedBy] = useState("price");
-  const [order, setOrder] = useState(1);
   const [itemsToShow, setItemsToShow] = useState(5);
   const [isReady, setIsReady] = useState(false);
-
+  const { order, sortValue, sortedBy } = useContext(SearchContext);
   useEffect(() => {
     setItemsToShow(5);
   }, [searchTerm]);
@@ -26,12 +26,17 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   const searchQuery = useQuery({
     queryKey: [
       "search",
-      { searchedPhrase: searchTerm, sortBy: sortedBy, order: order },
+      {
+        searchedPhrase: searchTerm,
+        sortBy: sortedBy,
+        order: order,
+        value: sortValue,
+      },
     ],
     enabled: isReady,
     queryFn: async () => {
       if (typeof searchTerm === "string") {
-        return fetchProductsSearch(searchTerm, sortedBy, order);
+        return fetchProductsSearch(searchTerm, sortedBy, order, sortValue);
       } else {
         throw new Error(`Search term is undefined`);
       }
@@ -39,18 +44,13 @@ const SearchedProds: React.FC<SearchedProdsProps> = ({ searchTerm }) => {
   });
 
   useEffect(() => {
+    console.log(sortValue);
     if (searchTerm !== "") {
       setIsReady(true);
     }
-  }, [searchTerm]);
+  }, [searchTerm, sortValue, sortedBy, order]);
   return (
     <>
-      {/* <SortOptions
-        sortedBy={sortedBy}
-        setSortedBy={setSortedBy}
-        order={order}
-        setOrder={setOrder}
-      /> */}
       {searchQuery.isLoading && (
         <span>
           <Spinner color="#860000" />

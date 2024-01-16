@@ -8,7 +8,7 @@
 header {
   width: 100%;
   background: #860000;
-  height: 12vh;
+  height: 9vh;
   display: flex;
   align-items: center;
   padding-inline: 3vw;
@@ -27,8 +27,8 @@ header {
   margin-right: 10px;
 }
 #logo {
-  height: 12vh;
-  width: 12vh;
+  height: 9vh;
+  width: 9vh;
   left: 0;
 }
 @media screen and (max-width: 768px) {
