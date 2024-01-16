@@ -8,6 +8,7 @@ import SimilarProducts from "../SimilarProducts/SimilarProducts";
 import { fetchProduct } from "../../API/Api";
 import { Product } from "../../types";
 import { formatMemory } from "../../Utils/converters";
+import ProductOffers from "../ProductOffers/ProductOffers";
 const ProductPage = () => {
   const { product_id } = useParams();
 
@@ -42,9 +43,6 @@ const ProductPage = () => {
                 <div className="productDetails">
                   <ul>
                     <li>
-                      <b>Cena:</b> {product.price} zł
-                    </li>
-                    <li>
                       <b>Wyświetlacz:</b> {product.display}
                     </li>
                     <li>
@@ -63,15 +61,12 @@ const ProductPage = () => {
                         <b>Bateria:</b> {product.battery} mAh
                       </li>
                     ) : null}
-                    <li>
-                      <Link href={product.product_url} target="_blank">
-                        <Button leftIcon={<ExternalLinkIcon />}>
-                          Kup teraz
-                        </Button>
-                      </Link>
-                    </li>
+                    <li></li>
                   </ul>
                 </div>
+              </div>
+              <div>
+                <ProductOffers product_id={product.product_id} />
               </div>
               <div>
                 <SimilarProducts
