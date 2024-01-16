@@ -45,6 +45,7 @@ func XkomScrapProductInfo() {
 		update := bson.M{
 			"$set": bson.M{
 				"name":      phone.Brand + " " + phone.Model,
+				"site_name": phone.SiteName,
 				"brand":     phone.Brand,
 				"model":     phone.Model,
 				"image":     phone.ImageURL,
@@ -76,6 +77,7 @@ func xkomScrapHelper(baseURL string) commons.Product {
 		PhoneName := strings.Split(e.Text, " ")
 		GBRegex := regexp.MustCompile(`(GB|1TB)$`)
 		Product.Brand = PhoneName[0]
+		Product.SiteName = e.Text
 		Model := ""
 		for i := 1; i < len(PhoneName); i++ {
 			if GBRegex.MatchString(PhoneName[i]) || strings.Contains(PhoneName[i], "5G") || strings.Contains(PhoneName[i], "/") {
