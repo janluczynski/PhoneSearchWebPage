@@ -46,7 +46,9 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
 
   return (
     <>
-      <h2 className="c">Podobne Produkty</h2>
+      <h2 className="c" style={{ marginTop: "50px" }}>
+        Podobne Produkty
+      </h2>
       <div className="similarProd">
         {similarProdQuery.data &&
           similarProdQuery.data

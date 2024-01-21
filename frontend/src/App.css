@@ -5,6 +5,7 @@
   font-family: "Roboto", sans-serif;
   text-align: justify;
   text-justify: inter-word;
+  margin-top:50px;
 }
 .products {
   display: flex;
@@ -82,15 +83,15 @@ main {
   display: flex;
   justify-content: center;
   position: relative;
+  height: 100vh;
 }
 .sort{
   position: absolute;
   display: flex;
   flex-direction: column;
-
   border: 2px solid #860000;
   width: 75%;
-  margin-top: 20%;
+  margin-top: 30vh;
   border-radius: 20px;
   text-align: left;
   padding: 5%;

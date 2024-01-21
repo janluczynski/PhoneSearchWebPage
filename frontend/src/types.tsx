@@ -12,4 +12,5 @@ export type Product = {
   ram: number;
   storage: number;
   battery: number;
+  popularity: number;
 };

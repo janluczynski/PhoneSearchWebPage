@@ -30,8 +30,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSearchTerm(inputValue);
-    setInputValue("");
+    if (inputValue.trim() !== "") {
+      setSearchTerm(inputValue);
+      setInputValue("");
+    }
   };
 
   return (

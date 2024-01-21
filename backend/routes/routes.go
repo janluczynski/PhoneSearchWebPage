@@ -1,11 +1,13 @@
 package routes
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	mongodb "main.go/mongoDB"
 )
 
@@ -144,6 +146,48 @@ func GetSimilarProducts(r *gin.Engine, m *mongodb.MongoDB) {
 			return
 		}
 		// Sending data as JSON response
+		c.JSON(http.StatusOK, products)
+	})
+}
+func IncrementField(r *gin.Engine, m *mongodb.MongoDB) {
+	r.PUT("/increment", func(c *gin.Context) {
+		id := c.Query("id") // get the id from the query parameters
+		println(id)
+		filter := bson.M{"product_id": id}                // filter the documents by id
+		update := bson.M{"$inc": bson.M{"popularity": 1}} // increment yourField by 1
+
+		// update the document
+		_, err := m.ProductCollection.UpdateOne(context.TODO(), filter, update)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while updating the field"})
+			return
+		}
+
+		// Sending response
+		c.JSON(http.StatusOK, gin.H{"message": "Field incremented successfully"})
+	})
+}
+func GetTopProducts(r *gin.Engine, m *mongodb.MongoDB) {
+	r.GET("/top-products", func(c *gin.Context) {
+		// Define the sort option
+		sortOption := options.Find()
+		sortOption.SetSort(bson.D{{"popularity", -1}}) // sort by popularity in descending order
+		sortOption.SetLimit(3)                         // limit the result to 3 documents
+
+		// Find the top 3 products
+		cursor, err := m.ProductCollection.Find(context.TODO(), bson.D{{}}, sortOption)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting top products"})
+			return
+		}
+
+		var products []bson.M
+		if err = cursor.All(context.TODO(), &products); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while decoding top products"})
+			return
+		}
+
+		// Sending response
 		c.JSON(http.StatusOK, products)
 	})
 }

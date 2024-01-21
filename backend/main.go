@@ -30,6 +30,8 @@ func main() {
 	routes.SearchProductsFromSearchBar(r, m)
 	routes.GetSimilarProducts(r, m)
 	routes.SearchProducts(r, m)
+	routes.IncrementField(r, m)
+	routes.GetTopProducts(r, m)
 	err = r.Run(":8080")
 	if err != nil {
 		log.Fatal("Error running server")

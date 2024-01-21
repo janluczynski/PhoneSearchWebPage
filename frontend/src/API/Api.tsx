@@ -91,3 +91,30 @@ export const fetchSameProducts = async (product_id: string) => {
   const data = await response.json();
   return data;
 };
+export const increaseProductViews = async (product_id: string) => {
+  const response = await fetch(
+    `http://localhost:8080/increment?id=${product_id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+};
+export const fetchTopProducts = async () => {
+  const response = await fetch(`http://localhost:8080/top-products`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  return data;
+};
