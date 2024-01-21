@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const handleScroll = debounce(() => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      if (scrollY > 150) {
+      if (scrollY > 300) {
         setIsVisibleNav(true);
       } else {
         setIsVisibleNav(false);
