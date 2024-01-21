@@ -169,7 +169,7 @@ func GetTopProducts(r *gin.Engine, m *mongodb.MongoDB) {
 		// Define the sort option
 		sortOption := options.Find()
 		sortOption.SetSort(bson.D{{"popularity", -1}}) // sort by popularity in descending order
-		sortOption.SetLimit(3)                         // limit the result to 3 documents
+		sortOption.SetLimit(8)                         // limit the result to 3 documents
 
 		// Find the top 3 products
 		cursor, err := m.ProductCollection.Find(context.TODO(), bson.D{{}}, sortOption)

@@ -35,12 +35,12 @@ function App() {
       >
         <Header />
         <div className="mainPage" style={{ width: "100%" }}>
-          <div className="sideBar" style={{ width: "20%" }}>
+          <div className="sideBar">
             <div className="sort">
               <SortOptions />
             </div>
           </div>
-          <div className="content" style={{ width: "80% " }}>
+          <div className="content">
             <div className="fancy">
               <h1>Wybierz najtańszy telefon dla siebie</h1>
             </div>
