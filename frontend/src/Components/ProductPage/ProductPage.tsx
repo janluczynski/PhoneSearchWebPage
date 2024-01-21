@@ -89,9 +89,8 @@ const ProductPage = () => {
               </div>
               <div>
                 <SimilarProducts
-                  name={product.model}
-                  ram={product.ram}
-                  storage={product.storage}
+                  brand={product.brand}
+                  popularity={product.popularity}
                 />
               </div>
             </div>

@@ -129,30 +129,27 @@ func SearchProducts(r *gin.Engine, m *mongodb.MongoDB) {
 func GetSimilarProducts(r *gin.Engine, m *mongodb.MongoDB) {
 	r.GET("/similar", func(c *gin.Context) {
 
-		name := c.Query("name")
-		ram, err := strconv.Atoi(c.Query("ram"))
+		brand := (c.Query("brand"))
+		popularity, err := strconv.Atoi(c.Query("popularity"))
+
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting ram to int"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting popularity to int"})
 			return
 		}
-		storage, err := strconv.Atoi(c.Query("storage"))
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Error with converting storage to int"})
-			return
-		}
-		products, err := m.FindSimilarPhones(name, ram, storage)
+
+		products, err := m.FindSimilarPhones(brand, popularity)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting product data"})
 			return
 		}
+
 		// Sending data as JSON response
 		c.JSON(http.StatusOK, products)
 	})
 }
 func IncrementField(r *gin.Engine, m *mongodb.MongoDB) {
 	r.PUT("/increment", func(c *gin.Context) {
-		id := c.Query("id") // get the id from the query parameters
-		println(id)
+		id := c.Query("id")                               // get the id from the query parameters
 		filter := bson.M{"product_id": id}                // filter the documents by id
 		update := bson.M{"$inc": bson.M{"popularity": 1}} // increment yourField by 1
 

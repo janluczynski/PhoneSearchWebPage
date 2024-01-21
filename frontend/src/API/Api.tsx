@@ -56,12 +56,11 @@ export const fetchSuggestions = async (searchTerm: string) => {
   return data as unknown as Product[];
 };
 export const fetchSimilarProducts = async (
-  name: string,
-  ram: number,
-  storage: number,
+  brand: string,
+  popularity?: number,
 ) => {
   const response = await fetch(
-    `http://localhost:8080/similar?name=${name}&ram=${ram}&storage=${storage}`,
+    `http://localhost:8080/similar?brand=${brand}&popularity=${popularity}`,
     {
       method: "GET",
       headers: {
