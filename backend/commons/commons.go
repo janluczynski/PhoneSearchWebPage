@@ -14,4 +14,5 @@ type Product struct {
 	RAM        int     `json:"ram" bson:"ram"`
 	Storage    int     `json:"storage" bson:"storage"`
 	Battery    int     `json:"battery" bson:"battery"`
+	Popularity int     `json:"popularity" bson:"popularity"`
 }

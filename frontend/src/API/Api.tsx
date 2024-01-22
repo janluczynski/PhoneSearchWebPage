@@ -56,12 +56,11 @@ export const fetchSuggestions = async (searchTerm: string) => {
   return data as unknown as Product[];
 };
 export const fetchSimilarProducts = async (
-  name: string,
-  ram: number,
-  storage: number,
+  brand: string,
+  popularity?: number,
 ) => {
   const response = await fetch(
-    `http://localhost:8080/similar?name=${name}&ram=${ram}&storage=${storage}`,
+    `http://localhost:8080/similar?brand=${brand}&popularity=${popularity}`,
     {
       method: "GET",
       headers: {
@@ -85,6 +84,33 @@ export const fetchSameProducts = async (product_id: string) => {
       },
     },
   );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  return data;
+};
+export const increaseProductViews = async (product_id: string) => {
+  const response = await fetch(
+    `http://localhost:8080/increment?id=${product_id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+};
+export const fetchTopProducts = async () => {
+  const response = await fetch(`http://localhost:8080/top-products`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

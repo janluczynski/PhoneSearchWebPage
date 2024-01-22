@@ -6,15 +6,13 @@ import { ChevronDownIcon, AddIcon } from "@chakra-ui/icons";
 import { fetchSimilarProducts } from "../../API/Api";
 import { Product } from "../../types";
 type SimilarProductsProps = {
-  name: string;
-  ram: number;
-  storage: number;
+  brand: string;
+  popularity: number;
 };
 
 const SimilarProducts: React.FC<SimilarProductsProps> = ({
-  name,
-  ram,
-  storage,
+  brand,
+  popularity,
 }) => {
   const [similarItemsToShow, setSimilarItemsToShow] = useState(5);
 
@@ -24,10 +22,10 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
 
   const similarProdQuery = useQuery({
     queryKey: ["productsByBrand", name],
-    enabled: name !== "",
+    enabled: brand !== "",
     queryFn: () => {
       if (typeof name === "string") {
-        return fetchSimilarProducts(name, ram, storage);
+        return fetchSimilarProducts(brand, popularity);
       } else {
         throw new Error(`Search term is undefined`);
       }
@@ -46,7 +44,9 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
 
   return (
     <>
-      <h2 className="c">Podobne Produkty</h2>
+      <h2 className="c" style={{ marginTop: "50px" }}>
+        Podobne Produkty
+      </h2>
       <div className="similarProd">
         {similarProdQuery.data &&
           similarProdQuery.data

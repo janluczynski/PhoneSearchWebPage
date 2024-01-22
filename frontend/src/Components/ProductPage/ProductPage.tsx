@@ -52,7 +52,11 @@ const ProductPage = () => {
                           <li>
                             Pamięć RAM: <b>{formatMemory(product.ram)}</b>
                           </li>
-                        ) : null}
+                        ) : (
+                          <li>
+                            Pamięć RAM: <s>Niedostępne</s>
+                          </li>
+                        )}
                         <li>
                           Pamięć wewnętrzna:{" "}
                           <b>{formatMemory(product.storage)}</b>
@@ -61,24 +65,32 @@ const ProductPage = () => {
                           <li>
                             Pojemność baterii: <b>{product.battery} mAh</b>
                           </li>
-                        ) : null}
+                        ) : (
+                          <li>
+                            Pojemność baterii: <s>Niedostępne</s>
+                          </li>
+                        )}
                         <li></li>
                       </ul>
                     </div>
                   </div>
                 </div>
-                <div style={{ width: "40%", overflow: "auto", height: "60vh" }}>
-                  <ProductOffers
-                    product_id={product.product_id}
-                    product_name={product.site_name}
-                  />
+                <div className="gradient-container">
+                  <div
+                    className="gradient-div"
+                    style={{ width: "100%", overflow: "auto", height: "60vh" }}
+                  >
+                    <ProductOffers
+                      product_id={product.product_id}
+                      product_name={product.site_name}
+                    />
+                  </div>
                 </div>
               </div>
               <div>
                 <SimilarProducts
-                  name={product.model}
-                  ram={product.ram}
-                  storage={product.storage}
+                  brand={product.brand}
+                  popularity={product.popularity}
                 />
               </div>
             </div>

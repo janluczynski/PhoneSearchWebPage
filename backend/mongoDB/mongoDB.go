@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -149,7 +150,8 @@ func (m *MongoDB) GetSameProductData(productID string) (map[string][]interface{}
 	}
 
 	patternBrand := bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}}
-	filterSame := bson.M{"brand": patternBrand, "model": product.Model, "ram": product.RAM, "storage": product.Storage}
+	patternModel := bson.M{"$regex": primitive.Regex{Pattern: fmt.Sprintf("^%s$", regexp.QuoteMeta(product.Model)), Options: "i"}}
+	filterSame := bson.M{"brand": patternBrand, "model": patternModel, "ram": product.RAM, "storage": product.Storage}
 
 	var sameProducts []commons.Product
 
@@ -227,11 +229,18 @@ func (m *MongoDB) GetProductsWithoutSorting(searchedPhrase string) ([]commons.Pr
 
 	return products, nil
 }
-func (m *MongoDB) FindSimilarPhones(name string, ram, storage int) ([]commons.Product, error) {
-	filter := bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: name, Options: "i"}}, "ram": ram, "storage": storage}
-	var products []commons.Product
+func (m *MongoDB) FindSimilarPhones(brand string, popularity int) ([]commons.Product, error) {
+	filter := bson.M{
+		"brand": bson.M{
+			"$regex":   regexp.QuoteMeta(strings.ToLower(brand)),
+			"$options": "i", // use i option
+		},
+	}
 
-	cursor, err := m.ProductCollection.Find(context.Background(), filter)
+	findOptions := options.Find().SetSort(bson.D{{Key: "popularity", Value: -1}}).SetLimit(20)
+
+	var products []commons.Product
+	cursor, err := m.ProductCollection.Find(context.Background(), filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +248,6 @@ func (m *MongoDB) FindSimilarPhones(name string, ram, storage int) ([]commons.Pr
 
 	err = cursor.All(context.Background(), &products)
 	if err != nil {
-
 		return nil, err
 	}
 

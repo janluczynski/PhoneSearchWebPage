@@ -34,7 +34,7 @@ const SortOptions = () => {
       </RadioGroup>
       <Divider my={4} borderWidth="2px" />
       <h2>Filtry</h2>
-      <p>Cena</p>
+      {/* <p>Cena</p> */}
       {/* <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
         <RangeSliderTrack bg="red.100">
           <RangeSliderFilledTrack bg="tomato" />
@@ -42,7 +42,7 @@ const SortOptions = () => {
         <RangeSliderThumb boxSize={6} index={0} />
         <RangeSliderThumb boxSize={6} index={1} />
       </RangeSlider> */}
-      <Flex>
+      {/* <Flex>
         <Input
           width="30%"
           placeholder="od"
@@ -63,19 +63,20 @@ const SortOptions = () => {
           boxShadow="0px 4px 4px rgba(0, 0, 0, 0.1)"
           focusBorderColor="#860000"
         />
-      </Flex>
-      <p>Pamięc</p>
+      </Flex> */}
+
       <RadioGroup marginTop="7%" defaultValue="0">
+        <Radio
+          value="0"
+          onChange={() => {
+            setSortedBy("price");
+            setSortValue(0);
+          }}
+        >
+          <NotAllowedIcon />
+        </Radio>
+        <p>Pamięc</p>
         <Stack>
-          <Radio
-            value="0"
-            onChange={() => {
-              setSortedBy("price");
-              setSortValue(0);
-            }}
-          >
-            <NotAllowedIcon />
-          </Radio>
           <Radio
             value="1"
             onChange={() => {

@@ -2,13 +2,24 @@ import "./CardProd.css";
 import { Link } from "react-router-dom";
 import { Product } from "../../types";
 import { formatMemory } from "../../Utils/converters";
+import { useQuery } from "@tanstack/react-query";
+import { increaseProductViews } from "../../API/Api";
+import { useMutation } from "@tanstack/react-query";
 
 type ProductPageProps = {
   product: Product;
 };
+
 const CardProd: React.FC<ProductPageProps> = ({ product }) => {
+  const mutation = useMutation({
+    mutationFn: () => increaseProductViews(product.product_id),
+  });
   return (
-    <Link to={`/product/${product.product_id}`} target="_blank">
+    <Link
+      to={`/product/${product.product_id}`}
+      target="_blank"
+      onClick={() => mutation.mutate()}
+    >
       <div className="product">
         <img
           src={product.image}
