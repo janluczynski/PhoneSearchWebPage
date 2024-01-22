@@ -150,7 +150,8 @@ func (m *MongoDB) GetSameProductData(productID string) (map[string][]interface{}
 	}
 
 	patternBrand := bson.M{"$regex": primitive.Regex{Pattern: product.Brand, Options: "i"}}
-	filterSame := bson.M{"brand": patternBrand, "model": product.Model, "ram": product.RAM, "storage": product.Storage}
+	patternModel := bson.M{"$regex": primitive.Regex{Pattern: fmt.Sprintf("^%s$", regexp.QuoteMeta(product.Model)), Options: "i"}}
+	filterSame := bson.M{"brand": patternBrand, "model": patternModel, "ram": product.RAM, "storage": product.Storage}
 
 	var sameProducts []commons.Product
 

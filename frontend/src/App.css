@@ -105,6 +105,9 @@ main {
   .sideBar, .content {
     width: 100%;
   }
+  .sideBar {
+    height: 80vh;
+  }
   .sort{
     margin-top: 1vh;
   }
